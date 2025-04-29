@@ -1,0 +1,94 @@
+-- 카테고리 (categories)
+INSERT INTO categories
+    (id, category)
+VALUES
+    (1, 'Java'),
+    (2, 'Spring'),
+    (3, '데이터베이스'),
+    (4, '자료구조'),
+    (5, '알고리즘');
+
+-- 난이도 (levels)
+INSERT INTO levels
+    (id, level)
+VALUES
+    (1, '쉬움'),
+    (2, '보통'),
+    (3, '어려움');
+
+-- 사용자 (users)
+INSERT INTO users
+    (id, login_id, password, nickname, email, created_at)
+VALUES
+    (1, 'user1', 'pass1234', '개발자1', 'user1@devup.com', CURRENT_TIMESTAMP),
+    (2, 'admin', 'admin123', '관리자', 'admin@devup.com', CURRENT_TIMESTAMP);
+
+-- 질문 (questions)
+INSERT INTO questions
+    (id, title, question_text, category_id, level_id, created_at)
+VALUES
+    (1, 'OOP란 무엇인가?', '객체 지향 프로그래밍의 네 가지 원칙을 설명하세요.', 1, 1, CURRENT_TIMESTAMP),
+    (2, '의존성 주입(Dependency Injection)이란?', 'DI 개념과 장점을 설명하세요.', 2, 2, CURRENT_TIMESTAMP),
+    (3, '데이터베이스 인덱스란?', '인덱스의 역할과 장단점을 설명하세요.', 3, 1, CURRENT_TIMESTAMP),
+    (4, 'HashMap이란?', 'HashMap의 동작 원리를 설명하세요.', 4, 2, CURRENT_TIMESTAMP),
+    (5, '다익스트라 알고리즘이란?', '다익스트라 알고리즘의 동작 과정을 설명하세요.', 5, 3, CURRENT_TIMESTAMP),
+    (6, '스프링 프레임워크란?', '스프링 프레임워크의 특징과 장점은 무엇인가요?', 1, 1, CURRENT_TIMESTAMP),
+    (7, '자바의 메모리 모델', '자바의 메모리 모델과 가비지 컬렉션에 대해 설명하세요.', 2, 1, CURRENT_TIMESTAMP),
+    (8, 'REST API란?', 'RESTful API의 특징과 장점에 대해 설명하세요.', 3, 2, CURRENT_TIMESTAMP),
+    (9, '스프링 부트란?', '스프링 부트의 주요 기능과 장점은 무엇인가요?', 4, 2, CURRENT_TIMESTAMP),
+    (10, 'JPA란?', 'JPA(Java Persistence API)의 개념과 장단점을 설명하세요.', 5, 1, CURRENT_TIMESTAMP),
+    (11, '리액티브 프로그래밍', '리액티브 프로그래밍이란 무엇인가요?', 1, 2, CURRENT_TIMESTAMP),
+    (12, '동시성 문제', '멀티스레드 환경에서 발생할 수 있는 동시성 문제를 설명하세요.', 2, 3, CURRENT_TIMESTAMP),
+    (13, 'HTTP와 HTTPS 차이점', 'HTTP와 HTTPS의 차이점에 대해 설명하세요.', 3, 2, CURRENT_TIMESTAMP),
+    (14, 'SQL JOIN', 'SQL에서 JOIN의 종류와 차이점에 대해 설명하세요.', 4, 3, CURRENT_TIMESTAMP),
+    (15, 'Redis란?', 'Redis의 특징과 사용 사례에 대해 설명하세요.', 5, 1, CURRENT_TIMESTAMP),
+    (16, '애자일 방법론', '애자일 방법론의 특징과 장점은 무엇인가요?', 1, 2, CURRENT_TIMESTAMP),
+    (17, '토큰 기반 인증', '토큰 기반 인증이란 무엇이며, JWT는 무엇인가요?', 2, 3, CURRENT_TIMESTAMP),
+    (18, '컴퓨터 네트워크', '컴퓨터 네트워크의 OSI 7계층에 대해 설명하세요.', 3, 1, CURRENT_TIMESTAMP),
+    (19, '배포 자동화', 'CI/CD 파이프라인을 활용한 배포 자동화 방법에 대해 설명하세요.', 4, 2, CURRENT_TIMESTAMP),
+    (20, 'AWS란?', 'AWS(Amazon Web Services)의 주요 서비스와 특징에 대해 설명하세요.', 5, 1, CURRENT_TIMESTAMP),
+    (21, '소프트웨어 아키텍처', '소프트웨어 아키텍처의 주요 패턴을 설명하세요.', 1, 3, CURRENT_TIMESTAMP),
+    (22, 'Docker란?', 'Docker의 개념과 컨테이너 기술에 대해 설명하세요.', 2, 2, CURRENT_TIMESTAMP),
+    (23, '자바 컬렉션 프레임워크', '자바의 컬렉션 프레임워크에서 List와 Set의 차이점에 대해 설명하세요.', 3, 1, CURRENT_TIMESTAMP),
+    (24, '스프링 시큐리티', '스프링 시큐리티의 주요 개념과 기능에 대해 설명하세요.', 4, 2, CURRENT_TIMESTAMP),
+    (25, 'Nginx란?', 'Nginx의 역할과 사용 사례에 대해 설명하세요.', 5, 3, CURRENT_TIMESTAMP),
+    (26, '하둡(Hadoop)', '하둡의 주요 구성 요소와 동작 방식에 대해 설명하세요.', 1, 2, CURRENT_TIMESTAMP),
+    (27, '리눅스 명령어', '리눅스에서 자주 사용되는 명령어들에 대해 설명하세요.', 2, 3, CURRENT_TIMESTAMP),
+    (28, '트랜잭션 관리', '트랜잭션의 ACID 속성에 대해 설명하세요.', 3, 1, CURRENT_TIMESTAMP),
+    (29, '객체지향 설계 원칙', 'SOLID 원칙에 대해 설명하세요.', 4, 2, CURRENT_TIMESTAMP),
+    (30, '정규 표현식', '정규 표현식의 사용법과 예제에 대해 설명하세요.', 5, 3, CURRENT_TIMESTAMP);
+
+-- 정답 (answers)
+INSERT INTO answers
+    (question_id, answer_text, created_at)
+VALUES
+    (1, 'OOP는 캡슐화, 상속, 다형성, 추상화의 네 가지 원칙을 포함합니다.', CURRENT_TIMESTAMP),
+    (2, '의존성 주입은 객체 간 의존 관계를 외부에서 주입하여 결합도를 낮추는 방법입니다.', CURRENT_TIMESTAMP),
+    (3, '인덱스는 검색 성능을 향상시키는 자료구조로, 검색 속도는 빠르지만 쓰기 성능은 저하될 수 있습니다.', CURRENT_TIMESTAMP),
+    (4, 'HashMap은 키-값 쌍을 저장하고 해시 함수를 통해 빠르게 데이터를 조회합니다.', CURRENT_TIMESTAMP),
+    (5, '다익스트라 알고리즘은 그래프에서 시작 노드로부터 다른 모든 노드까지의 최단 경로를 구하는 알고리즘입니다.', CURRENT_TIMESTAMP),
+    (6, '스프링 프레임워크는 자바 기반의 오픈 소스 애플리케이션 프레임워크로, 의존성 주입(Dependency Injection)과 AOP(Aspect-Oriented Programming)를 지원합니다.', CURRENT_TIMESTAMP),
+    (7, '자바의 메모리 모델은 JVM에 의해 관리되며, 가비지 컬렉션은 사용되지 않는 객체를 자동으로 청소하는 메커니즘입니다.', CURRENT_TIMESTAMP),
+    (8, 'REST API는 웹 서비스를 구축할 때 사용되는 아키텍처 스타일로, HTTP를 기반으로 한 API 설계 방식입니다.', CURRENT_TIMESTAMP),
+    (9, '스프링 부트는 스프링 프레임워크의 복잡한 설정을 자동화하고, 독립적으로 실행 가능한 애플리케이션을 만들 수 있도록 지원하는 프레임워크입니다.', CURRENT_TIMESTAMP),
+    (10, 'JPA는 자바에서 객체와 관계형 데이터베이스의 데이터를 매핑하기 위한 API로, 데이터베이스 작업을 객체 지향적으로 처리할 수 있게 해줍니다.', CURRENT_TIMESTAMP),
+    (11, '리액티브 프로그래밍은 비동기적으로 데이터 스트림을 처리하는 프로그래밍 패러다임으로, Flux와 Mono를 사용하여 데이터를 처리합니다.', CURRENT_TIMESTAMP),
+    (12, '동시성 문제는 여러 스레드가 동일한 자원에 접근할 때 발생하는 문제로, 예를 들어 데드락, 레이스 컨디션 등이 있습니다.', CURRENT_TIMESTAMP),
+    (13, 'HTTP는 클라이언트와 서버 간의 데이터 전송 프로토콜이고, HTTPS는 이를 SSL/TLS로 암호화한 보안 프로토콜입니다.', CURRENT_TIMESTAMP),
+    (14, 'SQL JOIN은 여러 테이블을 결합하여 데이터를 조회할 때 사용되며, INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN 등이 있습니다.', CURRENT_TIMESTAMP),
+    (15, 'Redis는 키-값 저장소로, 빠른 읽기/쓰기 성능을 제공하며, 캐시, 세션 관리, 메시지 큐 등 다양한 용도로 사용됩니다.', CURRENT_TIMESTAMP),
+    (16, '애자일 방법론은 개발 팀이 고객과 협력하며 유연하게 변경에 대응하고, 주기적인 회고를 통해 지속적으로 개선하는 개발 방법론입니다.', CURRENT_TIMESTAMP),
+    (17, '토큰 기반 인증은 서버가 사용자에게 인증 정보를 담은 토큰을 발급하고, 사용자가 이를 헤더에 포함하여 요청하는 방식입니다. JWT는 JSON Web Token의 약자입니다.', CURRENT_TIMESTAMP),
+    (18, 'OSI 7계층은 물리층, 데이터링크층, 네트워크층, 전송층, 세션층, 표현층, 응용층으로 구성됩니다.', CURRENT_TIMESTAMP),
+    (19, 'CI/CD 파이프라인은 개발, 빌드, 테스트, 배포 과정의 자동화를 의미하며, Jenkins, GitLab CI 등을 사용하여 구현할 수 있습니다.', CURRENT_TIMESTAMP),
+    (20, 'AWS는 아마존 웹 서비스로, 클라우드 컴퓨팅 서비스를 제공하며 EC2, S3, Lambda, RDS 등의 서비스가 있습니다.', CURRENT_TIMESTAMP),
+    (21, '소프트웨어 아키텍처 패턴으로는 MVC, MVVM, 레이어드 아키텍처, 마이크로서비스 등이 있으며, 각 패턴은 요구사항에 따라 선택할 수 있습니다.', CURRENT_TIMESTAMP),
+    (22, 'Docker는 애플리케이션을 컨테이너로 패키징하여, 환경에 관계없이 실행할 수 있게 해주는 오픈 소스 소프트웨어입니다.', CURRENT_TIMESTAMP),
+    (23, '자바 컬렉션 프레임워크에서 List는 순서가 있는 컬렉션으로 중복을 허용하고, Set은 순서가 없고 중복을 허용하지 않는 컬렉션입니다.', CURRENT_TIMESTAMP),
+    (24, '스프링 시큐리티는 인증과 권한 부여를 처리하는 프레임워크로, OAuth2, JWT, LDAP 등 다양한 인증 방식을 지원합니다.', CURRENT_TIMESTAMP),
+    (25, 'Nginx는 고성능 HTTP 서버 및 리버스 프록시 서버로, 부하 분산, SSL 종료, 캐싱 등의 기능을 제공합니다.', CURRENT_TIMESTAMP),
+    (26, '하둡은 대규모 데이터 저장과 분석을 위한 분산 처리 프레임워크로, HDFS와 MapReduce로 구성됩니다.', CURRENT_TIMESTAMP),
+    (27, '리눅스에서 자주 사용되는 명령어는 ls, cd, rm, mkdir, ps 등이 있으며, 시스템 관리와 작업 수행에 많이 사용됩니다.', CURRENT_TIMESTAMP),
+    (28, '트랜잭션의 ACID 속성은 원자성(Atomicity), 일관성(Consistency), 격리성(Isolation), 지속성(Durability)을 보장합니다.', CURRENT_TIMESTAMP),
+    (29, 'SOLID는 객체 지향 설계 원칙으로, 단일 책임 원칙, 개방-폐쇄 원칙, 리스코프 치환 원칙, 인터페이스 분리 원칙, 의존성 역전 원칙이 포함됩니다.', CURRENT_TIMESTAMP),
+    (30, '정규 표현식은 특정 패턴의 문자열을 찾거나 교체하는데 사용되는 언어로, 자주 사용하는 패턴으로는 \d, \w, \s 등이 있습니다.', CURRENT_TIMESTAMP);
