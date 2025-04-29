@@ -41,6 +41,32 @@ public class BoardService {
     }
 
     /**
+     * 제목으로 면접 질문 목록 조회
+     * @param title 검색할 제목
+     * @param page 페이지 번호
+     * @return 조회된 면접 질문 목록
+     */
+    public List<QuestionDetailDto> searchQuestionsByTitle(String title, int page) {
+        if (title == null) {
+            return List.of();
+        }
+
+        String str = title.trim();
+
+        if (str.length() < 2) {
+            return List.of();
+        }
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
+
+        return boardRepository.findByTitleContainsIgnoreCase(str, pageable)
+                .stream()
+                .map(this::convertQuestionToDetailDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 면접 질문 상세 조회
      * @param id 면접 질문 ID
      * @return 면접 질문 상세 정보

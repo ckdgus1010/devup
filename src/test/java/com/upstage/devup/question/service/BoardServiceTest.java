@@ -33,6 +33,49 @@ class BoardServiceTest {
 
     @Transactional
     @Test
+    @DisplayName("제목 검색 - 성공")
+    public void successToSearchQuestionByTitle() {
+        // given
+        String title = "란?";
+        int page = 0;
+
+        // when
+        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+
+        // then
+        assertThat(results.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("제목 검색 - 공백으로 검색 시 실패")
+    public void failToSearchQuestionByTitleUsingSpace() {
+        // given
+        String title = "     ";
+        int page = 0;
+
+        // when
+        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+
+        // then
+        assertThat(results.size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("제목 검색 - 검색어 길이가 2보다 작을 시 실패")
+    public void failToSearchQuestionByTitleUsingShortTitle() {
+        // given
+        String title = "1";
+        int page = 0;
+
+        // when
+        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+
+        // then
+        assertThat(results.size()).isEqualTo(0);
+    }
+
+    @Transactional
+    @Test
     @DisplayName("면접 질문 조회 - 성공")
     public void successFindQuestionById() {
         // given
