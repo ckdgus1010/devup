@@ -1,5 +1,7 @@
 package com.upstage.devup.auth.service;
 
+import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
+import com.upstage.devup.auth.domain.dto.SignInRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
 import com.upstage.devup.auth.domain.entity.User;
@@ -7,6 +9,7 @@ import com.upstage.devup.auth.domain.mapper.UserMapper;
 import com.upstage.devup.auth.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +19,34 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    /**
+     * 로그인
+     *
+     * @param request 로그인 요청 정보
+     * @return JWT 토큰
+     */
+    public String signIn(SignInRequestDto request) {
+        if (request == null || request.getPassword() == null) {
+            return null;
+        }
+
+        User user = userRepository.findByLoginId(request.getLoginId())
+                .orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return null;
+        }
+
+        // JWT 발급
+        return jwtTokenProvider.generateToken(user.getId());
+    }
 
     /**
      * 회원가입
