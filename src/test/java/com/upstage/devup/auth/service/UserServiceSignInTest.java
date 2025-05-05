@@ -4,12 +4,15 @@ import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.auth.domain.dto.SignInRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
+import com.upstage.devup.auth.exception.InvalidLoginException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserServiceSignInTest {
@@ -51,10 +54,8 @@ public class UserServiceSignInTest {
         // then
         // 토큰이 유효하며 유저 ID를 가지고 잇어야 함
         assertThat(token).isNotNull();
-        assertThat(jwtTokenProvider.validateJwtToken(token))
-                .isTrue();
-        assertThat(jwtTokenProvider.getUserIdFromJwtToken(token))
-                .isEqualTo(signUpResult.getId());
+        assertThat(jwtTokenProvider.validateJwtToken(token)).isTrue();
+        assertThat(jwtTokenProvider.getUserIdFromJwtToken(token)).isEqualTo(signUpResult.getId());
     }
 
     @Test
@@ -62,12 +63,15 @@ public class UserServiceSignInTest {
     public void failToSignInUsingNullRequest() {
         // given
         SignInRequestDto request = null;
+        String errorMessage = "유효하지 않는 요청입니다.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -78,12 +82,15 @@ public class UserServiceSignInTest {
                 .loginId(null)
                 .password("1234")
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -94,12 +101,15 @@ public class UserServiceSignInTest {
                 .loginId("")
                 .password("1234")
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -110,12 +120,15 @@ public class UserServiceSignInTest {
                 .loginId("algo")
                 .password("1234")
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -126,12 +139,15 @@ public class UserServiceSignInTest {
                 .loginId("user1")
                 .password(null)
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -142,12 +158,15 @@ public class UserServiceSignInTest {
                 .loginId("user1")
                 .password("")
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
@@ -158,11 +177,14 @@ public class UserServiceSignInTest {
                 .loginId("user1")
                 .password("scv")
                 .build();
+        String errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
 
-        // when
-        String token = userService.signIn(request);
+        // when & then
+        InvalidLoginException exception = assertThrows(
+                InvalidLoginException.class,
+                () -> userService.signIn(request)
+        );
 
-        // then
-        assertThat(token).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 }

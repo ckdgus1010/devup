@@ -6,7 +6,9 @@ import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.auth.domain.mapper.UserMapper;
+import com.upstage.devup.auth.exception.InvalidLoginException;
 import com.upstage.devup.auth.respository.UserRepository;
+import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,21 +29,23 @@ public class UserService {
      *
      * @param request 로그인 요청 정보
      * @return JWT 토큰
+     * @throws IllegalArgumentException 요청 데이터가 null일 때 발생
+     * @throws InvalidLoginException 아이디 또는 비밀번호가 일치하지 않는 경우 발생
      */
     public String signIn(SignInRequestDto request) {
-        if (request == null || request.getPassword() == null) {
-            return null;
+        if (request == null) {
+            throw new IllegalArgumentException("유효하지 않는 요청입니다.");
+        }
+
+        if (request.getPassword() == null) {
+            throw new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요.");
         }
 
         User user = userRepository.findByLoginId(request.getLoginId())
-                .orElse(null);
-
-        if (user == null) {
-            return null;
-        }
+                .orElseThrow(() -> new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return null;
+            throw new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요.");
         }
 
         // JWT 발급
@@ -53,23 +57,25 @@ public class UserService {
      *
      * @param request 회원가입 요청 정보
      * @return 회원가입 결과
+     * @throws IllegalArgumentException 요청 데이터가 null일 때 발생
+     * @throws ValueAlreadyInUseException 중복 검사 시 이미 사용 중인 값일 때 발생
      */
     public SignUpResponseDto signUp(SignUpRequestDto request) {
         if (request == null) {
-            return null;
+            throw new IllegalArgumentException("유효하지 않는 요청입니다.");
         }
 
         // 중복 검사
         if (isLoginIdInUse(request.getLoginId())) {
-            return null;
+            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
         }
 
         if (isNicknameInUse(request.getNickname())) {
-            return null;
+            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
         }
 
         if (isEmailInUse(request.getEmail())) {
-            return null;
+            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
         }
 
         User savedEntity = userRepository.save(userMapper.toEntity(request));
