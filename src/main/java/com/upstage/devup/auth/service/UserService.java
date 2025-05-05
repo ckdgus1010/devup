@@ -78,6 +78,16 @@ public class UserService {
     }
 
     /**
+     * 유저 ID가 사용 중인지 확인
+     *
+     * @param userId 확인할 유저 ID
+     * @return true: 사용 중인 ID, false: 사용하지 않는 ID
+     */
+    public boolean isUserIdInUse(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
+    /**
      * 로그인 ID가 사용 중인지 확인
      *
      * @param loginId 확인할 로그인 ID

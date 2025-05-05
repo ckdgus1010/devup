@@ -81,6 +81,16 @@ public class BoardService {
         return convertQuestionToDetailDto(optional.get());
     }
 
+    /**
+     * 면접 질문 ID가 사용 중인지 확인
+     *
+     * @param questionId 확인할 면접 질문 ID
+     * @return 사용 중인 ID, false: 사용하지 않는 ID
+     */
+    public boolean isQuestionIdInUse(Long questionId) {
+        return boardRepository.existsById(questionId);
+    }
+
     private QuestionDetailDto convertQuestionToDetailDto(Question question) {
         return QuestionDetailDto.builder()
                 .id(question.getId())
