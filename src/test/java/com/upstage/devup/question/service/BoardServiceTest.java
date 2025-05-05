@@ -1,5 +1,6 @@
 package com.upstage.devup.question.service;
 
+import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.domain.dto.QuestionDetailDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class BoardServiceTest {
@@ -82,22 +84,25 @@ class BoardServiceTest {
         Long questionId = 1L;
 
         // when
-        QuestionDetailDto result = boardService.findById(questionId);
+        QuestionDetailDto result = boardService.getQuestion(questionId);
 
         // then
         assertThat(result.getId()).isEqualTo(questionId);
     }
 
     @Test
-    @DisplayName("면접 질문 조회 - 유효하지 않은 ID로 조회 시 실패")
-    public void failToFindQuestionById() {
+    @DisplayName("면접 질문 조회 실패 - 유효하지 않은 ID로 조회하는 경우(EntityNotFoundException 반환)")
+    public void failToGetQuestion_whenUsingInvalidId() {
         // given
-        Long questionId = -1L;
+        Long questionId = 0L;
+        String errorMessage = "면접 질문을 찾을 수 없습니다.";
 
-        // when
-        QuestionDetailDto dto = boardService.findById(questionId);
+        // when & then
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> boardService.getQuestion(questionId)
+        );
 
-        // then
-        assertThat(dto).isNull();
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 }
