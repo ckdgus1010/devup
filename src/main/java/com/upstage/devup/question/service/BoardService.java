@@ -1,5 +1,6 @@
 package com.upstage.devup.question.service;
 
+import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.domain.dto.QuestionDetailDto;
 import com.upstage.devup.question.domain.entity.Question;
 import com.upstage.devup.question.repository.BoardRepository;
@@ -11,8 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +25,7 @@ public class BoardService {
 
     /**
      * 면접 질문 목록 조회
+     *
      * @param page 페이지 번호
      * @return 조회된 면접 질문 목록
      */
@@ -42,8 +42,9 @@ public class BoardService {
 
     /**
      * 제목으로 면접 질문 목록 조회
+     *
      * @param title 검색할 제목
-     * @param page 페이지 번호
+     * @param page  페이지 번호
      * @return 조회된 면접 질문 목록
      */
     public List<QuestionDetailDto> searchQuestionsByTitle(String title, int page) {
@@ -68,17 +69,15 @@ public class BoardService {
 
     /**
      * 면접 질문 상세 조회
+     *
      * @param id 면접 질문 ID
      * @return 면접 질문 상세 정보
      */
-    public QuestionDetailDto findById(Long id) {
-        Optional<Question> optional = boardRepository.findById(id);
-
-        if (optional.isEmpty()) {
-            return null;
-        }
-
-        return convertQuestionToDetailDto(optional.get());
+    public QuestionDetailDto getQuestion(Long id) {
+        return boardRepository
+                .findById(id)
+                .map(this::convertQuestionToDetailDto)
+                .orElseThrow(() -> new EntityNotFoundException("면접 질문을 찾을 수 없습니다."));
     }
 
     /**
