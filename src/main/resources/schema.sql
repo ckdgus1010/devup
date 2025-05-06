@@ -57,6 +57,18 @@ CREATE TABLE questions
     PRIMARY KEY (id)
 ); -- '기술 면접 질문'
 
+CREATE TABLE user_answer_stats
+(
+    id              BIGINT    NOT NULL AUTO_INCREMENT,
+    user_id         BIGINT    NOT NULL,
+    question_id     BIGINT    NOT NULL,
+    correct_count   INT       NOT NULL DEFAULT 0 COMMENT '맞춘 횟수',
+    wrong_count     INT       NOT NULL DEFAULT 0 COMMENT '틀릿 횟수',
+    first_solved_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_solved_at  TIMESTAMP NOT NULL,
+    PRIMARY KEY (id)
+); -- '유저가 푼 문제 이력'
+
 CREATE TABLE user_answers
 (
     id          BIGINT        NOT NULL AUTO_INCREMENT,
@@ -67,15 +79,6 @@ CREATE TABLE user_answers
     created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '제출 시간',
     PRIMARY KEY (id)
 ); -- '유저가 작성한 정답'
-
-CREATE TABLE user_correct_answers
-(
-    id          BIGINT    NOT NULL AUTO_INCREMENT,
-    user_id     BIGINT    NOT NULL,
-    question_id BIGINT    NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
-); -- '유저가 맞춘 문제'
 
 CREATE TABLE users
 (
@@ -157,12 +160,12 @@ ALTER TABLE question_stats
         FOREIGN KEY (question_id)
             REFERENCES questions (id);
 
-ALTER TABLE user_correct_answers
-    ADD CONSTRAINT FK_users_TO_user_correct_answers
+ALTER TABLE user_answer_stats
+    ADD CONSTRAINT FK_users_TO_user_answer_stats
         FOREIGN KEY (user_id)
             REFERENCES users (id);
 
-ALTER TABLE user_correct_answers
-    ADD CONSTRAINT FK_questions_TO_user_correct_answers
+ALTER TABLE user_answer_stats
+    ADD CONSTRAINT FK_questions_TO_user_answer_stats
         FOREIGN KEY (question_id)
             REFERENCES questions (id);
