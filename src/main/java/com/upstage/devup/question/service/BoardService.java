@@ -6,6 +6,7 @@ import com.upstage.devup.question.domain.entity.Question;
 import com.upstage.devup.question.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -47,24 +48,23 @@ public class BoardService {
      * @param page  페이지 번호
      * @return 조회된 면접 질문 목록
      */
-    public List<QuestionDetailDto> searchQuestionsByTitle(String title, int page) {
+    public Page<QuestionDetailDto> searchQuestionsByTitle(String title, int page) {
         if (title == null) {
-            return List.of();
+            return Page.empty();
         }
 
         String str = title.trim();
 
         if (str.length() < 2) {
-            return List.of();
+            return Page.empty();
         }
 
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
-        return boardRepository.findByTitleContainsIgnoreCase(str, pageable)
-                .stream()
-                .map(this::convertQuestionToDetailDto)
-                .collect(Collectors.toList());
+        return boardRepository
+                .findByTitleContainsIgnoreCase(str, pageable)
+                .map(this::convertQuestionToDetailDto);
     }
 
     /**
