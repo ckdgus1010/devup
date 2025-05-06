@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 마이페이지 통계 관련 기능 구현 후 테스트 코드 수정할 것
 @SpringBootTest
 public class UserAnswerServiceCorrectAnswerTest {
 
@@ -31,14 +32,10 @@ public class UserAnswerServiceCorrectAnswerTest {
                 .build();
 
         // when
-        userAnswerService.saveUserAnswer(userId, request);
+        Long result = userAnswerService.saveUserAnswer(userId, request);
 
         // then
-        UserAnswerDetailDto result = userAnswerService.getUserCorrectAnswer(userId, questionId);
-
-        assertThat(result.getId()).isGreaterThan(0);
-        assertThat(result.getUserId()).isEqualTo(userId);
-        assertThat(result.getQuestionId()).isEqualTo(questionId);
+        assertThat(result).isGreaterThan(0);
     }
 
     @Test
@@ -52,10 +49,9 @@ public class UserAnswerServiceCorrectAnswerTest {
                 .build();
 
         // when
-        userAnswerService.saveUserAnswer(userId, request);
+        Long result = userAnswerService.saveUserAnswer(userId, request);
 
         // then
-        UserAnswerDetailDto result = userAnswerService.getUserCorrectAnswer(userId, questionId);
         assertThat(result).isNull();
     }
 
@@ -70,10 +66,9 @@ public class UserAnswerServiceCorrectAnswerTest {
                 .build();
 
         // when
-        userAnswerService.saveUserAnswer(userId, request);
+        Long result = userAnswerService.saveUserAnswer(userId, request);
 
         // then
-        UserAnswerDetailDto result = userAnswerService.getUserCorrectAnswer(userId, questionId);
         assertThat(result).isNull();
     }
 }
