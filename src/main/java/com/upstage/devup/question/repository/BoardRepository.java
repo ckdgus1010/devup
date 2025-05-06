@@ -4,12 +4,23 @@ import com.upstage.devup.question.domain.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 
 public interface BoardRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findAll(Pageable pageable);
 
+    @Query(
+            value = """
+                SELECT *
+                FROM questions q
+                WHERE UPPER(q.title) LIKE UPPER(CONCAT('%', :title, '%'))
+                ORDER BY q.id DESC
+            """, countQuery = """
+                SELECT COUNT(*)
+                FROM questions q
+                WHERE UPPER(q.title) LIKE UPPER(CONCAT('%', :title, '%'))
+            """, nativeQuery = true
+    )
     Page<Question> findByTitleContainsIgnoreCase(String title, Pageable pageable);
 }

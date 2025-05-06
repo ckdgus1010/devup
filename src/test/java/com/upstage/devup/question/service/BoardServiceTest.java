@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -42,10 +43,10 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
 
         // then
-        assertThat(results.size()).isGreaterThan(0);
+        assertThat(results.getTotalElements()).isGreaterThan(0);
     }
 
     @Test
@@ -56,10 +57,10 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
 
         // then
-        assertThat(results.size()).isEqualTo(0);
+        assertThat(results.getTotalElements()).isEqualTo(0);
     }
 
     @Test
@@ -70,10 +71,10 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        List<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
 
         // then
-        assertThat(results.size()).isEqualTo(0);
+        assertThat(results.getTotalElements()).isEqualTo(0);
     }
 
     @Transactional
