@@ -1,4 +1,4 @@
-package com.upstage.devup.answer.domain.entity;
+package com.upstage.devup.user.answer.domain.entity;
 
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.question.domain.entity.Question;
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_answers")
+@Table(name = "user_correct_answers")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAnswer {
+public class UserWrongAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +29,6 @@ public class UserAnswer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
-
-    @Column(nullable = false)
-    private String answerText;
-
-    @Column(nullable = false)
-    private Boolean isCorrect;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

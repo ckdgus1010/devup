@@ -1,11 +1,10 @@
-package com.upstage.devup.answer.service;
+package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.answer.domain.dto.UserAnswerDetailDto;
-import com.upstage.devup.answer.domain.dto.UserAnswerSaveRequest;
-import com.upstage.devup.answer.domain.entity.UserAnswer;
-import com.upstage.devup.answer.domain.entity.UserWrongAnswer;
-import com.upstage.devup.answer.repository.UserAnswerRepository;
-import com.upstage.devup.answer.repository.UserWrongAnswerRepository;
+import com.upstage.devup.user.answer.domain.entity.UserAnswer;
+import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
+import com.upstage.devup.user.answer.repository.UserAnswerRepository;
+import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.auth.service.UserService;
 import com.upstage.devup.question.domain.entity.Question;
@@ -80,8 +79,6 @@ public class UserAnswerService {
                 .build();
     }
 
-//    TODO: 사용자가 맞춘 문제 단건 조회
-
     /**
      * 사용자가 틀린 문제 단건 조회
      *
@@ -105,68 +102,6 @@ public class UserAnswerService {
                 .questionId(entity.getQuestion().getId())
                 .createdAt(entity.getCreatedAt())
                 .build();
-    }
-
-    /**
-     * 사용자가 작성한 정답 저장
-     * <p>
-     * - 정답 여부에 따라 정답/오답 테이블에도 각각 저장됨
-     *
-     * @param userId 사용자 ID
-     * @param request 사용자 작성 정답 데이터
-     * @return 저장된 엔티티 ID
-     */
-    public Long saveUserAnswer(Long userId, UserAnswerSaveRequest request) {
-        if (!userService.isUserIdInUse(userId)) {
-            return null;
-        }
-
-        Long questionId = request.getQuestionId();
-
-        if (!boardService.isQuestionIdInUse(questionId)) {
-            return null;
-        }
-
-        // TODO: 오답 구분해서 저장
-        if (!request.getIsCorrect()) {
-            saveUserWrongAnswer(userId, questionId);
-        }
-
-        // ID만 설정한 연관관계 참조용 객체
-        User userRef = User.builder().id(userId).build();
-        Question questionRef = Question.builder().id(questionId).build();
-
-        UserAnswer entity = UserAnswer.builder()
-                .user(userRef)
-                .question(questionRef)
-                .answerText(request.getAnswerText())
-                .isCorrect(request.getIsCorrect())
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        return userAnswerRepository.save(entity).getId();
-    }
-
-    /**
-     * 사용자의 오답 답안 저장
-     *
-     * @param userId 사용자 ID
-     * @param questionId 면접 질문 ID
-     * @return 저장된 엔티티 ID
-     */
-    private Long saveUserWrongAnswer(Long userId, Long questionId) {
-
-        // ID만 설정한 연관관계 참조용 객체
-        User userRef = User.builder().id(userId).build();
-        Question questionRef = Question.builder().id(questionId).build();
-
-        UserWrongAnswer entity = UserWrongAnswer.builder()
-                .user(userRef)
-                .question(questionRef)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        return userWrongAnswerRepository.save(entity).getId();
     }
 
 }
