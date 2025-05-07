@@ -2,7 +2,7 @@ package com.upstage.devup.mypage.statistics.service;
 
 import com.upstage.devup.auth.exception.UnAuthenticatedException;
 import com.upstage.devup.mypage.statistics.domain.dto.UserAnswerStatDto;
-import com.upstage.devup.mypage.statistics.repository.UserAnswerStatRepository;
+import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ public class UserAnswerStatService {
         if (userId == null) {
             throw new UnAuthenticatedException("로그인이 필요합니다.");
         }
+
         long totalCount = userAnswerStatRepository.countUserAnswerStatByUserId(userId);
         long correctCount = userAnswerStatRepository.countUserAnswerStatByUserIdAndCorrectCountGreaterThan(userId, 0);
 
