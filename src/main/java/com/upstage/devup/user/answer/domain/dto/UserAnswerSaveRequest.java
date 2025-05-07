@@ -1,4 +1,4 @@
-package com.upstage.devup.answer.domain.dto;
+package com.upstage.devup.user.answer.domain.dto;
 
 import lombok.*;
 

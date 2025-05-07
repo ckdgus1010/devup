@@ -1,4 +1,4 @@
-package com.upstage.devup.answer.domain.entity;
+package com.upstage.devup.user.answer.domain.entity;
 
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.question.domain.entity.Question;

@@ -8,6 +8,7 @@ import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.auth.domain.mapper.UserMapper;
 import com.upstage.devup.auth.exception.InvalidLoginException;
 import com.upstage.devup.auth.respository.UserRepository;
+import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,6 +91,10 @@ public class UserService {
      * @return true: 사용 중인 ID, false: 사용하지 않는 ID
      */
     public boolean isUserIdInUse(Long userId) {
+        if (userId == null) {
+            throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
+        }
+
         return userRepository.existsById(userId);
     }
 
