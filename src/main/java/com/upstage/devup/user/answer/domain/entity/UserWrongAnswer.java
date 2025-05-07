@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_correct_answers")
+@Table(name = "wrong_answers")
 @Getter
 @Builder
 @NoArgsConstructor
