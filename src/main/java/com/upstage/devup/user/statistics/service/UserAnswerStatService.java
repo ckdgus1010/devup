@@ -1,8 +1,8 @@
-package com.upstage.devup.mypage.statistics.service;
+package com.upstage.devup.user.statistics.service;
 
 import com.upstage.devup.auth.exception.UnAuthenticatedException;
-import com.upstage.devup.mypage.statistics.domain.dto.UserAnswerStatDto;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
+import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

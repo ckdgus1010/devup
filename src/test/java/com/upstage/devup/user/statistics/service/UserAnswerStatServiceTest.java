@@ -1,7 +1,7 @@
-package com.upstage.devup.mypage.statistics.service;
+package com.upstage.devup.user.statistics.service;
 
 import com.upstage.devup.auth.exception.UnAuthenticatedException;
-import com.upstage.devup.mypage.statistics.domain.dto.UserAnswerStatDto;
+import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
