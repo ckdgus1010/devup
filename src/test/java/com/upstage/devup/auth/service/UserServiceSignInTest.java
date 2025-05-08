@@ -28,7 +28,7 @@ public class UserServiceSignInTest {
     public void successToSignIn() {
         // given
         // 회원가입을 먼저 진행 -> 유효한 유저 생성
-        String loginId = "user3";
+        String loginId = "user4";
         String password = "1111";
         String nickname = "newUser";
         String email = "newUser@devup.com";

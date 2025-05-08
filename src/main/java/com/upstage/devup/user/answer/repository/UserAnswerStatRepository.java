@@ -1,12 +1,33 @@
 package com.upstage.devup.user.answer.repository;
 
 import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
+import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserAnswerStatRepository extends JpaRepository<UserAnswerStat, Long> {
     Optional<UserAnswerStat> findByUserIdAndQuestionId(Long userId, Long questionId);
+
+    long countUserAnswerStatByUserId(Long userId);
+
+    long countUserAnswerStatByUserIdAndCorrectCountGreaterThan(Long userId, int i);
+
+    @Query(value = """
+        SELECT
+            c.category,
+            COUNT(*)
+        FROM user_answer_stats uas
+        JOIN questions q
+            ON uas.question_id = q.id
+        JOIN categories c
+            ON q.category_id = c.id
+        WHERE uas.user_id = :userId
+        GROUP BY c.category
+    """, nativeQuery = true)
+    List<CategoryCountDto> findCategoriesByUserId(Long userId);
 }
