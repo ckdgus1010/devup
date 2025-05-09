@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thlogic>
+    <attr sel="nav">
+        <attr sel="#question-list" th:href="@{/questions?pageNumber=0}"/>
+        <attr sel="#mypage" th:href="@{/mypage}"/>
+        <attr sel="#sign-in" th:href="@{/sign-in}"/>
+    </attr>
+    <attr sel="#question-list">
+        <attr sel="tbody" th:remove="all-but-first">
+            <attr sel="tr[0]" th:each="question : ${questions.content}">
+                <attr sel=".q_no" th:text="${question.id}"/>
+                <attr sel=".q_title">
+                    <attr sel="a" th:text="${question.title}" th:href="@{/questions/{id}(id=${question.id})}"/>
+                </attr>
+                <attr sel=".q_category" th:text="${question.category}"/>
+                <attr sel=".q_level" th:text="${question.level}"/>
+                <attr sel=".q_created_at" th:datetime="${question.createdAt}"
+                      th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd')}"/>
+            </attr>
+        </attr>
+    </attr>
+    <attr sel="#pagination">
+        <attr sel="div" th:remove="all-but-first" th:each="pageNumber : ${pageNumbers}">
+            <attr sel="a[0]"
+                  th:text="${pageNumber + 1}"
+                  th:href="@{/questions(pageNumber=${pageNumber})}"
+                  th:class="(${pageNumber} == ${questions.number} ? 'active' : '')"
+            />
+        </attr>
+    </attr>
+</thlogic>

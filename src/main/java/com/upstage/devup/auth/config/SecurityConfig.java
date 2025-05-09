@@ -11,6 +11,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    public static final String[] STATIC_RESOURCES = {
+            "/css/**", "/js/**", "/images/**"
+    };
+
+    public static final String[] PUBLIC_PAGES = {
+            "/", "/questions/**"
+    };
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -20,8 +28,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**")
-                        .permitAll()
+                        .requestMatchers(STATIC_RESOURCES).permitAll()
+                        .requestMatchers(PUBLIC_PAGES).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())

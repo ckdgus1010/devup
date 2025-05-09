@@ -1,15 +1,6 @@
 <?xml version="1.0"?>
 <thlogic xmlns:th="http://www.thymeleaf.org">
-    <attr
-            sel="#question-list"
-            th:href="@{/questions}"
-    />
-    <attr
-            sel="#mypage"
-            th:href="@{/mypage}"
-    />
-    <attr
-            sel="#sign-in"
-            th:href="@{/sign-in}"
-    />
+    <attr sel="#question-list" th:href="@{/questions?pageNumber=0}"/>
+    <attr sel="#mypage" th:href="@{/mypage}"/>
+    <attr sel="#sign-in" th:href="@{/sign-in}"/>
 </thlogic>
