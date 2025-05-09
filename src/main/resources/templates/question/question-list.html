@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 풀이 - DevUp</title>
+    <link rel="stylesheet" href="/css/question/question-list.css"/>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <img src="/images/devup_logo.png" alt="DevUp 로고" height="32"/>
+        <strong>DevUp</strong>
+    </div>
+    <nav>
+        <a href="/">홈</a>
+        <a id="question-list" href="#">문제풀이</a>
+        <a id="mypage" href="#">마이페이지</a>
+        <a id="sign-in" href="#">로그인</a>
+    </nav>
+</header>
+
+<main>
+    <div class="content-container">
+        <div class="header-row">
+            <h1 aria-label="문제 목록">📋 문제 목록</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="제목으로 검색..."/>
+                <button id="search-btn">검색</button>
+            </div>
+        </div>
+
+        <table id="question-list">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>제목</th>
+                <th>카테고리</th>
+                <th>난이도</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="q_no">1</td>
+                <td class="q_title">
+                    <a href="#">예시 질문 1</a>
+                </td>
+                <td class="q_category">Java</td>
+                <td class="q_level">중</td>
+                <td class="q_created_at">2025-05-09</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>예시 질문 2</td>
+                <td>Database</td>
+                <td>상</td>
+                <td>2025-05-08</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>예시 질문 3</td>
+                <td>Network</td>
+                <td>하</td>
+                <td>2025-05-07</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>예시 질문 4</td>
+                <td>Java</td>
+                <td>중</td>
+                <td>2025-05-09</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>예시 질문 5</td>
+                <td>Database</td>
+                <td>상</td>
+                <td>2025-05-08</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>예시 질문 6</td>
+                <td>Network</td>
+                <td>하</td>
+                <td>2025-05-07</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>예시 질문 7</td>
+                <td>Java</td>
+                <td>중</td>
+                <td>2025-05-09</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>예시 질문 8</td>
+                <td>Database</td>
+                <td>상</td>
+                <td>2025-05-08</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>예시 질문 9</td>
+                <td>Network</td>
+                <td>하</td>
+                <td>2025-05-07</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>예시 질문 10</td>
+                <td>Network</td>
+                <td>하</td>
+                <td>2025-05-07</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="pagination" class="pagination">
+            <div>
+                <a class="active">1</a>
+                <a>2</a>
+                <a>3</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 DevUp | <a href="#" style="color: #ccc; text-decoration: none;">GitHub</a> | 이메일: support@devup.com
+</footer>
+
+</body>
+</html>
