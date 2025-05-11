@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,5 +47,13 @@ public class QuestionController {
 
         List<Integer> pageNumbers = IntStream.range(startPage, endPage).boxed().toList();
         return pageNumbers;
+    }
+
+    @GetMapping("/{questionId}")
+    public String getQuestionDetailView(@PathVariable Long questionId, Model model) {
+        QuestionDetailDto question = boardService.getQuestion(questionId);
+        model.addAttribute("question", question);
+
+        return "question/question-detail";
     }
 }
