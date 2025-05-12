@@ -42,6 +42,9 @@ jwt:
   issuer: ${JWT_ISSUER}
   expiration: ${JWT_EXPIRATION}
 
+security:
+  csrf-enabled: false
+
 
 ---
 
@@ -49,3 +52,6 @@ spring:
   config:
     activate:
       on-profile: prod
+
+security:
+  csrf-enabled: true
