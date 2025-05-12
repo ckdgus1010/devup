@@ -2,6 +2,7 @@ package com.upstage.devup.auth.service;
 
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.auth.domain.dto.SignInRequestDto;
+import com.upstage.devup.auth.domain.dto.SignInResponseDto;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
 import com.upstage.devup.auth.domain.entity.User;
@@ -33,7 +34,7 @@ public class UserService {
      * @throws IllegalArgumentException 요청 데이터가 null일 때 발생
      * @throws InvalidLoginException 아이디 또는 비밀번호가 일치하지 않는 경우 발생
      */
-    public String signIn(SignInRequestDto request) {
+    public SignInResponseDto signIn(SignInRequestDto request) {
         if (request == null) {
             throw new IllegalArgumentException("유효하지 않는 요청입니다.");
         }
@@ -50,7 +51,15 @@ public class UserService {
         }
 
         // JWT 발급
-        return jwtTokenProvider.generateToken(user.getId());
+        String token = jwtTokenProvider.generateToken(user.getId());
+
+        return SignInResponseDto.builder()
+                .token(token)
+                .userId(user.getId())
+                .loginId(user.getLoginId())
+                .nickname(user.getNickname())
+                .redirectUrl("/")
+                .build();
     }
 
     /**
