@@ -16,7 +16,7 @@
         </attr>
         <attr sel="main">
             <attr sel=".signin-box">
-                <attr sel="form" th:action="@{/api/auth/signin}">
+                <attr sel="form">
                     <attr sel="div.signup-link">
                         <attr sel="a" th:href="@{/auth/signup}"/>
                     </attr>
