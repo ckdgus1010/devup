@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 상세 - DevUp</title>
+    <link rel="stylesheet" href="/static/css/question/question-detail.css"/>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <img src="/images/devup_logo.png" alt="DevUp 로고" height="32"/>
+        <strong>DevUp</strong>
+    </div>
+    <nav>
+        <a href="/">홈</a>
+        <a id="question-list" href="#">문제풀이</a>
+        <a id="mypage" href="#">마이페이지</a>
+        <a id="sign-in" href="#">로그인</a>
+    </nav>
+</header>
+
+<main>
+    <div id="container" class="container" data-question-id="#">
+
+        <div class="question-header">
+            <h1>📋 Java의 정적(static) 키워드란?</h1>
+            <div class="meta">
+                <span>📁 Java</span>
+                <span>🎯 중</span>
+                <span>🕒 2025-05-09</span>
+            </div>
+        </div>
+
+        <div class="question">
+            <p><strong>📝 문제</strong></p>
+            <div class="question-body">
+                정적 키워드(static)는 클래스 수준에서 공유되는 변수를 선언할 때 사용됩니다.
+                객체가 여러 개여도 static 변수는 하나만 존재합니다.
+            </div>
+        </div>
+
+        <div class="user-answer">
+            <label for="user-answer"><strong>📝 나의 답변</strong></label>
+            <textarea id="user-answer" rows="5" placeholder="여기에 당신의 답변을 작성하세요..."></textarea>
+        </div>
+
+        <div class="show-answer">
+            <button id="toggle-answer-btn">정답 보기</button>
+        </div>
+
+        <div class="answer-body" id="answer-box">
+            <p><strong>정답:</strong></p>
+            <p id="answer-text">
+                static 키워드는 클래스 단위로 메모리를 공유하기 위한 키워드입니다.<br>
+                static 변수는 모든 인스턴스가 공유하며, static 메서드는 객체 없이 클래스에서 직접 호출할 수 있습니다.
+            </p>
+            <div id="answer-result">
+                <p><strong>정답 결과는?</strong></p>
+                <button id="correct-btn" class="result-btn correct">✔ 맞았어요</button>
+                <button id="wrong-btn" class="result-btn wrong">❌ 틀렸어요</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 DevUp |
+    <a href="https://github.com/ckdgus1010/devup"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="color: #ccc; text-decoration: none"
+    >
+        GitHub
+    </a> |
+    이메일: ckdgus3735@gmail.com
+</footer>
+
+<script id="main-script" src="/static/js/question/question-detail.js"></script>
+
+</body>
+</html>
