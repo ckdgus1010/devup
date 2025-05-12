@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <attr sel="head">
+        <attr sel="link" th:href="@{/css/auth/signup.css}"/>
+    </attr>
+    <attr sel="body">
+        <attr sel="header">
+            <attr sel=".brand">
+                <attr sel="img" th:src="@{/images/devup_logo.png}"/>
+            </attr>
+            <attr sel="nav">
+                <attr sel="#question-list" th:href="@{/questions?pageNumber=0}"/>
+                <attr sel="#mypage" th:href="@{/mypage}"/>
+                <attr sel="#sign-in" th:href="@{/sign-in}"/>
+            </attr>
+        </attr>
+        <attr sel="main">
+            <attr sel=".container">
+                <attr sel="form" th:action="@{/signup}"/>
+            </attr>
+        </attr>
+        <attr sel="#main-script" th:src="@{/js/auth/signup.js}"/>
+    </attr>
+</thlogic>

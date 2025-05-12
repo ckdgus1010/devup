@@ -1,0 +1,119 @@
+:root {
+    --primary-color: #2C3E50;
+    --secondary-color: #E67E22;
+    --bg-color: #F4F6FB;
+    --text-color: #2E2F3E;
+    --border-color: #DADCE5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header,
+footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem 2rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav a {
+    color: #fff;
+    margin-left: 1rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.form-actions button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-actions button:hover {
+    background-color: #cf670b;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.9rem;
+}
