@@ -12,4 +12,9 @@ public class AuthViewController {
     public String getSignupPage() {
         return "auth/signup";
     }
+
+    @GetMapping("/signin")
+    public String getSigninPage() {
+        return "auth/signin";
+    }
 }

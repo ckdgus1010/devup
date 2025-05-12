@@ -16,7 +16,13 @@ public class SecurityConfig {
     };
 
     public static final String[] PUBLIC_PAGES = {
-            "/", "/auth/signup", "/questions/**", "/api/answers/**"
+            "/",
+            "/auth/signup", "/auth/signin",
+            "/questions/**"
+    };
+
+    public static final String[] PUBLIC_APIS = {
+            "/api/answers/**"
     };
 
     @Bean
@@ -30,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(STATIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_PAGES).permitAll()
+                        .requestMatchers(PUBLIC_APIS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
