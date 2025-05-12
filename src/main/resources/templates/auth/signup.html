@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - DevUp</title>
+    <link rel="stylesheet" href="/static/css/auth/signup.css"/>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <img src="/static/images/devup_logo.png" alt="DevUp 로고" height="32"/>
+        <strong>DevUp</strong>
+    </div>
+    <nav>
+        <a id="question-list" href="#">문제풀이</a>
+        <a id="mypage" href="#">마이페이지</a>
+        <a id="sign-in" href="#">로그인</a>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form action="#" method="post" onsubmit="return validateSignup();">
+            <div class="form-group">
+                <label for="login_id">아이디</label>
+                <input type="text" id="login_id" name="loginId" placeholder="아이디 입력" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호 입력" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호 확인</label>
+                <input type="password" id="password_confirm" name="password_confirm" placeholder="비밀번호 입력" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="nickname">닉네임</label>
+                <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" placeholder="이메일 입력" required/>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">가입하기</button>
+            </div>
+        </form>
+    </div>
+</main>
+<footer>
+    &copy; 2025 DevUp |
+    <a
+            href="https://github.com/ckdgus1010/devup"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color: #ccc; text-decoration: none"
+    >
+        GitHub
+    </a> |
+    이메일: ckdgus3735@gmail.com
+</footer>
+<script id="main-script" src="/static/js/auth/signup.js"/>
+</body>
+</html>

@@ -20,10 +20,10 @@ VALUES
 INSERT INTO users
     (id, login_id, password, nickname, email, created_at)
 VALUES
-    (1, 'user1', 'pass1111', '개발자1', 'user1@devup.com', CURRENT_TIMESTAMP),
-    (2, 'user2', 'pass2222', '개발자2', 'user2@devup.com', CURRENT_TIMESTAMP),
-    (3, 'user3', 'pass3333', '개발자3', 'user3@devup.com', CURRENT_TIMESTAMP),
-    (4, 'admin', 'admin123', '관리자', 'admin@devup.com', CURRENT_TIMESTAMP);
+    (1, 'user1', '$2a$12$L3hwEcWBtlbjNqbBO1Ukv.H2qYEprz6P9uylfT2RujWW9FiAEf9ve', '개발자1', 'user1@devup.com', CURRENT_TIMESTAMP),
+    (2, 'user2', '$2a$12$A5XbxYRC6WAEACzXW1QcpeKbr8NuFhcphfhACaXtRBjpWb2yACMvW', '개발자2', 'user2@devup.com', CURRENT_TIMESTAMP),
+    (3, 'user3', '$2a$12$7jpHtMMoVmHqQgw.mSgBPe8qnVXboRO3k920KCTbzChtHksJkfvo2', '개발자3', 'user3@devup.com', CURRENT_TIMESTAMP),
+    (4, 'admin', '$2a$12$.1kjJ6BpDtwS28rgV/WSo.fnVDKfdUAC3V.qk.gduTNVC9NPWrJ9W', '관리자', 'admin@devup.com', CURRENT_TIMESTAMP);
 
 -- 질문 (questions)
 INSERT INTO questions
