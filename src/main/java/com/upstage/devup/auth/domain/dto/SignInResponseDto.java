@@ -5,16 +5,19 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-@AllArgsConstructor
 public class SignInResponseDto {
 
-    private String token;
+    private final Long userId;
+    private final String loginId;
+    private final String nickname;
 
-    private Long userId;
-    private String loginId;
-    private String nickname;
+    private final String redirectUrl;
 
-    private String redirectUrl;
+    public SignInResponseDto(SignInResult result) {
+        this.userId = result.getUserId();
+        this.loginId = result.getLoginId();
+        this.nickname = result.getNickname();
 
+        this.redirectUrl = result.getRedirectUrl();
+    }
 }

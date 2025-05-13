@@ -49,8 +49,10 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_APIS).permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
-                .logout(Customizer.withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/auth/signin")
+                        .permitAll()
+                ).logout(Customizer.withDefaults());
 
         return http.build();
     }
