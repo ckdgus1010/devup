@@ -4,16 +4,7 @@
         <attr sel="link" th:href="@{/css/auth/signin.css}"/>
     </attr>
     <attr sel="body">
-        <attr sel="header">
-            <attr sel=".brand">
-                <attr sel="img" th:src="@{/images/devup_logo.png}"/>
-            </attr>
-            <attr sel="nav">
-                <attr sel="#question-list" th:href="@{/questions?pageNumber=0}"/>
-                <attr sel="#mypage" th:href="@{/mypage}"/>
-                <attr sel="#sign-in" th:href="@{/auth/signin}"/>
-            </attr>
-        </attr>
+        <attr sel="#header" th:replace="~{common/header :: header}"/>
         <attr sel="main">
             <attr sel=".signin-box">
                 <attr sel="form">
@@ -23,6 +14,7 @@
                 </attr>
             </attr>
         </attr>
+        <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
         <attr sel="#main-script" th:src="@{/js/auth/signin.js}"/>
     </attr>
 </thlogic>
