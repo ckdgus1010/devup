@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <thlogic>
     <attr sel="head">
-        <attr sel="link" th:href="@{/css/question/question-list.css}"/>
+        <attr sel="link" th:href="@{/css/user/mypage/mypage.css}"/>
     </attr>
     <attr sel="body">
         <attr sel="#footer" th:replace="~{common/footer :: footer}"/>

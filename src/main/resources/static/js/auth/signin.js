@@ -29,7 +29,6 @@ async function handleLoginSubmit(event) {
         }
 
         // 토큰 저장, 페이지 이동 등 후속 처리
-        localStorage.setItem("token", data.token);
         window.location.href = data.redirectUrl;
     } catch (err) {
         alert(err);
