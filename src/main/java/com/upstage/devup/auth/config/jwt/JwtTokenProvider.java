@@ -1,5 +1,6 @@
 package com.upstage.devup.auth.config.jwt;
 
+import com.upstage.devup.auth.config.AuthenticatedUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -74,6 +75,23 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             log.warn("User Id를 찾을 수 없음: {}", e.getMessage());
             return 0;
+        }
+    }
+
+    /**
+     * JWT 토큰에서 사용자 정보 추출
+     *
+     * @param token 사용자 정보를 추출할 JWT 토큰
+     * @return 추출된 사용자 정보
+     */
+    public AuthenticatedUser getAuthenticatedUserFromJwtToken(String token) {
+        try {
+            Claims claims = parseToken(token);
+            Long userId = Long.parseLong(claims.getSubject());
+            return new AuthenticatedUser(userId);
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("토큰에서 사용자 정보를 찾을 수 없음: {}", e.getMessage());
+            return null;
         }
     }
 
