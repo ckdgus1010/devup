@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - DevUp</title>
+    <link rel="stylesheet" href="/static/css/user/mypage/mypage.css"/>
+</head>
+<body>
+
+<header id="header">
+    <div class="brand">
+        <img src="/static/images/devup_logo.png" alt="DevUp 로고" height="32"/>
+        <strong>DevUp</strong>
+    </div>
+    <nav>
+        <a href="#">홈</a>
+        <a href="#">문제풀이</a>
+        <a href="#">마이페이지</a>
+        <a href="#">로그인</a>
+    </nav>
+</header>
+
+<main>
+    <h1>📊 마이페이지</h1>
+    <div class="tab-buttons">
+        <button class="tab-button active" data-tab="stats" id="stats-tab-btn">📈 통계</button>
+        <button class="tab-button" data-tab="history">🕓 풀이 이력</button>
+        <button class="tab-button" data-tab="wrong">❌ 오답 노트</button>
+        <button class="tab-button" data-tab="profile">🙋 사용자 정보</button>
+    </div>
+    <div id="tab-container">
+
+    </div>
+</main>
+<template class="tab-content active" id="stats">
+    <div class="card">총 풀이 수: <strong>43</strong></div>
+    <div class="card">정답률: <strong>76%</strong></div>
+    <div class="card">
+        <strong>카테고리별 풀이 현황</strong>
+        <div class="gauge-bar">
+            <div class="gauge-segment" style="width: 40%; background-color: #f39c12;">Java 40%</div>
+            <div class="gauge-segment" style="width: 30%; background-color: #3498db;">DB 30%</div>
+            <div class="gauge-segment" style="width: 30%; background-color: #9b59b6;">Network 30%</div>
+        </div>
+    </div>
+</template>
+<template class="tab-content" id="history">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>카테고리</th>
+            <th>난이도</th>
+            <th>날짜</th>
+            <th>결과</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>Java static 키워드</td>
+            <td>Java</td>
+            <td>중</td>
+            <td>2025-05-09</td>
+            <td><span class="tag correct">정답</span></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>SQL JOIN 종류</td>
+            <td>DB</td>
+            <td>상</td>
+            <td>2025-05-08</td>
+            <td><span class="tag wrong">오답</span></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+    </div>
+</template>
+<template class="tab-content" id="wrong">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>카테고리</th>
+            <th>난이도</th>
+            <th>날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>2</td>
+            <td>SQL JOIN 종류</td>
+            <td>DB</td>
+            <td>상</td>
+            <td>2025-05-08</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+    </div>
+</template>
+<template class="tab-content" id="profile">
+    <form>
+        <div class="form-group">
+            <label for="login_id">아이디</label>
+            <input type="text" id="login_id" placeholder="user1" disabled/>
+        </div>
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <div class="form-inline">
+                <input type="text" id="nickname" value="devuser"/>
+                <button type="button">수정</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <div class="form-inline">
+                <input type="email" id="email" value="devup@example.com"/>
+                <button type="button">수정</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <div class="form-inline">
+                <input type="password" id="password" placeholder="새 비밀번호 입력"/>
+                <button type="button">변경</button>
+            </div>
+        </div>
+
+    </form>
+</template>
+
+<footer id="footer">
+    &copy; 2025 DevUp |
+    <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a> |
+    이메일: devup@devup.com
+</footer>
+
+<script id="main-script" src="/static/js/user/mypage/mypage.js"></script>
+
+</body>
+</html>

@@ -30,15 +30,13 @@ public class BoardService {
      * @param page 페이지 번호
      * @return 조회된 면접 질문 목록
      */
-    public List<QuestionDetailDto> getQuestions(int page) {
+    public Page<QuestionDetailDto> getQuestions(int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
         return boardRepository
                 .findAll(pageable)
-                .stream()
-                .map(this::convertQuestionToDetailDto)
-                .collect(Collectors.toList());
+                .map(this::convertQuestionToDetailDto);
     }
 
     /**

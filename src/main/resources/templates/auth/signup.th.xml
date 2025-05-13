@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <attr sel="head">
+        <attr sel="link" th:href="@{/css/auth/signup.css}"/>
+    </attr>
+    <attr sel="body">
+        <attr sel="#header" th:replace="~{common/header :: header}"/>
+        <attr sel="main">
+            <attr sel=".container">
+                <attr sel="form" th:action="@{/api/auth/signup}"/>
+            </attr>
+        </attr>
+        <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
+        <attr sel="#main-script" th:src="@{/js/auth/signup.js}"/>
+    </attr>
+</thlogic>

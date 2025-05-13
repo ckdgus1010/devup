@@ -28,10 +28,10 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        List<QuestionDetailDto> questions = boardService.getQuestions(page);
+        Page<QuestionDetailDto> questions = boardService.getQuestions(page);
 
         // then
-        assertThat(questions.size()).isEqualTo(10);
+        assertThat(questions.getContent().size()).isEqualTo(10);
     }
 
     @Transactional

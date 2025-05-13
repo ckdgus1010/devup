@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<thlogic xmlns:th="http://www.thymeleaf.org">
+    <attr sel="head">
+        <attr sel="link" th:href="@{/css/index.css}"/>
+    </attr>
+    <attr sel="body">
+        <attr sel="#header" th:replace="~{common/header :: header}"/>
+        <attr sel="main">
+            <attr sel="div.hero-image">
+                <attr sel="img" th:src="@{/images/undraw_interview_yz52.svg}"/>
+            </attr>
+        </attr>
+        <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
+    </attr>
+</thlogic>

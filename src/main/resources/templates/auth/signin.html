@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - DevUp</title>
+    <link rel="stylesheet" href="/static/css/auth/signin.css">
+</head>
+<body>
+<header id="header">
+    <div class="brand">
+        <img src="/static/images/devup_logo.png" alt="DevUp 로고" height="32"/>
+        <strong>DevUp</strong>
+    </div>
+    <nav>
+        <a href="#">문제풀이</a>
+        <a href="#">마이페이지</a>
+        <a href="#">로그인</a>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <div class="slogan">
+            <h2>🚀 처음이 막막할 땐, DevUp에서 한 문제부터.</h2>
+        </div>
+        <div class="signin-box">
+            <h2>로그인</h2>
+            <form id="login-form" action="#" method="post">
+                <div class="form-group">
+                    <label for="login_id">아이디</label>
+                    <input type="text" id="login_id" name="loginId" placeholder="아이디 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" placeholder="비밀번호 입력" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">로그인</button>
+                </div>
+                <div class="signup-link">
+                    <span>아직 회원이 아니신가요?</span>
+                    <a href="#">회원가입</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer id="footer">
+    &copy; 2025 DevUp |
+    <a href="#">GitHub</a> |
+    이메일: devup@devup.com
+</footer>
+<script id="main-script" src="/static/js/auth/signin.js"></script>
+</body>
+</html>

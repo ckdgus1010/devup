@@ -30,6 +30,9 @@ spring:
   sql:
     init:
       mode: always
+  thymeleaf:
+  thymeleaf3:
+    decoupled-logic: true
 
 server:
   port: 8080
@@ -39,6 +42,9 @@ jwt:
   issuer: ${JWT_ISSUER}
   expiration: ${JWT_EXPIRATION}
 
+security:
+  csrf-enabled: false
+
 
 ---
 
@@ -46,3 +52,6 @@ spring:
   config:
     activate:
       on-profile: prod
+
+security:
+  csrf-enabled: true

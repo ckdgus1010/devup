@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thlogic>
+    <attr sel="head">
+        <attr sel="link" th:href="@{/css/question/question-detail.css}"/>
+    </attr>
+    <attr sel="body">
+        <attr sel="#header" th:replace="~{common/header :: header}"/>
+        <attr sel="#container" th:attr="data-question-id=${question.id}"/>
+        <attr sel="nav">
+            <attr sel="#question-list" th:href="@{/questions?pageNumber=0}"/>
+            <attr sel="#mypage" th:href="@{/mypage}"/>
+            <attr sel="#sign-in" th:href="@{/sign-in}"/>
+        </attr>
+        <attr sel="div.question-header">
+            <attr sel="h1" th:text="'📋 ' + ${question.title}"/>
+            <attr sel="div.meta">
+                <attr sel="span[0]" th:text="'📁 ' + ${question.category}"/>
+                <attr sel="span[1]" th:text="'🎯 ' + ${question.level}"/>
+                <attr sel="span[2]" th:datetime="${question.createdAt}"
+                      th:text="'🕒 ' + ${#temporals.format(question.createdAt, 'yyyy-MM-dd')}"/>
+            </attr>
+        </attr>
+        <attr sel="div.question-body" th:text="${question.questionText}"/>
+        <attr sel="div.answer-body">
+            <attr sel="p[1]" th:text="''"/>
+        </attr>
+        <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
+        <attr sel="#main-script" th:src="@{/js/question/question-detail.js}"/>
+    </attr>
+</thlogic>
