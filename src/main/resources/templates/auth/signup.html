@@ -7,19 +7,23 @@
     <link rel="stylesheet" href="/static/css/auth/signup.css"/>
 </head>
 <body>
-<header>
+<header id="header">
     <div class="brand">
         <img src="/static/images/devup_logo.png" alt="DevUp 로고" height="32"/>
         <strong>DevUp</strong>
     </div>
     <nav>
-        <a id="question-list" href="#">문제풀이</a>
-        <a id="mypage" href="#">마이페이지</a>
-        <a id="sign-in" href="#">로그인</a>
+        <a href="#">문제풀이</a>
+        <a href="#">마이페이지</a>
+        <a href="#">로그인</a>
     </nav>
 </header>
 
 <main>
+    <div id="title-text">
+        <h2>📋 간단한 정보를 입력하고 DevUp을 시작해보세요.</h2>
+        <p>회원가입만 하면 모든 기능을 바로 이용할 수 있어요.</p>
+    </div>
     <div class="container">
         <h2>회원가입</h2>
         <form action="#" method="post" onsubmit="return validateSignup();">
@@ -34,7 +38,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password">비밀번호 확인</label>
+                <label for="password_confirm">비밀번호 확인</label>
                 <input type="password" id="password_confirm" name="password_confirm" placeholder="비밀번호 입력" required/>
             </div>
 
@@ -54,18 +58,11 @@
         </form>
     </div>
 </main>
-<footer>
+<footer id="footer">
     &copy; 2025 DevUp |
-    <a
-            href="https://github.com/ckdgus1010/devup"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="color: #ccc; text-decoration: none"
-    >
-        GitHub
-    </a> |
-    이메일: ckdgus3735@gmail.com
+    <a href="#">GitHub</a> |
+    이메일: devup@devup.com
 </footer>
-<script id="main-script" src="/static/js/auth/signup.js"/>
+<script id="main-script" src="/static/js/auth/signup.js"></script>
 </body>
 </html>
