@@ -1,12 +1,12 @@
 -- 카테고리 (categories)
 INSERT INTO categories
-    (id, category)
+    (id, category, color)
 VALUES
-    (1, 'Java'),
-    (2, 'Spring'),
-    (3, '데이터베이스'),
-    (4, '자료구조'),
-    (5, '알고리즘');
+    (1, 'Java', '#e67e22'),
+    (2, 'Spring', '#4e9e18'),
+    (3, '데이터베이스', '#2375a9'),
+    (4, '자료구조', '#1e5fbb'),
+    (5, '알고리즘', '#7b35c8');
 
 -- 난이도 (levels)
 INSERT INTO levels

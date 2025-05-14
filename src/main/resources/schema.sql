@@ -20,6 +20,7 @@ CREATE TABLE categories
 (
     id       BIGINT       NOT NULL AUTO_INCREMENT,
     category VARCHAR(100) NOT NULL,
+    color    VARCHAR(10)  NOT NULL COMMENT '카테고리 바에 표시할 색상',
     PRIMARY KEY (id)
 ); -- '기술 면접 주제'
 
