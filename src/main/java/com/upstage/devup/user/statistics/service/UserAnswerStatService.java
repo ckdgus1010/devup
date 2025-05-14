@@ -62,7 +62,7 @@ public class UserAnswerStatService {
                 .map(result -> CategoryStat.builder()
                         .category(result.getCategory())
                         .solvedCount(result.getCount())
-                        .ratio(Math.round((double) result.getCount() / totalSolvedCount) * 100.0)
+                        .ratio(Math.round((double) result.getCount() / totalSolvedCount * 100.0) * 1.0)
                         .build()
                 ).toList();
 

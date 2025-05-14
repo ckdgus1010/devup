@@ -4,6 +4,23 @@
         <attr sel="link" th:href="@{/css/user/mypage/mypage.css}"/>
     </attr>
     <attr sel="body">
+        <attr sel="#header" th:replace="~{common/header :: header}"/>
+        <attr sel="#stats">
+            <attr sel=".card[0]">
+                <attr sel="strong" th:text="${quizStat.totalCount}"/>
+            </attr>
+            <attr sel=".card[1]">
+                <attr sel="strong" th:text="${(quizStat.correctCount / quizStat.totalCount * 100) + '%'}"/>
+            </attr>
+            <attr sel=".card[2]">
+                <attr sel=".gauge-bar" th:remove="all-but-first">
+                    <attr sel=".gauge-segment[0]"  th:each="stat : ${categoryStat.categoryStats}"
+                          th:style="'width: ' + ${stat.ratio} + '%;'"
+                          th:text="${stat.category} + ' ' + ${stat.ratio} + '%'"
+                    />
+                </attr>
+            </attr>
+        </attr>
         <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
         <attr sel="#main-script" th:src="@{/js/user/mypage/mypage.js}"/>
     </attr>
