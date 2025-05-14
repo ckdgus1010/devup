@@ -42,7 +42,7 @@ public class SignInController {
         return ResponseCookie
                 .from("accessToken", token)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(3600)
                 .build();

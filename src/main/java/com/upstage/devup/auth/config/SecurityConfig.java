@@ -1,16 +1,21 @@
 package com.upstage.devup.auth.config;
 
+import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     public static final String[] STATIC_RESOURCES = {
@@ -31,6 +36,12 @@ public class SecurityConfig {
     @Value("${security.csrf-enabled:true}")
     private boolean csrfEnabled;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -42,6 +53,7 @@ public class SecurityConfig {
 //            http.csrf(csrf -> csrf.disable());
             http.csrf(AbstractHttpConfigurer::disable);
         }
+
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(STATIC_RESOURCES).permitAll()
@@ -53,6 +65,15 @@ public class SecurityConfig {
                         .loginPage("/auth/signin")
                         .permitAll()
                 ).logout(Customizer.withDefaults());
+
+        http
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                (req, res, ex1) ->
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
+                        )
+                );
 
         return http.build();
     }

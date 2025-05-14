@@ -3,15 +3,13 @@ package com.upstage.devup.user.answer.domain.entity;
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.question.domain.entity.Question;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_answer_stats")
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

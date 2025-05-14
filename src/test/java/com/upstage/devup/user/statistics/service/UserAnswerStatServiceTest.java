@@ -17,7 +17,7 @@ class UserAnswerStatServiceTest {
     private UserAnswerStatService userAnswerStatService;
 
     @Test
-    @DisplayName("사용자 문제 풀이 이력 조회 성공")
+    @DisplayName("사용자 문제 풀이 통계 조회 성공")
     public void shouldGetUserAnswerStat() {
         // given
         Long userId = 1L;
@@ -34,7 +34,7 @@ class UserAnswerStatServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 문제 풀이 이력 조회 실패 - 사용자 ID가 null이면 UnAuthenticatedException 발생")
+    @DisplayName("사용자 문제 풀이 통계 조회 실패 - 사용자 ID가 null이면 UnAuthenticatedException 발생")
     public void shouldThrowUnAuthenticatedException_whenUserIdIsNull() {
         // given
         Long userId = null;
@@ -52,7 +52,7 @@ class UserAnswerStatServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 문제 풀이 이력 조회 실패 - 유효하지 않은 사용자 ID로 조회 시 빈 객체를 반환")
+    @DisplayName("사용자 문제 풀이 통계 조회 실패 - 유효하지 않은 사용자 ID로 조회 시 빈 객체를 반환")
     public void whenUserIdDoesNotExist_thenReturnEmptyStats() {
         // given
         Long userId = 0L;

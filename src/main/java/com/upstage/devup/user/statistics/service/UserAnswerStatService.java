@@ -6,8 +6,13 @@ import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
 import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
 import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto;
 import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto.CategoryStat;
+import com.upstage.devup.user.statistics.domain.dto.UserSolvedQuestionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,14 +23,32 @@ import java.util.List;
 public class UserAnswerStatService {
 
     private final UserAnswerStatRepository userAnswerStatRepository;
+    private static final int USER_SOLVED_QUESTIONS_PER_PAGE = 10;
 
-    // 사용자 문제 풀이 이력 조회
+    // 문제 풀이 이력 조회
+    public Page<UserSolvedQuestionDto> getUserSolvedQuestions(Long userId, Integer pageNumber) {
+        if (userId == null) {
+            throw new UnAuthenticatedException("로그인이 필요합니다.");
+        }
+
+        if (pageNumber == null || pageNumber < 0) {
+            pageNumber = 0;
+        }
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "firstSolvedAt");
+        Pageable pageable = PageRequest.of(pageNumber, USER_SOLVED_QUESTIONS_PER_PAGE, sort);
+
+        return userAnswerStatRepository
+                .findByUserId(userId, pageable)
+                .map(UserSolvedQuestionDto::of);
+    }
+
 
     /**
-     * 사용자의 문제 풀이 이력 조회
+     * 사용자의 문제 풀이 통계 조회
      *
      * @param userId 사용자 ID
-     * @return 사용자의 문제 풀이 이력
+     * @return 사용자의 문제 통계
      * @throws UnAuthenticatedException 사용자 ID가 null 일 때 발생
      */
     public UserAnswerStatDto getUserAnswerStat(Long userId) {
@@ -60,9 +83,11 @@ public class UserAnswerStatService {
 
         List<CategoryStat> categoryStats = results.stream()
                 .map(result -> CategoryStat.builder()
+                        .categoryId(result.getCategoryId())
                         .category(result.getCategory())
+                        .color(result.getColor())
                         .solvedCount(result.getCount())
-                        .ratio(Math.round((double) result.getCount() / totalSolvedCount) * 100.0)
+                        .ratio(Math.round((double) result.getCount() / totalSolvedCount * 100.0) * 1.0)
                         .build()
                 ).toList();
 

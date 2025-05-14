@@ -2,6 +2,8 @@ package com.upstage.devup.user.answer.repository;
 
 import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
 import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,7 +21,9 @@ public interface UserAnswerStatRepository extends JpaRepository<UserAnswerStat, 
 
     @Query(value = """
         SELECT
+            c.id,
             c.category,
+            c.color,
             COUNT(*)
         FROM user_answer_stats uas
         JOIN questions q
@@ -27,7 +31,9 @@ public interface UserAnswerStatRepository extends JpaRepository<UserAnswerStat, 
         JOIN categories c
             ON q.category_id = c.id
         WHERE uas.user_id = :userId
-        GROUP BY c.category
+        GROUP BY c.id, c.category, c.color
     """, nativeQuery = true)
     List<CategoryCountDto> findCategoriesByUserId(Long userId);
+
+    Page<UserAnswerStat> findByUserId(Long userId, Pageable pageable);
 }

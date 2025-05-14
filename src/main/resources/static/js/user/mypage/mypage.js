@@ -1,36 +1,152 @@
 const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
-let currButton = null;
-
+let currentTabButton = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    currentTabButton = document.getElementById("stats-tab-btn");
     showTab('stats');
-    currButton = document.getElementById("stats-tab-btn");
 });
 
 buttons.forEach(btn => {
     btn.addEventListener("click", () => {
-        changeButton(btn);
+        changeCurrentTabButton(btn);
         showTab(btn.dataset.tab);
     });
 });
 
-function changeButton(btn) {
-    if (currButton !== null) {
-        currButton.classList.remove('active');
+// 탭 버튼 바꾸기
+function changeCurrentTabButton(btn) {
+    if (currentTabButton !== null) {
+        currentTabButton.classList.remove('active');
     }
 
     btn.classList.add('active');
-    currButton = btn;
+    currentTabButton = btn;
 }
 
-function showTab(tabName) {
+// 탭 전환하기
+async function showTab(tabName) {
+    tabContainer.innerHTML = "";
+    tabContainer.innerHTML = "데이터를 불러오는 중입니다.";
+
     const template = document.getElementById(tabName);
 
-    if (template) {
-        tabContainer.innerHTML = "";
-
-        const content = template.content.cloneNode(true);
-        tabContainer.appendChild(content);
+    if (!template) {
+        return;
     }
+
+    tabContainer.innerHTML = "";
+
+    const content = template.content.cloneNode(true);
+    tabContainer.appendChild(content);
+
+    if (tabName === 'history') {
+        await showUserSolvedQuestions(0);
+    }
+}
+
+// 풀이 이력 목록 보여주기
+async function showUserSolvedQuestions(pageNumber) {
+    try {
+        const tbody = document.getElementById('history-body');
+        const paginationEl = document.getElementById('pagination');
+        tbody.innerHTML = '';
+        paginationEl.innerHTML = '';
+
+        const url = '/api/stat/history?pageNumber=' + pageNumber;
+        const response = await fetch(url, { method: "GET" });
+        const data = await response.json();
+
+        // 표에 서버에서 받은 목록 데이터 보여주기
+        renderTable(data.content, tbody);
+
+        // 페이징 처리
+        renderPagination(data.number, data.totalPages, paginationEl);
+    } catch (err) {
+        alert(err);
+    }
+}
+
+function renderTable(content, tbody) {
+    content.forEach(item => {
+        const row = document.createElement('tr');
+
+        const solvedAt = item.lastSolvedAt != null
+            ? item.lastSolvedAt
+            : item.firstSolvedAt;
+
+        const resultText = item.correct
+            ? "<span class='tag correct'>정답</span>"
+            : "<span class='tag wrong'>오답</span>";
+
+        row.innerHTML = `
+            <td>${item.questionId}</td>
+            <td>${item.questionTitle}</td>
+            <td>${item.category}</td>
+            <td>${item.level}</td>
+            <td>${formatDate(solvedAt)}</td>
+            <td>${resultText}</td>
+            `;
+
+        tbody.appendChild(row);
+    });
+}
+
+function renderPagination(currentPage, totalPages, paginationEl) {
+    const pageNumbers = getPageNumbers(currentPage, totalPages);
+
+    pageNumbers.forEach(page => {
+        const btn = document.createElement("button");
+        btn.textContent = page + 1;
+        btn.className = "page-btn";
+
+        if (page === currentPage) {
+            btn.classList.add("active");
+        }
+
+        btn.addEventListener("click", () => showUserSolvedQuestions(page));
+
+        paginationEl.appendChild(btn);
+    });
+}
+
+
+function getPageNumbers(currentPage, totalPages, maxPages = 5) {
+    if (totalPages === 0) {
+        return [];
+    }
+
+    const pages = [];
+
+    // 페이지 번호는 0부터 시작
+    const half = Math.floor(maxPages / 2);
+    let start = Math.max(0, currentPage - half);
+    let end = start + maxPages;
+
+    // 범위를 초과하면 조정
+    if (end > totalPages) {
+        end = totalPages;
+        start = Math.max(0, end - maxPages);
+    }
+
+    for (let i = start; i < end; i++) {
+        pages.push(i);
+    }
+
+    return pages;
+}
+
+
+function formatDate(dateStr) {
+    if (dateStr == null) {
+        return "";
+    }
+
+    const date = new Date(dateStr);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
