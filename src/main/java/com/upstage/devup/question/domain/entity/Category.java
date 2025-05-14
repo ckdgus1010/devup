@@ -21,4 +21,7 @@ public class Category {
     @Column(unique = true, nullable = false, length = 100)
     private String category;
 
+    @Column(nullable = false, length = 10)
+    private String color;
+
 }
