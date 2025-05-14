@@ -2,6 +2,7 @@ package com.upstage.devup.auth.service;
 
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.auth.domain.dto.SignInRequestDto;
+import com.upstage.devup.auth.domain.dto.SignInResult;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
 import com.upstage.devup.auth.exception.InvalidLoginException;
@@ -49,7 +50,8 @@ public class UserServiceSignInTest {
                 .build();
 
         // when
-        String token = userService.signIn(request);
+        SignInResult signInResult = userService.signIn(request);
+        String token = signInResult.getToken();
 
         // then
         // 토큰이 유효하며 유저 ID를 가지고 잇어야 함
