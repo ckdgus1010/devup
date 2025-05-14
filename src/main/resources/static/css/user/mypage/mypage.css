@@ -166,6 +166,20 @@ tr:hover {
     cursor: pointer;
 }
 
+.pagination button.active {
+    background-color: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
+.pagination button:disabled {
+    cursor: default;
+}
+
+.pagination button.active:hover {
+    background-color: var(--secondary-color);
+}
+
 .form-group {
     margin-bottom: 1rem;
 }

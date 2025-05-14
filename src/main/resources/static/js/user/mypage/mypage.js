@@ -2,6 +2,14 @@ const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
 let currentTabButton = null;
 
+const tabActionMap = {
+    stats: () => {
+    },
+    history: () => showUserSolvedQuestions(0),
+    wrong: () => showWrongNote(0),
+    profile: () => showProfile()
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     currentTabButton = document.getElementById("stats-tab-btn");
     showTab('stats');
@@ -40,77 +48,119 @@ async function showTab(tabName) {
     const content = template.content.cloneNode(true);
     tabContainer.appendChild(content);
 
-    if (tabName === 'history') {
-        await showUserSolvedQuestions(0);
+    const action = tabActionMap[tabName];
+    if (typeof action === 'function') {
+        await action();
     }
+}
+
+async function showProfile() {
+    console.log("회원 정보 보기");
+}
+
+// 오답 노트 목록 보여주기
+async function showWrongNote(pageNumber) {
+    try {
+        const tbody = document.getElementById('wrong-body');
+        const paginationEl = document.getElementById('wrong-pagination');
+        tbody.innerHTML = '';
+        paginationEl.innerHTML = '';
+
+        const url = '/api/stat/wrong?pageNumber=' + pageNumber;
+        const response = await fetch(url, {method: "GET"});
+        const data = await response.json();
+
+        // 오답 노트 목록 보여주기
+        renderTable(data.content, tbody, renderWrongNoteRow);
+
+        // 페이징 처리
+        renderPagination(data.number, data.totalPages, paginationEl, showWrongNote);
+    } catch (err) {
+        alert(err);
+    }
+}
+
+function renderWrongNoteRow(item) {
+    return `
+        <td>${item.questionId}</td>
+        <td>${item.title}</td>
+        <td>${item.category}</td>
+        <td>${item.level}</td>
+        <td>${formatDate(item.createdAt)}</td>
+        `;
 }
 
 // 풀이 이력 목록 보여주기
 async function showUserSolvedQuestions(pageNumber) {
     try {
         const tbody = document.getElementById('history-body');
-        const paginationEl = document.getElementById('pagination');
+        const paginationEl = document.getElementById('history-pagination');
         tbody.innerHTML = '';
         paginationEl.innerHTML = '';
 
         const url = '/api/stat/history?pageNumber=' + pageNumber;
-        const response = await fetch(url, { method: "GET" });
+        const response = await fetch(url, {method: "GET"});
         const data = await response.json();
 
         // 표에 서버에서 받은 목록 데이터 보여주기
-        renderTable(data.content, tbody);
+        renderTable(data.content, tbody, renderHistoryRow);
 
         // 페이징 처리
-        renderPagination(data.number, data.totalPages, paginationEl);
+        renderPagination(data.number, data.totalPages, paginationEl, showUserSolvedQuestions);
     } catch (err) {
         alert(err);
     }
 }
 
-function renderTable(content, tbody) {
+function renderHistoryRow(item) {
+    const solvedAt = item.lastSolvedAt != null
+        ? item.lastSolvedAt
+        : item.firstSolvedAt;
+
+    const resultText = item.correct
+        ? "<span class='tag correct'>정답</span>"
+        : "<span class='tag wrong'>오답</span>";
+
+    return `
+        <td>${item.questionId}</td>
+        <td>${item.questionTitle}</td>
+        <td>${item.category}</td>
+        <td>${item.level}</td>
+        <td>${formatDate(solvedAt)}</td>
+        <td>${resultText}</td>
+    `;
+}
+
+function renderTable(content, tbody, rowRenderer) {
     content.forEach(item => {
         const row = document.createElement('tr');
-
-        const solvedAt = item.lastSolvedAt != null
-            ? item.lastSolvedAt
-            : item.firstSolvedAt;
-
-        const resultText = item.correct
-            ? "<span class='tag correct'>정답</span>"
-            : "<span class='tag wrong'>오답</span>";
-
-        row.innerHTML = `
-            <td>${item.questionId}</td>
-            <td>${item.questionTitle}</td>
-            <td>${item.category}</td>
-            <td>${item.level}</td>
-            <td>${formatDate(solvedAt)}</td>
-            <td>${resultText}</td>
-            `;
+        row.innerHTML = rowRenderer(item);
 
         tbody.appendChild(row);
     });
 }
 
-function renderPagination(currentPage, totalPages, paginationEl) {
+// 페이징 처리
+function renderPagination(currentPage, totalPages, paginationEl, clickHandler) {
     const pageNumbers = getPageNumbers(currentPage, totalPages);
 
     pageNumbers.forEach(page => {
         const btn = document.createElement("button");
         btn.textContent = page + 1;
-        btn.className = "page-btn";
+        // btn.className = "page-btn";
 
         if (page === currentPage) {
             btn.classList.add("active");
+            btn.disabled = true;
         }
 
-        btn.addEventListener("click", () => showUserSolvedQuestions(page));
+        btn.addEventListener("click", () => clickHandler(page));
 
         paginationEl.appendChild(btn);
     });
 }
 
-
+// 페이징 처리 시 표시할 페이지 번호 확인
 function getPageNumbers(currentPage, totalPages, maxPages = 5) {
     if (totalPages === 0) {
         return [];
@@ -135,7 +185,6 @@ function getPageNumbers(currentPage, totalPages, maxPages = 5) {
 
     return pages;
 }
-
 
 function formatDate(dateStr) {
     if (dateStr == null) {
