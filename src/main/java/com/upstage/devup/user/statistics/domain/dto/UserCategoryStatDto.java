@@ -21,7 +21,9 @@ public class UserCategoryStatDto {
     @Builder
     @AllArgsConstructor
     public static class CategoryStat {
+        private Long categoryId;
         private String category;
+        private String color;
         private Long solvedCount;
         private Double ratio;
     }

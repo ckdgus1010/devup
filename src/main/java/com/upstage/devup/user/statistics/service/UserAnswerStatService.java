@@ -60,7 +60,9 @@ public class UserAnswerStatService {
 
         List<CategoryStat> categoryStats = results.stream()
                 .map(result -> CategoryStat.builder()
+                        .categoryId(result.getCategoryId())
                         .category(result.getCategory())
+                        .color(result.getColor())
                         .solvedCount(result.getCount())
                         .ratio(Math.round((double) result.getCount() / totalSolvedCount * 100.0) * 1.0)
                         .build()

@@ -3,15 +3,16 @@ package com.upstage.devup.user.statistics.domain.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class CategoryCountDto {
 
+    private Long categoryId;
     private String category;
+    private String color;
     private long count;
 
 }

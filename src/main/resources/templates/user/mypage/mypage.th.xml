@@ -15,7 +15,7 @@
             <attr sel=".card[2]">
                 <attr sel=".gauge-bar" th:remove="all-but-first">
                     <attr sel=".gauge-segment[0]"  th:each="stat : ${categoryStat.categoryStats}"
-                          th:style="'width: ' + ${stat.ratio} + '%;'"
+                          th:style="'width: ' + ${stat.ratio} + '%; background-color: ' + ${stat.color} + ';'"
                           th:text="${stat.category} + ' ' + ${stat.ratio} + '%'"
                     />
                 </attr>
