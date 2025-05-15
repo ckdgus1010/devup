@@ -1,3 +1,5 @@
+import {showProfile} from '/js/user/mypage/mypage-profile.js';
+
 const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
 let currentTabButton = null;
@@ -7,7 +9,7 @@ const tabActionMap = {
     },
     history: () => showUserSolvedQuestions(0),
     wrong: () => showWrongNote(0),
-    profile: () => showProfile()
+    profile: showProfile
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,10 +54,6 @@ async function showTab(tabName) {
     if (typeof action === 'function') {
         await action();
     }
-}
-
-async function showProfile() {
-    console.log("회원 정보 보기");
 }
 
 // 오답 노트 목록 보여주기

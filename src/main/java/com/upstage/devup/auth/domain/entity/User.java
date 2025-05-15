@@ -36,4 +36,12 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }
