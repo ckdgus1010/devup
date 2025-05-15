@@ -1,3 +1,5 @@
+import {showProfile} from '/js/user/mypage/mypage-profile.js';
+
 const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
 let currentTabButton = null;
@@ -7,7 +9,7 @@ const tabActionMap = {
     },
     history: () => showUserSolvedQuestions(0),
     wrong: () => showWrongNote(0),
-    profile: () => showProfile()
+    profile: showProfile
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,24 +54,6 @@ async function showTab(tabName) {
     if (typeof action === 'function') {
         await action();
     }
-}
-
-async function showProfile() {
-    const loginIdEl = document.getElementById("login_id");
-    const nicknameEl = document.getElementById("nickname");
-    const emailEl = document.getElementById("email");
-
-    loginIdEl.value = '';
-    nicknameEl.value = '';
-    emailEl.value = '';
-
-    const url = '/api/user/account';
-    const response = await fetch(url, {method: "GET"});
-    const data = await response.json();
-
-    loginIdEl.value = data.loginId;
-    nicknameEl.value = data.nickname;
-    emailEl.value = data.email;
 }
 
 // 오답 노트 목록 보여주기
