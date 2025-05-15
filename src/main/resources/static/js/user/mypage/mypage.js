@@ -55,7 +55,21 @@ async function showTab(tabName) {
 }
 
 async function showProfile() {
-    console.log("회원 정보 보기");
+    const loginIdEl = document.getElementById("login_id");
+    const nicknameEl = document.getElementById("nickname");
+    const emailEl = document.getElementById("email");
+
+    loginIdEl.value = '';
+    nicknameEl.value = '';
+    emailEl.value = '';
+
+    const url = '/api/user/account';
+    const response = await fetch(url, {method: "GET"});
+    const data = await response.json();
+
+    loginIdEl.value = data.loginId;
+    nicknameEl.value = data.nickname;
+    emailEl.value = data.email;
 }
 
 // 오답 노트 목록 보여주기
