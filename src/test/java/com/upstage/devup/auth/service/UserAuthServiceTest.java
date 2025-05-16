@@ -12,10 +12,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class UserServiceTest {
+class UserAuthServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserAuthService userAuthService;
 
     private final String loginId = "qwerty";
     private final String password = "asdf1234";
@@ -34,7 +34,7 @@ class UserServiceTest {
                 .build();
 
         // when
-        SignUpResponseDto result = userService.signUp(request);
+        SignUpResponseDto result = userAuthService.signUp(request);
 
         // then
         assertThat(result).isNotNull();
@@ -54,7 +54,7 @@ class UserServiceTest {
         // when & then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userService.signUp(request)
+                () -> userAuthService.signUp(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -77,7 +77,7 @@ class UserServiceTest {
         // when & then
         ValueAlreadyInUseException exception = assertThrows(
                 ValueAlreadyInUseException.class,
-                () -> userService.signUp(request)
+                () -> userAuthService.signUp(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -100,7 +100,7 @@ class UserServiceTest {
         // when & then
         ValueAlreadyInUseException exception = assertThrows(
                 ValueAlreadyInUseException.class,
-                () -> userService.signUp(request)
+                () -> userAuthService.signUp(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -123,7 +123,7 @@ class UserServiceTest {
         // when & then
         ValueAlreadyInUseException exception = assertThrows(
                 ValueAlreadyInUseException.class,
-                () -> userService.signUp(request)
+                () -> userAuthService.signUp(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);

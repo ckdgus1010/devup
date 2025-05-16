@@ -6,7 +6,6 @@ import com.upstage.devup.auth.domain.dto.SignInResult;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
 import com.upstage.devup.auth.exception.InvalidLoginException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class UserServiceSignInTest {
+public class UserAuthServiceSignInTest {
 
     @Autowired
-    private UserService userService;
+    private UserAuthService userAuthService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -34,7 +33,7 @@ public class UserServiceSignInTest {
         String nickname = "newUser";
         String email = "newUser@devup.com";
 
-        SignUpResponseDto signUpResult = userService.signUp(
+        SignUpResponseDto signUpResult = userAuthService.signUp(
                 SignUpRequestDto.builder()
                 .loginId(loginId)
                 .password(password)
@@ -50,7 +49,7 @@ public class UserServiceSignInTest {
                 .build();
 
         // when
-        SignInResult signInResult = userService.signIn(request);
+        SignInResult signInResult = userAuthService.signIn(request);
         String token = signInResult.getToken();
 
         // then
@@ -70,7 +69,7 @@ public class UserServiceSignInTest {
         // when & then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -89,7 +88,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -108,7 +107,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -127,7 +126,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -146,7 +145,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -165,7 +164,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -184,7 +183,7 @@ public class UserServiceSignInTest {
         // when & then
         InvalidLoginException exception = assertThrows(
                 InvalidLoginException.class,
-                () -> userService.signIn(request)
+                () -> userAuthService.signIn(request)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);

@@ -1,7 +1,7 @@
 package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.auth.domain.entity.User;
-import com.upstage.devup.auth.service.UserService;
+import com.upstage.devup.auth.service.UserAuthService;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.domain.dto.QuestionDetailDto;
 import com.upstage.devup.question.domain.entity.Question;
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserAnswerSaveService {
 
-    private final UserService userService;
+    private final UserAuthService userAuthService;
     private final BoardService boardService;
 
     private final UserAnswerRepository userAnswerRepository;
@@ -44,7 +44,7 @@ public class UserAnswerSaveService {
      */
     @Transactional
     public UserAnswerDetailDto saveUserAnswer(Long userId, UserAnswerSaveRequest request) {
-        if (!userService.isUserIdInUse(userId)) {
+        if (!userAuthService.isUserIdInUse(userId)) {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
 

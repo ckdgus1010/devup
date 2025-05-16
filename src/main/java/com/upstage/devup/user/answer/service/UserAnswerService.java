@@ -5,9 +5,7 @@ import com.upstage.devup.user.answer.domain.entity.UserAnswer;
 import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
-import com.upstage.devup.auth.domain.entity.User;
-import com.upstage.devup.auth.service.UserService;
-import com.upstage.devup.question.domain.entity.Question;
+import com.upstage.devup.auth.service.UserAuthService;
 import com.upstage.devup.question.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,7 +22,7 @@ import java.util.Optional;
 public class UserAnswerService {
 
     private final BoardService boardService;
-    private final UserService userService;
+    private final UserAuthService userAuthService;
 
     private final UserAnswerRepository userAnswerRepository;
     private final UserWrongAnswerRepository userWrongAnswerRepository;
