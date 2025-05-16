@@ -1,6 +1,6 @@
 package com.upstage.devup.user.statistics.service;
 
-import com.upstage.devup.auth.exception.UnAuthenticatedException;
+import com.upstage.devup.auth.exception.UnauthenticatedException;
 import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,15 +34,15 @@ class UserAnswerStatServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 문제 풀이 통계 조회 실패 - 사용자 ID가 null이면 UnAuthenticatedException 발생")
+    @DisplayName("사용자 문제 풀이 통계 조회 실패 - 사용자 ID가 null이면 UnauthenticatedException 발생")
     public void shouldThrowUnAuthenticatedException_whenUserIdIsNull() {
         // given
         Long userId = null;
         String errorMessage = "로그인이 필요합니다.";
 
         // when
-        UnAuthenticatedException exception = Assertions.assertThrows(
-                UnAuthenticatedException.class,
+        UnauthenticatedException exception = Assertions.assertThrows(
+                UnauthenticatedException.class,
                 () -> userAnswerStatService.getUserAnswerStat(userId)
         );
 

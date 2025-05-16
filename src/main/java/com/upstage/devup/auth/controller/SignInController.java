@@ -4,6 +4,7 @@ import com.upstage.devup.auth.domain.dto.SignInRequestDto;
 import com.upstage.devup.auth.domain.dto.SignInResponseDto;
 import com.upstage.devup.auth.domain.dto.SignInResult;
 import com.upstage.devup.auth.service.UserService;
+import com.upstage.devup.global.provider.CookieProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignInController {
 
     private final UserService userService;
+    private final CookieProvider cookieProvider;
 
     /**
      * 로그인
@@ -32,19 +34,9 @@ public class SignInController {
         SignInResult result = userService.signIn(request);
 
         // 쿠키 설정
-        ResponseCookie cookie = createAccessTokenCookie(result.getToken());
+        ResponseCookie cookie = cookieProvider.createAccessTokenCookie(result.getToken());
         response.addHeader("Set-Cookie", cookie.toString());
 
         return ResponseEntity.ok(new SignInResponseDto(result));
-    }
-
-    private ResponseCookie createAccessTokenCookie(String token) {
-        return ResponseCookie
-                .from("accessToken", token)
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(3600)
-                .build();
     }
 }
