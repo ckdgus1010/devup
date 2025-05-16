@@ -2,7 +2,7 @@ package com.upstage.devup.question.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.domain.dto.QuestionDetailDto;
-import com.upstage.devup.question.domain.entity.Question;
+import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.question.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

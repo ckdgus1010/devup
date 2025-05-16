@@ -1,7 +1,7 @@
 package com.upstage.devup.user.answer.domain.entity;
 
 import com.upstage.devup.global.entity.User;
-import com.upstage.devup.question.domain.entity.Question;
+import com.upstage.devup.global.entity.Question;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

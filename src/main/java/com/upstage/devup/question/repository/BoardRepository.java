@@ -1,6 +1,6 @@
 package com.upstage.devup.question.repository;
 
-import com.upstage.devup.question.domain.entity.Question;
+import com.upstage.devup.global.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
