@@ -1,6 +1,6 @@
 package com.upstage.devup.user.account.service;
 
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import com.upstage.devup.user.account.dto.UserAccountDto;

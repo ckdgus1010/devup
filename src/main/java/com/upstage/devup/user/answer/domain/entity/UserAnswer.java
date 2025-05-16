@@ -1,6 +1,6 @@
 package com.upstage.devup.user.answer.domain.entity;
 
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import com.upstage.devup.question.domain.entity.Question;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

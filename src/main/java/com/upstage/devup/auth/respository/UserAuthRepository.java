@@ -1,6 +1,6 @@
 package com.upstage.devup.auth.respository;
 
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

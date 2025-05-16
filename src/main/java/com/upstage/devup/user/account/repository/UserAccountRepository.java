@@ -1,6 +1,6 @@
 package com.upstage.devup.user.account.repository;
 
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

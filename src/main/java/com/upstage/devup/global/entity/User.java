@@ -1,4 +1,4 @@
-package com.upstage.devup.auth.domain.entity;
+package com.upstage.devup.global.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

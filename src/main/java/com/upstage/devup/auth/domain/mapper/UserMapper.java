@@ -2,7 +2,7 @@ package com.upstage.devup.auth.domain.mapper;
 
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

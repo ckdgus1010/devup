@@ -2,7 +2,7 @@ package com.upstage.devup.auth.service;
 
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.auth.domain.dto.*;
-import com.upstage.devup.auth.domain.entity.User;
+import com.upstage.devup.global.entity.User;
 import com.upstage.devup.auth.domain.mapper.UserMapper;
 import com.upstage.devup.auth.exception.InvalidLoginException;
 import com.upstage.devup.auth.respository.UserAuthRepository;
