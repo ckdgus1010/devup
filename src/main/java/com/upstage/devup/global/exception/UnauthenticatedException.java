@@ -1,4 +1,4 @@
-package com.upstage.devup.auth.exception;
+package com.upstage.devup.global.exception;
 
 public class UnauthenticatedException extends RuntimeException {
     public UnauthenticatedException(String message) {

@@ -5,7 +5,7 @@ import com.upstage.devup.auth.domain.dto.SignInRequestDto;
 import com.upstage.devup.auth.domain.dto.SignInResult;
 import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
 import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
-import com.upstage.devup.auth.exception.InvalidLoginException;
+import com.upstage.devup.global.exception.InvalidLoginException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

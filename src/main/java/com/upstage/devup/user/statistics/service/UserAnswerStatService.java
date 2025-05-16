@@ -1,6 +1,6 @@
 package com.upstage.devup.user.statistics.service;
 
-import com.upstage.devup.auth.exception.UnauthenticatedException;
+import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
 import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
 import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
