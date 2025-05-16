@@ -1,8 +1,12 @@
 const form = document.getElementById("login-form");
 form.addEventListener('submit', handleLoginSubmit);
 
+const submitBtn = document.getElementById("submit-btn");
+
 async function handleLoginSubmit(event) {
     event.preventDefault();
+
+    submitBtn.disabled = true;
 
     const loginId = form.loginId.value;
     const password = form.password.value;
@@ -32,5 +36,7 @@ async function handleLoginSubmit(event) {
         window.location.href = data.redirectUrl;
     } catch (err) {
         alert(err);
+    } finally {
+        submitBtn.disabled = false;
     }
 }
