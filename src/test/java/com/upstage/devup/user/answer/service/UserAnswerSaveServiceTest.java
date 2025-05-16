@@ -2,7 +2,7 @@ package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.dto.QuestionDetailDto;
-import com.upstage.devup.question.service.BoardService;
+import com.upstage.devup.question.service.QuestionService;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,7 @@ class UserAnswerSaveServiceTest {
     private UserAnswerSaveService userAnswerSaveService;
 
     @Autowired
-    private BoardService boardService;
+    private QuestionService questionService;
 
     @Transactional
     @Test
@@ -43,7 +43,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(userId, request);
 
         // then
-        QuestionDetailDto questionDetailDto = boardService.getQuestion(questionId);
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(questionId);
 
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getQuestionId()).isEqualTo(questionId);

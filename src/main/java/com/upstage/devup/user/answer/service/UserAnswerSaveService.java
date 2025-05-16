@@ -4,7 +4,7 @@ import com.upstage.devup.global.entity.User;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.global.entity.Question;
-import com.upstage.devup.question.service.BoardService;
+import com.upstage.devup.question.service.QuestionService;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
 import com.upstage.devup.user.answer.domain.entity.UserAnswer;
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserAnswerSaveService {
 
-    private final BoardService boardService;
+    private final QuestionService questionService;
 
     private final AnswerUserRepository answerUserRepository;
     private final UserAnswerRepository userAnswerRepository;
@@ -52,7 +52,7 @@ public class UserAnswerSaveService {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
 
-        QuestionDetailDto questionDetailDto = boardService.getQuestion(request.getQuestionId());
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(request.getQuestionId());
 
         UserAnswerContext context = new UserAnswerContext(userId, request.getQuestionId());
 

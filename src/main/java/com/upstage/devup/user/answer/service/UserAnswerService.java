@@ -6,7 +6,7 @@ import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
 import com.upstage.devup.auth.service.UserAuthService;
-import com.upstage.devup.question.service.BoardService;
+import com.upstage.devup.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserAnswerService {
 
-    private final BoardService boardService;
+    private final QuestionService questionService;
     private final UserAuthService userAuthService;
 
     private final UserAnswerRepository userAnswerRepository;

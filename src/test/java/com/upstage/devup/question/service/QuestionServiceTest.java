@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class BoardServiceTest {
+class QuestionServiceTest {
 
     @Autowired
-    private BoardService boardService;
+    private QuestionService questionService;
 
     @Transactional
     @Test
@@ -26,7 +26,7 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        Page<QuestionDetailDto> questions = boardService.getQuestions(page);
+        Page<QuestionDetailDto> questions = questionService.getQuestions(page);
 
         // then
         assertThat(questions.getContent().size()).isEqualTo(10);
@@ -41,7 +41,7 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = questionService.searchQuestionsByTitle(title, page);
 
         // then
         assertThat(results.getTotalElements()).isGreaterThan(0);
@@ -55,7 +55,7 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = questionService.searchQuestionsByTitle(title, page);
 
         // then
         assertThat(results.getTotalElements()).isEqualTo(0);
@@ -69,7 +69,7 @@ class BoardServiceTest {
         int page = 0;
 
         // when
-        Page<QuestionDetailDto> results = boardService.searchQuestionsByTitle(title, page);
+        Page<QuestionDetailDto> results = questionService.searchQuestionsByTitle(title, page);
 
         // then
         assertThat(results.getTotalElements()).isEqualTo(0);
@@ -83,7 +83,7 @@ class BoardServiceTest {
         Long questionId = 1L;
 
         // when
-        QuestionDetailDto result = boardService.getQuestion(questionId);
+        QuestionDetailDto result = questionService.getQuestion(questionId);
 
         // then
         assertThat(result.getId()).isEqualTo(questionId);
@@ -99,7 +99,7 @@ class BoardServiceTest {
         // when & then
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
-                () -> boardService.getQuestion(questionId)
+                () -> questionService.getQuestion(questionId)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
