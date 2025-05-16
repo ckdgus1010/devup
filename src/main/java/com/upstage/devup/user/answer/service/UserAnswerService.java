@@ -1,8 +1,8 @@
 package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.answer.dto.UserAnswerDetailDto;
-import com.upstage.devup.user.answer.domain.entity.UserAnswer;
-import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
+import com.upstage.devup.global.entity.UserAnswer;
+import com.upstage.devup.global.entity.UserWrongAnswer;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
 import com.upstage.devup.auth.service.UserAuthService;

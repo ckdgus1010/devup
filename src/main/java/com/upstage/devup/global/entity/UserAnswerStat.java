@@ -1,22 +1,17 @@
-package com.upstage.devup.user.answer.domain.entity;
+package com.upstage.devup.global.entity;
 
-import com.upstage.devup.global.entity.User;
-import com.upstage.devup.global.entity.Question;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_answers")
+@Table(name = "user_answer_stats")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAnswer {
+public class UserAnswerStat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +26,24 @@ public class UserAnswer {
     private Question question;
 
     @Column(nullable = false)
-    private String answerText;
+    private Integer correctCount;
 
     @Column(nullable = false)
-    private Boolean isCorrect;
+    private Integer wrongCount;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime firstSolvedAt;
+
+    @Setter
+    @Column(nullable = false)
+    private LocalDateTime lastSolvedAt;
+
+    public void increaseCorrectCount() {
+        this.correctCount += 1;
+    }
+
+    public void increaseWrongCount() {
+        this.wrongCount += 1;
+    }
 
 }

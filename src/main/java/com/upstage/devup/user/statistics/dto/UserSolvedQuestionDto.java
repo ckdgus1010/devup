@@ -1,6 +1,6 @@
 package com.upstage.devup.user.statistics.dto;
 
-import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
+import com.upstage.devup.global.entity.UserAnswerStat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

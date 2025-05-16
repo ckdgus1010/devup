@@ -1,6 +1,6 @@
 package com.upstage.devup.user.answer.repository;
 
-import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
+import com.upstage.devup.global.entity.UserAnswerStat;
 import com.upstage.devup.user.statistics.dto.CategoryCountDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
