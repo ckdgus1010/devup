@@ -1,11 +1,11 @@
 package com.upstage.devup.user.account.service;
 
 import com.upstage.devup.auth.domain.entity.User;
-import com.upstage.devup.auth.respository.UserRepository;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import com.upstage.devup.user.account.dto.UserAccountDto;
 import com.upstage.devup.user.account.dto.UserAccountUpdateDto;
+import com.upstage.devup.user.account.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAccountService {
 
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     /**
      * 사용자 정보 불러오기
@@ -29,7 +29,7 @@ public class UserAccountService {
             throw new EntityNotFoundException("회원 정보를 찾을 수 없습니다.");
         }
 
-        User user = userRepository.findById(userId)
+        User user = userAccountRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
         return UserAccountDto.of(user);
@@ -44,7 +44,7 @@ public class UserAccountService {
             throw new IllegalArgumentException("유효한 데이터가 아닙니다.");
         }
 
-        User user = userRepository.findById(userId)
+        User user = userAccountRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
         switch (request.getType()) {
@@ -56,7 +56,7 @@ public class UserAccountService {
                 break;
         }
 
-        User saved = userRepository.save(user);
+        User saved = userAccountRepository.save(user);
         return UserAccountDto.of(saved);
     }
 
@@ -69,7 +69,7 @@ public class UserAccountService {
             throw new ValueAlreadyInUseException("이미 사용중인 닉네임입니다.");
         }
 
-        if (userRepository.existsByNickname(newNickname)) {
+        if (userAccountRepository.existsByNickname(newNickname)) {
             throw new ValueAlreadyInUseException("이미 사용중인 닉네임입니다.");
         }
 
@@ -85,7 +85,7 @@ public class UserAccountService {
             throw new ValueAlreadyInUseException("이미 사용중인 이메일입니다.");
         }
 
-        if (userRepository.existsByEmail(newEmail)) {
+        if (userAccountRepository.existsByEmail(newEmail)) {
             throw new ValueAlreadyInUseException("이미 사용중인 이메일입니다.");
         }
 

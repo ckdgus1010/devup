@@ -5,7 +5,7 @@ import com.upstage.devup.auth.domain.dto.*;
 import com.upstage.devup.auth.domain.entity.User;
 import com.upstage.devup.auth.domain.mapper.UserMapper;
 import com.upstage.devup.auth.exception.InvalidLoginException;
-import com.upstage.devup.auth.respository.UserRepository;
+import com.upstage.devup.auth.respository.UserAuthRepository;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAuthService {
 
-    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -40,7 +40,7 @@ public class UserAuthService {
             throw new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요.");
         }
 
-        User user = userRepository.findByLoginId(request.getLoginId())
+        User user = userAuthRepository.findByLoginId(request.getLoginId())
                 .orElseThrow(() -> new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -85,7 +85,7 @@ public class UserAuthService {
             throw new ValueAlreadyInUseException("이미 사용 중입니다.");
         }
 
-        User savedEntity = userRepository.save(userMapper.toEntity(request));
+        User savedEntity = userAuthRepository.save(userMapper.toEntity(request));
 
         return userMapper.toSignUpResponseDto(savedEntity);
     }
@@ -101,7 +101,7 @@ public class UserAuthService {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
 
-        return userRepository.existsById(userId);
+        return userAuthRepository.existsById(userId);
     }
 
     /**
@@ -111,7 +111,7 @@ public class UserAuthService {
      * @return true: 이미 사용 중, false: 사용 가능
      */
     private boolean isLoginIdInUse(String loginId) {
-        return userRepository.existsByLoginId(loginId);
+        return userAuthRepository.existsByLoginId(loginId);
     }
 
     /**
@@ -121,7 +121,7 @@ public class UserAuthService {
      * @return true: 이미 사용 중, false: 사용 가능
      */
     private boolean isNicknameInUse(String nickname) {
-        return userRepository.existsByNickname(nickname);
+        return userAuthRepository.existsByNickname(nickname);
     }
 
     /**
@@ -131,6 +131,6 @@ public class UserAuthService {
      * @return true: 이미 사용 중, false: 사용 가능
      */
     private boolean isEmailInUse(String email) {
-        return userRepository.existsByEmail(email);
+        return userAuthRepository.existsByEmail(email);
     }
 }
