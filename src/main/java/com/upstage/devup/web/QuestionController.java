@@ -1,7 +1,7 @@
 package com.upstage.devup.web;
 
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
-import com.upstage.devup.question.service.BoardService;
+import com.upstage.devup.question.dto.QuestionDetailDto;
+import com.upstage.devup.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,11 +19,11 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class QuestionController {
 
-    private final BoardService boardService;
+    private final QuestionService questionService;
 
     @GetMapping
     public String getQuestionListView(@RequestParam(defaultValue = "0") int pageNumber, Model model) {
-        Page<QuestionDetailDto> questions = boardService.getQuestions(pageNumber);
+        Page<QuestionDetailDto> questions = questionService.getQuestions(pageNumber);
         List<Integer> pageNumbers = getPageNumbers(questions);
 
         model.addAttribute("questions", questions);
@@ -51,7 +51,7 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String getQuestionDetailView(@PathVariable Long questionId, Model model) {
-        QuestionDetailDto question = boardService.getQuestion(questionId);
+        QuestionDetailDto question = questionService.getQuestion(questionId);
         model.addAttribute("question", question);
 
         return "question/question-detail";

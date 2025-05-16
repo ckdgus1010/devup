@@ -1,6 +1,6 @@
 package com.upstage.devup.answer.service;
 
-import com.upstage.devup.answer.domain.dto.AnswerDetailDto;
+import com.upstage.devup.answer.dto.AnswerDetailDto;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.upstage.devup.answer.repository;
 
-import com.upstage.devup.answer.domain.entity.Answer;
+import com.upstage.devup.global.entity.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

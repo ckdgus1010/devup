@@ -1,6 +1,6 @@
 package com.upstage.devup.answer.controller;
 
-import com.upstage.devup.answer.domain.dto.AnswerDetailDto;
+import com.upstage.devup.answer.dto.AnswerDetailDto;
 import com.upstage.devup.answer.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

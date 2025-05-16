@@ -1,6 +1,6 @@
 package com.upstage.devup.user.answer.repository;
 
-import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
+import com.upstage.devup.global.entity.UserWrongAnswer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

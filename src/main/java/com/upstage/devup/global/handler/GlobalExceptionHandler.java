@@ -1,7 +1,7 @@
 package com.upstage.devup.global.handler;
 
-import com.upstage.devup.auth.exception.InvalidLoginException;
-import com.upstage.devup.auth.exception.UnauthenticatedException;
+import com.upstage.devup.global.exception.InvalidLoginException;
+import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.global.domain.dto.ErrorResponse;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;

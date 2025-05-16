@@ -1,9 +1,9 @@
 package com.upstage.devup.auth.controller;
 
-import com.upstage.devup.auth.domain.dto.SignInRequestDto;
-import com.upstage.devup.auth.domain.dto.SignInResponseDto;
-import com.upstage.devup.auth.domain.dto.SignInResult;
-import com.upstage.devup.auth.service.UserService;
+import com.upstage.devup.auth.dto.SignInRequestDto;
+import com.upstage.devup.auth.dto.SignInResponseDto;
+import com.upstage.devup.auth.dto.SignInResult;
+import com.upstage.devup.auth.service.UserAuthService;
 import com.upstage.devup.global.provider.CookieProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SignInController {
 
-    private final UserService userService;
+    private final UserAuthService userAuthService;
     private final CookieProvider cookieProvider;
 
     /**
@@ -31,7 +31,7 @@ public class SignInController {
      */
     @PostMapping
     public ResponseEntity<?> signIn(@RequestBody @Valid SignInRequestDto request, HttpServletResponse response) {
-        SignInResult result = userService.signIn(request);
+        SignInResult result = userAuthService.signIn(request);
 
         // 쿠키 설정
         ResponseCookie cookie = cookieProvider.createAccessTokenCookie(result.getToken());

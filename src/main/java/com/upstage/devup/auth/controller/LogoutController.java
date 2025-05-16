@@ -1,8 +1,8 @@
 package com.upstage.devup.auth.controller;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
-import com.upstage.devup.auth.domain.dto.LogoutResponseDto;
-import com.upstage.devup.auth.exception.UnauthenticatedException;
+import com.upstage.devup.auth.dto.LogoutResponseDto;
+import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.global.provider.CookieProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
