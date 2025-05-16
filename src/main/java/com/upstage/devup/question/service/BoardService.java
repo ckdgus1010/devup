@@ -3,7 +3,7 @@ package com.upstage.devup.question.service;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.global.entity.Question;
-import com.upstage.devup.question.repository.BoardRepository;
+import com.upstage.devup.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final BoardRepository boardRepository;
+    private final QuestionRepository questionRepository;
 
     private static final int QUESTIONS_PER_PAGE = 10;
 
@@ -31,7 +31,7 @@ public class BoardService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
-        return boardRepository
+        return questionRepository
                 .findAll(pageable)
                 .map(this::convertQuestionToDetailDto);
     }
@@ -57,7 +57,7 @@ public class BoardService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
-        return boardRepository
+        return questionRepository
                 .findByTitleContainsIgnoreCase(str, pageable)
                 .map(this::convertQuestionToDetailDto);
     }
@@ -69,7 +69,7 @@ public class BoardService {
      * @return 면접 질문 상세 정보
      */
     public QuestionDetailDto getQuestion(Long id) {
-        return boardRepository
+        return questionRepository
                 .findById(id)
                 .map(this::convertQuestionToDetailDto)
                 .orElseThrow(() -> new EntityNotFoundException("면접 질문을 찾을 수 없습니다."));
@@ -82,7 +82,7 @@ public class BoardService {
      * @return 사용 중인 ID, false: 사용하지 않는 ID
      */
     public boolean isQuestionIdInUse(Long questionId) {
-        return boardRepository.existsById(questionId);
+        return questionRepository.existsById(questionId);
     }
 
     private QuestionDetailDto convertQuestionToDetailDto(Question question) {
