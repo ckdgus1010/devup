@@ -1,6 +1,6 @@
 package com.upstage.devup.user.statistics.service;
 
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

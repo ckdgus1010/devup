@@ -1,7 +1,7 @@
 package com.upstage.devup.user.answer.repository;
 
 import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
-import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
+import com.upstage.devup.user.statistics.dto.CategoryCountDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

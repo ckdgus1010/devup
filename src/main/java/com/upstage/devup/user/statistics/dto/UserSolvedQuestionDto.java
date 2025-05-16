@@ -1,4 +1,4 @@
-package com.upstage.devup.user.statistics.domain.dto;
+package com.upstage.devup.user.statistics.dto;
 
 import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
 import lombok.AllArgsConstructor;

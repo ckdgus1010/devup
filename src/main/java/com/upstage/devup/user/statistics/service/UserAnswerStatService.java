@@ -2,11 +2,11 @@ package com.upstage.devup.user.statistics.service;
 
 import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
-import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
-import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto;
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto.CategoryStat;
-import com.upstage.devup.user.statistics.domain.dto.UserSolvedQuestionDto;
+import com.upstage.devup.user.statistics.dto.CategoryCountDto;
+import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto.CategoryStat;
+import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
