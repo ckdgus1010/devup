@@ -1,4 +1,4 @@
-<header>
+<header xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="brand">
         <img src="/images/devup_logo.png" alt="DevUp 로고" height="32"/>
         <strong>DevUp</strong>
@@ -6,7 +6,9 @@
     <nav>
         <a href="/">홈</a>
         <a href="/questions?pageNumber=0">문제풀이</a>
-        <a href="/mypage">마이페이지</a>
-        <a href="/auth/signin">로그인</a>
+        <a href="/mypage" sec:authorize="isAuthenticated()">마이페이지</a>
+        <a href="/auth/signin" sec:authorize="isAnonymous()">로그인</a>
+        <a href="#" onclick="logout()" sec:authorize="isAuthenticated()">로그아웃</a>
     </nav>
+    <script th:src="@{/js/header.js}"></script>
 </header>
