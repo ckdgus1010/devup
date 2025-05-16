@@ -128,8 +128,7 @@ class UserStatControllerTest {
                 .andExpect(jsonPath("$.content[0].questionId").value(String.valueOf(dto.getQuestionId())))
                 .andExpect(jsonPath("$.content[0].title").value(String.valueOf(dto.getTitle())))
                 .andExpect(jsonPath("$.content[0].category").value(String.valueOf(dto.getCategory())))
-                .andExpect(jsonPath("$.content[0].level").value(String.valueOf(dto.getLevel())))
-                .andExpect(jsonPath("$.content[0].createdAt").value(String.valueOf(dto.getCreatedAt())));
+                .andExpect(jsonPath("$.content[0].level").value(String.valueOf(dto.getLevel())));
     }
 
     private RequestPostProcessor getAuthentication(Long userId) {

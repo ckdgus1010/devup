@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class UserAuthService {
 
@@ -96,7 +96,7 @@ public class UserAuthService {
      * @param userId 확인할 유저 ID
      * @return true: 사용 중인 ID, false: 사용하지 않는 ID
      */
-    public boolean isUserIdInUse(Long userId) {
+    private boolean isUserIdInUse(Long userId) {
         if (userId == null) {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
@@ -110,7 +110,7 @@ public class UserAuthService {
      * @param loginId 확인할 로그인 ID
      * @return true: 이미 사용 중, false: 사용 가능
      */
-    public boolean isLoginIdInUse(String loginId) {
+    private boolean isLoginIdInUse(String loginId) {
         return userRepository.existsByLoginId(loginId);
     }
 
@@ -120,7 +120,7 @@ public class UserAuthService {
      * @param nickname 확인할 닉네임
      * @return true: 이미 사용 중, false: 사용 가능
      */
-    public boolean isNicknameInUse(String nickname) {
+    private boolean isNicknameInUse(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 
@@ -130,7 +130,7 @@ public class UserAuthService {
      * @param email 확인할 이메일
      * @return true: 이미 사용 중, false: 사용 가능
      */
-    public boolean isEmailInUse(String email) {
+    private boolean isEmailInUse(String email) {
         return userRepository.existsByEmail(email);
     }
 }

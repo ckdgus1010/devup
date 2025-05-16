@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserAnswerSaveServiceTest {
@@ -67,7 +68,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -85,7 +86,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -103,7 +104,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = null;
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -124,7 +125,7 @@ class UserAnswerSaveServiceTest {
                 .build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
