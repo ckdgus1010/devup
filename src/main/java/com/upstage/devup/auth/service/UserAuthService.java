@@ -1,9 +1,12 @@
 package com.upstage.devup.auth.service;
 
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
-import com.upstage.devup.auth.domain.dto.*;
+import com.upstage.devup.auth.dto.SignInRequestDto;
+import com.upstage.devup.auth.dto.SignInResult;
+import com.upstage.devup.auth.dto.SignUpRequestDto;
+import com.upstage.devup.auth.dto.SignUpResponseDto;
 import com.upstage.devup.global.entity.User;
-import com.upstage.devup.auth.domain.mapper.UserMapper;
+import com.upstage.devup.auth.mapper.UserMapper;
 import com.upstage.devup.global.exception.InvalidLoginException;
 import com.upstage.devup.auth.respository.UserAuthRepository;
 import com.upstage.devup.global.exception.EntityNotFoundException;

@@ -1,4 +1,4 @@
-package com.upstage.devup.auth.domain.dto;
+package com.upstage.devup.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

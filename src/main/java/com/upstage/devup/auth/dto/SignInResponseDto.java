@@ -1,7 +1,5 @@
-package com.upstage.devup.auth.domain.dto;
+package com.upstage.devup.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

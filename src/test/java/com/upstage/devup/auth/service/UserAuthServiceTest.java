@@ -1,7 +1,7 @@
 package com.upstage.devup.auth.service;
 
-import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
-import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
+import com.upstage.devup.auth.dto.SignUpRequestDto;
+import com.upstage.devup.auth.dto.SignUpResponseDto;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

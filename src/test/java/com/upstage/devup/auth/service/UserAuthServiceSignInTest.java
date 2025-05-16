@@ -1,10 +1,10 @@
 package com.upstage.devup.auth.service;
 
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
-import com.upstage.devup.auth.domain.dto.SignInRequestDto;
-import com.upstage.devup.auth.domain.dto.SignInResult;
-import com.upstage.devup.auth.domain.dto.SignUpRequestDto;
-import com.upstage.devup.auth.domain.dto.SignUpResponseDto;
+import com.upstage.devup.auth.dto.SignInRequestDto;
+import com.upstage.devup.auth.dto.SignInResult;
+import com.upstage.devup.auth.dto.SignUpRequestDto;
+import com.upstage.devup.auth.dto.SignUpResponseDto;
 import com.upstage.devup.global.exception.InvalidLoginException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

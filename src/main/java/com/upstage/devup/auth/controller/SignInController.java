@@ -1,8 +1,8 @@
 package com.upstage.devup.auth.controller;
 
-import com.upstage.devup.auth.domain.dto.SignInRequestDto;
-import com.upstage.devup.auth.domain.dto.SignInResponseDto;
-import com.upstage.devup.auth.domain.dto.SignInResult;
+import com.upstage.devup.auth.dto.SignInRequestDto;
+import com.upstage.devup.auth.dto.SignInResponseDto;
+import com.upstage.devup.auth.dto.SignInResult;
 import com.upstage.devup.auth.service.UserAuthService;
 import com.upstage.devup.global.provider.CookieProvider;
 import jakarta.servlet.http.HttpServletResponse;
