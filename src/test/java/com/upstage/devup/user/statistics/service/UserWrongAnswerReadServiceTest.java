@@ -1,7 +1,7 @@
 package com.upstage.devup.user.statistics.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.user.statistics.domain.dto.WrongNoteSummaryDto;
+import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

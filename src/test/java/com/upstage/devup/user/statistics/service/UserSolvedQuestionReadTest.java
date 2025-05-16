@@ -1,7 +1,7 @@
 package com.upstage.devup.user.statistics.service;
 
-import com.upstage.devup.auth.exception.UnAuthenticatedException;
-import com.upstage.devup.user.statistics.domain.dto.UserSolvedQuestionDto;
+import com.upstage.devup.global.exception.UnauthenticatedException;
+import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,8 +81,8 @@ class UserSolvedQuestionReadTest {
         String errorMessage = "로그인이 필요합니다.";
 
         // when & then
-        UnAuthenticatedException exception = Assertions.assertThrows(
-                UnAuthenticatedException.class,
+        UnauthenticatedException exception = Assertions.assertThrows(
+                UnauthenticatedException.class,
                 () -> userAnswerStatService.getUserSolvedQuestions(userId, pageNumber)
         );
 

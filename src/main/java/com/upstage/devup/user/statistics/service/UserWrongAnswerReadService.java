@@ -1,10 +1,10 @@
 package com.upstage.devup.user.statistics.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.entity.Question;
-import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
+import com.upstage.devup.global.entity.Question;
+import com.upstage.devup.global.entity.UserWrongAnswer;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
-import com.upstage.devup.user.statistics.domain.dto.WrongNoteSummaryDto;
+import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

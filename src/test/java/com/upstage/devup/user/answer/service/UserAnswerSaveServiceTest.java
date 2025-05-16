@@ -1,19 +1,18 @@
 package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
-import com.upstage.devup.question.service.BoardService;
-import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;
-import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
-import org.junit.jupiter.api.Assertions;
+import com.upstage.devup.question.dto.QuestionDetailDto;
+import com.upstage.devup.question.service.QuestionService;
+import com.upstage.devup.user.answer.dto.UserAnswerDetailDto;
+import com.upstage.devup.user.answer.dto.UserAnswerSaveRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserAnswerSaveServiceTest {
@@ -22,7 +21,7 @@ class UserAnswerSaveServiceTest {
     private UserAnswerSaveService userAnswerSaveService;
 
     @Autowired
-    private BoardService boardService;
+    private QuestionService questionService;
 
     @Transactional
     @Test
@@ -44,7 +43,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(userId, request);
 
         // then
-        QuestionDetailDto questionDetailDto = boardService.getQuestion(questionId);
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(questionId);
 
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getQuestionId()).isEqualTo(questionId);
@@ -67,7 +66,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -85,7 +84,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -103,7 +102,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerSaveRequest request = null;
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );
@@ -124,7 +123,7 @@ class UserAnswerSaveServiceTest {
                 .build();
 
         // when
-        EntityNotFoundException exception = Assertions.assertThrows(
+        EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
                 () -> userAnswerSaveService.saveUserAnswer(userId, request)
         );

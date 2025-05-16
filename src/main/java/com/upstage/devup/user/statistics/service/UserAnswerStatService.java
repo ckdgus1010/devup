@@ -1,12 +1,12 @@
 package com.upstage.devup.user.statistics.service;
 
-import com.upstage.devup.auth.exception.UnAuthenticatedException;
+import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
-import com.upstage.devup.user.statistics.domain.dto.CategoryCountDto;
-import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto;
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto.CategoryStat;
-import com.upstage.devup.user.statistics.domain.dto.UserSolvedQuestionDto;
+import com.upstage.devup.user.statistics.dto.CategoryCountDto;
+import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto.CategoryStat;
+import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class UserAnswerStatService {
     // 문제 풀이 이력 조회
     public Page<UserSolvedQuestionDto> getUserSolvedQuestions(Long userId, Integer pageNumber) {
         if (userId == null) {
-            throw new UnAuthenticatedException("로그인이 필요합니다.");
+            throw new UnauthenticatedException("로그인이 필요합니다.");
         }
 
         if (pageNumber == null || pageNumber < 0) {
@@ -49,11 +49,11 @@ public class UserAnswerStatService {
      *
      * @param userId 사용자 ID
      * @return 사용자의 문제 통계
-     * @throws UnAuthenticatedException 사용자 ID가 null 일 때 발생
+     * @throws UnauthenticatedException 사용자 ID가 null 일 때 발생
      */
     public UserAnswerStatDto getUserAnswerStat(Long userId) {
         if (userId == null) {
-            throw new UnAuthenticatedException("로그인이 필요합니다.");
+            throw new UnauthenticatedException("로그인이 필요합니다.");
         }
 
         long totalCount = userAnswerStatRepository.countUserAnswerStatByUserId(userId);
@@ -71,11 +71,11 @@ public class UserAnswerStatService {
      *
      * @param userId 사용자 ID
      * @return 카테고리 비율
-     * @throws UnAuthenticatedException 사용자 ID가 null 일 때 발생
+     * @throws UnauthenticatedException 사용자 ID가 null 일 때 발생
      */
     public UserCategoryStatDto getUserCategoryStat(Long userId) {
         if (userId == null) {
-            throw new UnAuthenticatedException("로그인이 필요합니다.");
+            throw new UnauthenticatedException("로그인이 필요합니다.");
         }
 
         List<CategoryCountDto> results = userAnswerStatRepository.findCategoriesByUserId(userId);

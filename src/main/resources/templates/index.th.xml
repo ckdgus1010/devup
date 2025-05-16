@@ -6,6 +6,7 @@
     <attr sel="body">
         <attr sel="#header" th:replace="~{common/header :: header}"/>
         <attr sel="main">
+            <attr sel="#start-btn" th:href="@{/auth/signin}"/>
             <attr sel="div.hero-image">
                 <attr sel="img" th:src="@{/images/undraw_interview_yz52.svg}"/>
             </attr>

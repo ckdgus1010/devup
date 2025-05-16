@@ -3,8 +3,8 @@ package com.upstage.devup.user.statistics.controller;
 import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
-import com.upstage.devup.user.statistics.domain.dto.UserSolvedQuestionDto;
-import com.upstage.devup.user.statistics.domain.dto.WrongNoteSummaryDto;
+import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
+import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
 import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
 import org.junit.jupiter.api.DisplayName;
@@ -128,8 +128,7 @@ class UserStatControllerTest {
                 .andExpect(jsonPath("$.content[0].questionId").value(String.valueOf(dto.getQuestionId())))
                 .andExpect(jsonPath("$.content[0].title").value(String.valueOf(dto.getTitle())))
                 .andExpect(jsonPath("$.content[0].category").value(String.valueOf(dto.getCategory())))
-                .andExpect(jsonPath("$.content[0].level").value(String.valueOf(dto.getLevel())))
-                .andExpect(jsonPath("$.content[0].createdAt").value(String.valueOf(dto.getCreatedAt())));
+                .andExpect(jsonPath("$.content[0].level").value(String.valueOf(dto.getLevel())));
     }
 
     private RequestPostProcessor getAuthentication(Long userId) {

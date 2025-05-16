@@ -1,8 +1,8 @@
 package com.upstage.devup.web;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
-import com.upstage.devup.user.statistics.domain.dto.UserAnswerStatDto;
-import com.upstage.devup.user.statistics.domain.dto.UserCategoryStatDto;
+import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
+import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
 import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
 import lombok.RequiredArgsConstructor;

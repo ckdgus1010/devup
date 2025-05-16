@@ -1,6 +1,7 @@
 package com.upstage.devup.global.handler;
 
-import com.upstage.devup.auth.exception.InvalidLoginException;
+import com.upstage.devup.global.exception.InvalidLoginException;
+import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.global.domain.dto.ErrorResponse;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
@@ -27,9 +28,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValueAlreadyInUseException.class)
-    public ResponseEntity<ErrorResponse> handleValueAlreadInUse(ValueAlreadyInUseException e) {
+    public ResponseEntity<ErrorResponse> handleValueAlreadyInUse(ValueAlreadyInUseException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse("VALUE_ALREADY_IN_USE", e.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthenticated(UnauthenticatedException e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse("Unauthenticated", e.getMessage()));
     }
 }

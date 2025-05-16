@@ -1,16 +1,16 @@
 package com.upstage.devup.user.answer.service;
 
-import com.upstage.devup.auth.domain.entity.User;
-import com.upstage.devup.auth.service.UserService;
+import com.upstage.devup.global.entity.User;
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
-import com.upstage.devup.question.domain.entity.Question;
-import com.upstage.devup.question.service.BoardService;
-import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;
-import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
-import com.upstage.devup.user.answer.domain.entity.UserAnswer;
-import com.upstage.devup.user.answer.domain.entity.UserAnswerStat;
-import com.upstage.devup.user.answer.domain.entity.UserWrongAnswer;
+import com.upstage.devup.question.dto.QuestionDetailDto;
+import com.upstage.devup.global.entity.Question;
+import com.upstage.devup.question.service.QuestionService;
+import com.upstage.devup.user.answer.dto.UserAnswerDetailDto;
+import com.upstage.devup.user.answer.dto.UserAnswerSaveRequest;
+import com.upstage.devup.global.entity.UserAnswer;
+import com.upstage.devup.global.entity.UserAnswerStat;
+import com.upstage.devup.global.entity.UserWrongAnswer;
+import com.upstage.devup.user.answer.repository.AnswerUserRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
@@ -27,9 +27,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserAnswerSaveService {
 
-    private final UserService userService;
-    private final BoardService boardService;
+    private final QuestionService questionService;
 
+    private final AnswerUserRepository answerUserRepository;
     private final UserAnswerRepository userAnswerRepository;
     private final UserAnswerStatRepository userAnswerStatRepository;
     private final UserWrongAnswerRepository userWrongAnswerRepository;
@@ -44,15 +44,15 @@ public class UserAnswerSaveService {
      */
     @Transactional
     public UserAnswerDetailDto saveUserAnswer(Long userId, UserAnswerSaveRequest request) {
-        if (!userService.isUserIdInUse(userId)) {
-            throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
-        }
-
         if (request == null) {
             throw new EntityNotFoundException("면접 질문을 찾을 수 없습니다.");
         }
 
-        QuestionDetailDto questionDetailDto = boardService.getQuestion(request.getQuestionId());
+        if (userId == null || !answerUserRepository.existsById(userId)) {
+            throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
+        }
+
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(request.getQuestionId());
 
         UserAnswerContext context = new UserAnswerContext(userId, request.getQuestionId());
 
