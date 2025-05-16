@@ -1,18 +1,16 @@
 package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
+import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.question.service.BoardService;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 

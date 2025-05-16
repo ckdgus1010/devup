@@ -1,7 +1,7 @@
 package com.upstage.devup.question.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
+import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.question.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;

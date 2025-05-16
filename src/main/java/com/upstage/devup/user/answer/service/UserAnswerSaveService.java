@@ -2,7 +2,7 @@ package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.global.entity.User;
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
+import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.question.service.BoardService;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerDetailDto;

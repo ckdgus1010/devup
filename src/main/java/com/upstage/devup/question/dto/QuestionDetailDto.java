@@ -1,4 +1,4 @@
-package com.upstage.devup.question.domain.dto;
+package com.upstage.devup.question.dto;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.upstage.devup.web;
 
-import com.upstage.devup.question.domain.dto.QuestionDetailDto;
+import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.question.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
