@@ -1,6 +1,5 @@
 package com.upstage.devup.answer.service;
 
-import com.upstage.devup.answer.domain.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.domain.dto.UserAnswerSaveRequest;
 import com.upstage.devup.user.answer.service.UserAnswerService;
 import org.junit.jupiter.api.DisplayName;

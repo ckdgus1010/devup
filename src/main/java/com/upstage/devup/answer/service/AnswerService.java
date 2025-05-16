@@ -1,6 +1,6 @@
 package com.upstage.devup.answer.service;
 
-import com.upstage.devup.answer.domain.dto.AnswerDetailDto;
+import com.upstage.devup.answer.dto.AnswerDetailDto;
 import com.upstage.devup.global.entity.Answer;
 import com.upstage.devup.answer.repository.AnswerRepository;
 import com.upstage.devup.global.exception.EntityNotFoundException;
