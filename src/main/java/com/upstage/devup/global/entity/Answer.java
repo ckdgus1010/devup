@@ -1,4 +1,4 @@
-package com.upstage.devup.answer.domain.entity;
+package com.upstage.devup.global.entity;
 
 import com.upstage.devup.question.domain.entity.Question;
 import jakarta.persistence.*;
