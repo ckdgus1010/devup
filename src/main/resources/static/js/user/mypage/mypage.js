@@ -117,7 +117,7 @@ function renderHistoryRow(item) {
 
     return `
         <td>${item.questionId}</td>
-        <td>${item.questionTitle}</td>
+        <td><a href="/user/history/${item.id}">${item.questionTitle}</a></td>
         <td>${item.category}</td>
         <td>${item.level}</td>
         <td>${formatDate(item.solvedAt)}</td>
