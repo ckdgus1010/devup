@@ -1,6 +1,9 @@
 package com.upstage.devup.user.history.service;
 
+import com.upstage.devup.global.entity.UserAnswer;
+import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.exception.UnauthenticatedException;
+import com.upstage.devup.user.history.dto.UserSolvedHistoryDetailDto;
 import com.upstage.devup.user.history.repository.UserSolvedHistoryRepository;
 import com.upstage.devup.user.history.dto.UserSolvedQuestionDto;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +40,22 @@ public class UserSolvedHistoryService {
         return userSolvedHistoryRepository
                 .findByUserId(userId, pageable)
                 .map(UserSolvedQuestionDto::of);
+    }
+
+    /**
+     * 상세 문제 풀이 이력 조회
+     *
+     * @param userAnswerId 사용자 답안 ID
+     * @return 상세 문제 풀이 이력
+     */
+    public UserSolvedHistoryDetailDto getUserSolvedHistoryDetail(Long userAnswerId) {
+        if (userAnswerId == null || userAnswerId <= 0L) {
+            throw new IllegalArgumentException("풀이 이력을 찾을 수 없습니다.");
+        }
+
+        UserAnswer userAnswer = userSolvedHistoryRepository.findById(userAnswerId)
+                .orElseThrow(() -> new EntityNotFoundException("풀이 이력을 찾을 수 없습니다."));
+
+        return UserSolvedHistoryDetailDto.of(userAnswer);
     }
 }
