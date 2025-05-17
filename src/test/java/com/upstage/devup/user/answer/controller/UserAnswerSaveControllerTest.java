@@ -50,7 +50,7 @@ class UserAnswerSaveControllerTest {
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
-    private static final String URI_TEMPLATE = "/user/answer";
+    private static final String URI_TEMPLATE = "/api/user/answer";
 
     private RequestPostProcessor getAuthentication(Long userId) {
         AuthenticatedUser user = new AuthenticatedUser(userId);
