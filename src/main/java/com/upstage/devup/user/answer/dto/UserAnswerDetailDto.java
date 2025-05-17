@@ -1,5 +1,6 @@
 package com.upstage.devup.user.answer.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,5 +26,7 @@ public class UserAnswerDetailDto {
     private String answerText;
 
     private Boolean isCorrect;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 }
