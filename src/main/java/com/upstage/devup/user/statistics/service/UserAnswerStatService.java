@@ -7,6 +7,7 @@ import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
 import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
 import com.upstage.devup.user.statistics.dto.UserCategoryStatDto.CategoryStat;
 import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
+import com.upstage.devup.user.statistics.repository.UserAnswerHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserAnswerStatService {
 
     private final UserAnswerStatRepository userAnswerStatRepository;
+    private final UserAnswerHistoryRepository userAnswerHistoryRepository;
     private static final int USER_SOLVED_QUESTIONS_PER_PAGE = 10;
 
     // 문제 풀이 이력 조회
@@ -35,10 +37,10 @@ public class UserAnswerStatService {
             pageNumber = 0;
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "firstSolvedAt");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(pageNumber, USER_SOLVED_QUESTIONS_PER_PAGE, sort);
 
-        return userAnswerStatRepository
+        return userAnswerHistoryRepository
                 .findByUserId(userId, pageable)
                 .map(UserSolvedQuestionDto::of);
     }

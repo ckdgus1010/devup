@@ -64,8 +64,7 @@ class UserStatControllerTest {
                 .questionTitle("제목")
                 .category("카테고리")
                 .level("난이도")
-                .firstSolvedAt(LocalDateTime.now())
-                .lastSolvedAt(null)
+                .solvedAt(LocalDateTime.now())
                 .isCorrect(true)
                 .build();
 
@@ -87,8 +86,7 @@ class UserStatControllerTest {
                 .andExpect(jsonPath("$.content[0].questionTitle").value(dto.getQuestionTitle()))
                 .andExpect(jsonPath("$.content[0].category").value(dto.getCategory()))
                 .andExpect(jsonPath("$.content[0].level").value(dto.getLevel()))
-                .andExpect(jsonPath("$.content[0].firstSolvedAt").value(String.valueOf(dto.getFirstSolvedAt())))
-                .andExpect(jsonPath("$.content[0].lastSolvedAt").value(dto.getLastSolvedAt()))
+                .andExpect(jsonPath("$.content[0].firstSolvedAt").value(String.valueOf(dto.getSolvedAt())))
                 .andExpect(jsonPath("$.content[0].correct").value(String.valueOf(dto.isCorrect())))
                 .andExpect(jsonPath("$.totalElements").value(String.valueOf(items.size())));
     }

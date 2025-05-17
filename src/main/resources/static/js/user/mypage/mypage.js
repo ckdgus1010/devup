@@ -111,10 +111,6 @@ async function showUserSolvedQuestions(pageNumber) {
 }
 
 function renderHistoryRow(item) {
-    const solvedAt = item.lastSolvedAt != null
-        ? item.lastSolvedAt
-        : item.firstSolvedAt;
-
     const resultText = item.correct
         ? "<span class='tag correct'>정답</span>"
         : "<span class='tag wrong'>오답</span>";
@@ -124,7 +120,7 @@ function renderHistoryRow(item) {
         <td>${item.questionTitle}</td>
         <td>${item.category}</td>
         <td>${item.level}</td>
-        <td>${formatDate(solvedAt)}</td>
+        <td>${formatDate(item.solvedAt)}</td>
         <td>${resultText}</td>
     `;
 }
