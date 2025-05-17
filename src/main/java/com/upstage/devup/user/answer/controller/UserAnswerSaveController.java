@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/user/answer")
+@RequestMapping("/api/user/answer")
 @RequiredArgsConstructor
 public class UserAnswerSaveController {
 
