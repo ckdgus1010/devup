@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/user/history")
+@RequestMapping("/api/user/history")
 @RequiredArgsConstructor
 public class UserSolvedHistoryController {
 
     private final UserSolvedHistoryService userSolvedHistoryService;
-
 
     @GetMapping
     public ResponseEntity<?> getSolvedHistories(

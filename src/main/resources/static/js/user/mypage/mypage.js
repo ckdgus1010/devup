@@ -96,7 +96,7 @@ async function showUserSolvedQuestions(pageNumber) {
         tbody.innerHTML = '';
         paginationEl.innerHTML = '';
 
-        const url = '/api/stat/history?pageNumber=' + pageNumber;
+        const url = '/api/user/history?pageNumber=' + pageNumber;
         const response = await fetch(url, {method: "GET"});
         const data = await response.json();
 
