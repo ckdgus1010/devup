@@ -152,6 +152,12 @@ tr:hover {
     border-color: var(--secondary-color);
 }
 
+.pagination a.active:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
 .pagination a:hover {
     background-color: #f2f2f2;
 }

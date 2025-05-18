@@ -31,5 +31,6 @@
             </attr>
         </attr>
         <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
+        <attr sel="#main-script" th:src="@{/js/question/question-list.js}"/>
     </attr>
 </thlogic>
