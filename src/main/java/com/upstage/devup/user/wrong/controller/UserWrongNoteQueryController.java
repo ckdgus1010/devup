@@ -1,9 +1,8 @@
-package com.upstage.devup.user.statistics.controller;
+package com.upstage.devup.user.wrong.controller;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
-import com.upstage.devup.user.statistics.service.UserAnswerStatService;
-import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
+import com.upstage.devup.user.wrong.service.UserWrongAnswerQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +13,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/stat")
+@RequestMapping("/api/wrong")
 @RequiredArgsConstructor
-public class UserStatController {
+public class UserWrongNoteQueryController {
 
-    private final UserAnswerStatService userAnswerStatService;
-    private final UserWrongAnswerReadService userWrongAnswerReadService;
+    private final UserWrongAnswerQueryService userWrongAnswerQueryService;
 
-    @GetMapping("/wrong")
+    @GetMapping
     public ResponseEntity<?> getWrongNotes(
             @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam Integer pageNumber) {
+            @RequestParam(defaultValue = "0") Integer pageNumber
+    ) {
 
-        Page<WrongNoteSummaryDto> summaries
-                = userWrongAnswerReadService.getWrongNoteSummaries(user.getUserId(), pageNumber);
+        if (pageNumber < 0) {
+            throw new IllegalArgumentException("페이지 번호는 0 이상이어야 합니다.");
+        }
 
-        return ResponseEntity.ok(summaries);
+        Page<WrongNoteSummaryDto> result
+                = userWrongAnswerQueryService.getWrongNoteSummaries(user.getUserId(), pageNumber);
+
+        return ResponseEntity.ok(result);
     }
 }

@@ -64,7 +64,7 @@ async function showWrongNote(pageNumber) {
         tbody.innerHTML = '';
         paginationEl.innerHTML = '';
 
-        const url = '/api/stat/wrong?pageNumber=' + pageNumber;
+        const url = '/api/wrong?pageNumber=' + pageNumber;
         const response = await fetch(url, {method: "GET"});
         const data = await response.json();
 

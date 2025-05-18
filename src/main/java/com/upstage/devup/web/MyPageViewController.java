@@ -4,7 +4,6 @@ import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
 import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
-import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyPageViewController {
 
     private final UserAnswerStatService userAnswerStatService;
-    private final UserWrongAnswerReadService userWrongAnswerReadService;
 
     /**
      * 마이페이지 화면 불러오기

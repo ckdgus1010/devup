@@ -1,4 +1,4 @@
-package com.upstage.devup.user.statistics.service;
+package com.upstage.devup.user.wrong.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.entity.Question;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserWrongAnswerReadService {
+public class UserWrongAnswerQueryService {
 
     private final UserWrongAnswerRepository userWrongAnswerRepository;
 
@@ -33,17 +33,13 @@ public class UserWrongAnswerReadService {
      * @throws EntityNotFoundException  사용자 ID가 null일 때 발생
      * @throws IllegalArgumentException pageNumber가 null이거나 음수일 때 발생
      */
-    public Page<WrongNoteSummaryDto> getWrongNoteSummaries(Long userId, Integer pageNumber) {
-        if (userId == null) {
-            throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
-        }
+    public Page<WrongNoteSummaryDto> getWrongNoteSummaries(long userId, int pageNumber) {
 
-        if (pageNumber == null) {
-            throw new IllegalArgumentException("오답 노트를 불러올 수 없습니다.");
-        }
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(pageNumber, WRONG_NOTES_PER_PAGE, sort);
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                WRONG_NOTES_PER_PAGE,
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
 
         return userWrongAnswerRepository
                 .findByUserId(userId, pageable)
