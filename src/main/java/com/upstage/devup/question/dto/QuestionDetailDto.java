@@ -1,5 +1,6 @@
 package com.upstage.devup.question.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,7 +17,11 @@ public class QuestionDetailDto {
     private String category;
     private String level;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedAt;
 
 }

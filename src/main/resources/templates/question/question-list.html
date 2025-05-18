@@ -25,7 +25,7 @@
         <div class="header-row">
             <h1 aria-label="문제 목록">📋 문제 목록</h1>
             <div class="search-bar">
-                <input type="text" placeholder="제목으로 검색..."/>
+                <input id="search-input" type="text" placeholder="제목으로 검색..."/>
                 <button id="search-btn">검색</button>
             </div>
         </div>
@@ -40,7 +40,7 @@
                 <th>작성일</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
             <tr>
                 <td class="q_no">1</td>
                 <td class="q_title">
@@ -131,6 +131,8 @@
     <a href="#">GitHub</a> |
     이메일: support@devup.com
 </footer>
+
+<script id="main-script" type="module" src="/static/js/question/question-list.js"></script>
 
 </body>
 </html>
