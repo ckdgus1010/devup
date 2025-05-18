@@ -45,7 +45,7 @@ async function fetchAndShowAnswer() {
     }
 }
 
-function send(isCorrect) {
+async function send(isCorrect) {
     const userAnswer = userAnswerBox.value.trim();
 
     if (userAnswer === '') {
@@ -53,7 +53,26 @@ function send(isCorrect) {
         return;
     }
 
-    // TODO: send to server
-    console.log(userAnswer);
-    console.log(isCorrect);
+    try {
+        const response = await fetch('/api/user/answer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'questionId': document.getElementById('container').dataset.questionId,
+                'answerText': userAnswer,
+                'isCorrect': isCorrect
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('저장할 수 없습니다.');
+        }
+
+        const data = await response.json();
+        alert('저장됐습니다.');
+    } catch (err) {
+        alert(err);
+    }
 }

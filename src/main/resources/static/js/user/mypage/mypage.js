@@ -96,7 +96,7 @@ async function showUserSolvedQuestions(pageNumber) {
         tbody.innerHTML = '';
         paginationEl.innerHTML = '';
 
-        const url = '/api/stat/history?pageNumber=' + pageNumber;
+        const url = '/api/user/history?pageNumber=' + pageNumber;
         const response = await fetch(url, {method: "GET"});
         const data = await response.json();
 
@@ -111,20 +111,16 @@ async function showUserSolvedQuestions(pageNumber) {
 }
 
 function renderHistoryRow(item) {
-    const solvedAt = item.lastSolvedAt != null
-        ? item.lastSolvedAt
-        : item.firstSolvedAt;
-
     const resultText = item.correct
         ? "<span class='tag correct'>정답</span>"
         : "<span class='tag wrong'>오답</span>";
 
     return `
         <td>${item.questionId}</td>
-        <td>${item.questionTitle}</td>
+        <td><a href="/user/history/${item.id}">${item.questionTitle}</a></td>
         <td>${item.category}</td>
         <td>${item.level}</td>
-        <td>${formatDate(solvedAt)}</td>
+        <td>${formatDate(item.solvedAt)}</td>
         <td>${resultText}</td>
     `;
 }

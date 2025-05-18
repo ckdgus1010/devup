@@ -1,15 +1,11 @@
 package com.upstage.devup.user.answer.service;
 
-import com.upstage.devup.global.entity.User;
+import com.upstage.devup.global.entity.*;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.dto.QuestionDetailDto;
-import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.question.service.QuestionService;
 import com.upstage.devup.user.answer.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.dto.UserAnswerSaveRequest;
-import com.upstage.devup.global.entity.UserAnswer;
-import com.upstage.devup.global.entity.UserAnswerStat;
-import com.upstage.devup.global.entity.UserWrongAnswer;
 import com.upstage.devup.user.answer.repository.AnswerUserRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
@@ -153,23 +149,6 @@ public class UserAnswerSaveService {
 
         userAnswerStat.setLastSolvedAt(context.getNow());
         userAnswerStatRepository.save(userAnswerStat);
-    }
-
-    private UserAnswerDetailDto toUserAnswerDetailDto(UserAnswer userAnswer) {
-        Question question = userAnswer.getQuestion();
-
-        return UserAnswerDetailDto.builder()
-                .userId(userAnswer.getUser().getId())
-                .questionId(question.getId())
-                .title(question.getTitle())
-                .questionText(question.getQuestionText())
-                .category(question.getCategory().getCategory())
-                .level(question.getLevel().getLevel())
-                .userAnswerId(userAnswer.getId())
-                .answerText(userAnswer.getAnswerText())
-                .isCorrect(userAnswer.getIsCorrect())
-                .createdAt(userAnswer.getCreatedAt())
-                .build();
     }
 
     @Getter

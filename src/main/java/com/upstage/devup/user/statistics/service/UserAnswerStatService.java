@@ -6,13 +6,8 @@ import com.upstage.devup.user.statistics.dto.CategoryCountDto;
 import com.upstage.devup.user.statistics.dto.UserAnswerStatDto;
 import com.upstage.devup.user.statistics.dto.UserCategoryStatDto;
 import com.upstage.devup.user.statistics.dto.UserCategoryStatDto.CategoryStat;
-import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,26 +18,6 @@ import java.util.List;
 public class UserAnswerStatService {
 
     private final UserAnswerStatRepository userAnswerStatRepository;
-    private static final int USER_SOLVED_QUESTIONS_PER_PAGE = 10;
-
-    // 문제 풀이 이력 조회
-    public Page<UserSolvedQuestionDto> getUserSolvedQuestions(Long userId, Integer pageNumber) {
-        if (userId == null) {
-            throw new UnauthenticatedException("로그인이 필요합니다.");
-        }
-
-        if (pageNumber == null || pageNumber < 0) {
-            pageNumber = 0;
-        }
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "firstSolvedAt");
-        Pageable pageable = PageRequest.of(pageNumber, USER_SOLVED_QUESTIONS_PER_PAGE, sort);
-
-        return userAnswerStatRepository
-                .findByUserId(userId, pageable)
-                .map(UserSolvedQuestionDto::of);
-    }
-
 
     /**
      * 사용자의 문제 풀이 통계 조회

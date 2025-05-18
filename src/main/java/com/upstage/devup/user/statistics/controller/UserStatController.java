@@ -1,7 +1,6 @@
 package com.upstage.devup.user.statistics.controller;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
-import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
 import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
@@ -21,17 +20,6 @@ public class UserStatController {
 
     private final UserAnswerStatService userAnswerStatService;
     private final UserWrongAnswerReadService userWrongAnswerReadService;
-
-    @GetMapping("/history")
-    public ResponseEntity<?> getSolvedQuestions(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam Integer pageNumber) {
-
-        Page<UserSolvedQuestionDto> solvedQuestions
-                = userAnswerStatService.getUserSolvedQuestions(user.getUserId(), pageNumber);
-
-        return ResponseEntity.ok(solvedQuestions);
-    }
 
     @GetMapping("/wrong")
     public ResponseEntity<?> getWrongNotes(

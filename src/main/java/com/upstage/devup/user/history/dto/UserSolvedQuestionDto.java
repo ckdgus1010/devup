@@ -1,6 +1,6 @@
-package com.upstage.devup.user.statistics.dto;
+package com.upstage.devup.user.history.dto;
 
-import com.upstage.devup.global.entity.UserAnswerStat;
+import com.upstage.devup.global.entity.UserAnswer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +18,11 @@ public class UserSolvedQuestionDto {
     private String questionTitle;
     private String category;
     private String level;
-    private LocalDateTime firstSolvedAt;
-    private LocalDateTime lastSolvedAt;
+    private LocalDateTime solvedAt;
 
     private boolean isCorrect;
 
-    public static UserSolvedQuestionDto of(UserAnswerStat entity) {
+    public static UserSolvedQuestionDto of(UserAnswer entity) {
         if (entity == null) {
             return null;
         }
@@ -34,9 +33,8 @@ public class UserSolvedQuestionDto {
                 .questionTitle(entity.getQuestion().getTitle())
                 .category(entity.getQuestion().getCategory().getCategory())
                 .level(entity.getQuestion().getLevel().getLevel())
-                .firstSolvedAt(entity.getFirstSolvedAt())
-                .lastSolvedAt(entity.getLastSolvedAt())
-                .isCorrect(entity.getCorrectCount() > 0)
+                .solvedAt(entity.getCreatedAt())
+                .isCorrect(entity.getIsCorrect())
                 .build();
     }
 }

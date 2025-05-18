@@ -1,7 +1,7 @@
-package com.upstage.devup.user.statistics.service;
+package com.upstage.devup.user.history.service;
 
 import com.upstage.devup.global.exception.UnauthenticatedException;
-import com.upstage.devup.user.statistics.dto.UserSolvedQuestionDto;
+import com.upstage.devup.user.history.dto.UserSolvedQuestionDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class UserSolvedQuestionReadTest {
+class UserSolvedHistoryServiceTest {
 
     @Autowired
-    private UserAnswerStatService userAnswerStatService;
+    private UserSolvedHistoryService userSolvedHistoryService;
 
     @Transactional
     @Test
@@ -27,7 +27,7 @@ class UserSolvedQuestionReadTest {
         Integer pageNumber = 0;
 
         // when
-        Page<UserSolvedQuestionDto> results = userAnswerStatService.getUserSolvedQuestions(userId, pageNumber);
+        Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
 
         // then
         assertThat(results).isNotNull();
@@ -45,7 +45,7 @@ class UserSolvedQuestionReadTest {
         Integer targetPageNumber = 0;
 
         // when
-        Page<UserSolvedQuestionDto> results = userAnswerStatService.getUserSolvedQuestions(userId, pageNumber);
+        Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
 
         // then
         assertThat(results).isNotNull();
@@ -63,7 +63,7 @@ class UserSolvedQuestionReadTest {
         Integer targetPageNumber = 0;
 
         // when
-        Page<UserSolvedQuestionDto> results = userAnswerStatService.getUserSolvedQuestions(userId, pageNumber);
+        Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
 
         // then
         assertThat(results).isNotNull();
@@ -83,7 +83,7 @@ class UserSolvedQuestionReadTest {
         // when & then
         UnauthenticatedException exception = Assertions.assertThrows(
                 UnauthenticatedException.class,
-                () -> userAnswerStatService.getUserSolvedQuestions(userId, pageNumber)
+                () -> userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
