@@ -110,5 +110,18 @@ function addDeleteButtonClickHandler() {
 }
 
 async function deleteWrongNote(questionId) {
-    console.log('오답노트 삭제: ' + questionId);
+    try {
+        const response = await fetch(`/api/wrong/${questionId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('오답노트를 삭제했습니다.');
+             await showWrongNote(0);
+        } else {
+            alert('오답노트를 삭제할 수 없습니다.');
+        }
+    } catch (err) {
+        alert(err);
+    }
 }
