@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValueAlreadyInUseException.class)
     public ResponseEntity<ErrorResponse> handleValueAlreadyInUse(ValueAlreadyInUseException e) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse("VALUE_ALREADY_IN_USE", e.getMessage()));
     }
 

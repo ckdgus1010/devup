@@ -3,130 +3,142 @@ package com.upstage.devup.auth.service;
 import com.upstage.devup.auth.dto.SignUpRequestDto;
 import com.upstage.devup.auth.dto.SignUpResponseDto;
 import com.upstage.devup.global.exception.ValueAlreadyInUseException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@Transactional
 class UserAuthServiceTest {
 
     @Autowired
     private UserAuthService userAuthService;
 
-    private final String loginId = "qwerty";
-    private final String password = "asdf1234";
-    private final String nickname = "apple";
-    private final String email = "apple@gmail.com";
+    private String loginId;
+    private String password;
+    private String nickname;
+    private String email;
 
-    @Test
-    @DisplayName("회원가입 성공")
-    public void successToSignUp() {
-        // given
+    @BeforeEach
+    public void setUp() {
         SignUpRequestDto request = SignUpRequestDto.builder()
-                .loginId(loginId)
-                .password(password)
-                .nickname(nickname)
-                .email(email)
+                .loginId("dummyId")
+                .password("dummyPw")
+                .nickname("dummyNickname")
+                .email("test@devup.com")
                 .build();
 
-        // when
-        SignUpResponseDto result = userAuthService.signUp(request);
+        userAuthService.signUp(request);
 
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isGreaterThan(0);
-        assertThat(result.getLoginId()).isEqualTo(loginId);
-        assertThat(result.getNickname()).isEqualTo(nickname);
-        assertThat(result.getEmail()).isEqualTo(email);
+        loginId = "qwerty";
+        password = "asdf1234";
+        nickname = "apple";
+        email = "apple@gmail.com";
     }
 
-    @Test
-    @DisplayName("회원가입 실패 - 요청 데이터가 null인 경우 IllegalArgumentException 발생")
-    public void failToSignUpUsingNullRequest() {
-        // given
-        SignUpRequestDto request = null;
-        String errorMessage = "유효하지 않는 요청입니다.";
+    @Nested
+    @DisplayName("회원가입 성공 케이스")
+    public class SuccessCases {
 
-        // when & then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userAuthService.signUp(request)
-        );
+        @Test
+        @DisplayName("유효한 회원가입 요청 데이터를 사용한 경우")
+        public void shouldReturnSignUpResponseDto_whenValidRequest() {
+            // given
+            SignUpRequestDto request = SignUpRequestDto.builder()
+                    .loginId(loginId)
+                    .password(password)
+                    .nickname(nickname)
+                    .email(email)
+                    .build();
 
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
+            // when
+            SignUpResponseDto result = userAuthService.signUp(request);
+
+            // then
+            assertThat(result).isNotNull();
+            assertThat(result.getId()).isGreaterThan(0);
+            assertThat(result.getLoginId()).isEqualTo(loginId);
+            assertThat(result.getNickname()).isEqualTo(nickname);
+            assertThat(result.getEmail()).isEqualTo(email);
+        }
     }
 
-    @Test
-    @DisplayName("회원가입 실패 - 중복된 로그인 ID로 가입하려는 경우 ValueAlreadyInUseException 발생")
-    public void failToSignUpUsingUsedLoginId() {
-        // given
-        String usedLoginId = "user1";
+    @Nested
+    @DisplayName("회원가입 실패 케이스")
+    public class FailureCases {
 
-        SignUpRequestDto request = SignUpRequestDto.builder()
-                .loginId(usedLoginId)
-                .password(password)
-                .nickname(nickname)
-                .email(email)
-                .build();
-        String errorMessage = "이미 사용 중입니다.";
+        @Test
+        @DisplayName("중복된 로그인 ID로 가입하려는 경우 ValueAlreadyInUseException 발생")
+        public void shouldThrowValueAlreadyInUseException_whenLoginIdIsAlreadyUsed() {
+            // given
+            String usedLoginId = "dummyId";
 
-        // when & then
-        ValueAlreadyInUseException exception = assertThrows(
-                ValueAlreadyInUseException.class,
-                () -> userAuthService.signUp(request)
-        );
+            SignUpRequestDto request = SignUpRequestDto.builder()
+                    .loginId(usedLoginId)
+                    .password(password)
+                    .nickname(nickname)
+                    .email(email)
+                    .build();
 
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
+            // when & then
+            ValueAlreadyInUseException exception = assertThrows(
+                    ValueAlreadyInUseException.class,
+                    () -> userAuthService.signUp(request)
+            );
 
-    @Test
-    @DisplayName("회원가입 실패 - 중복된 닉네임로 가입하려는 경우 ValueAlreadyInUseException 발생")
-    public void failToSignUpUsingUsedNickname() {
-        // given
-        String usedNickname = "개발자1";
+            assertThat(exception.getMessage()).isEqualTo("이미 사용 중인 아이디입니다.");
+        }
 
-        SignUpRequestDto request = SignUpRequestDto.builder()
-                .loginId(loginId)
-                .password(password)
-                .nickname(usedNickname)
-                .email(email)
-                .build();
-        String errorMessage = "이미 사용 중입니다.";
+        @Test
+        @DisplayName("중복된 닉네임으로 가입하려는 경우 ValueAlreadyInUseException 발생")
+        public void shouldThrowValueAlreadyInUseException_whenNicknameIsAlreadyUsed() {
+            // given
+            String usedNickname = "dummyNickname";
 
-        // when & then
-        ValueAlreadyInUseException exception = assertThrows(
-                ValueAlreadyInUseException.class,
-                () -> userAuthService.signUp(request)
-        );
+            SignUpRequestDto request = SignUpRequestDto.builder()
+                    .loginId(loginId)
+                    .password(password)
+                    .nickname(usedNickname)
+                    .email(email)
+                    .build();
 
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
+            // when & then
+            ValueAlreadyInUseException exception = assertThrows(
+                    ValueAlreadyInUseException.class,
+                    () -> userAuthService.signUp(request)
+            );
 
-    @Test
-    @DisplayName("회원가입 실패 - 중복된 이메일로 가입하려는 경우 ValueAlreadyInUseException 발생")
-    public void failToSignUpUsingUsedEmail() {
-        // given
-        String usedEmail = "admin@devup.com";
+            assertThat(exception.getMessage()).isEqualTo("이미 사용 중인 닉네임입니다.");
+        }
 
-        SignUpRequestDto request = SignUpRequestDto.builder()
-                .loginId(loginId)
-                .password(password)
-                .nickname(nickname)
-                .email(usedEmail)
-                .build();
-        String errorMessage = "이미 사용 중입니다.";
+        @Test
+        @DisplayName("중복된 이메일로 가입하려는 경우 ValueAlreadyInUseException 발생")
+        public void shouldThrowValueAlreadyInUseException_whenEmailIsAlreadyUsed() {
+            // given
+            String usedEmail = "test@devup.com";
 
-        // when & then
-        ValueAlreadyInUseException exception = assertThrows(
-                ValueAlreadyInUseException.class,
-                () -> userAuthService.signUp(request)
-        );
+            SignUpRequestDto request = SignUpRequestDto.builder()
+                    .loginId(loginId)
+                    .password(password)
+                    .nickname(nickname)
+                    .email(usedEmail)
+                    .build();
 
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
+            // when & then
+            ValueAlreadyInUseException exception = assertThrows(
+                    ValueAlreadyInUseException.class,
+                    () -> userAuthService.signUp(request)
+            );
+
+            assertThat(exception.getMessage()).isEqualTo("이미 사용 중인 이메일입니다.");
+        }
     }
 
 }

@@ -71,21 +71,17 @@ public class UserAuthService {
      * @throws ValueAlreadyInUseException 중복 검사 시 이미 사용 중인 값일 때 발생
      */
     public SignUpResponseDto signUp(SignUpRequestDto request) {
-        if (request == null) {
-            throw new IllegalArgumentException("유효하지 않는 요청입니다.");
-        }
-
         // 중복 검사
         if (isLoginIdInUse(request.getLoginId())) {
-            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
+            throw new ValueAlreadyInUseException("이미 사용 중인 아이디입니다.");
         }
 
         if (isNicknameInUse(request.getNickname())) {
-            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
+            throw new ValueAlreadyInUseException("이미 사용 중인 닉네임입니다.");
         }
 
         if (isEmailInUse(request.getEmail())) {
-            throw new ValueAlreadyInUseException("이미 사용 중입니다.");
+            throw new ValueAlreadyInUseException("이미 사용 중인 이메일입니다.");
         }
 
         User savedEntity = userAuthRepository.save(userMapper.toEntity(request));
