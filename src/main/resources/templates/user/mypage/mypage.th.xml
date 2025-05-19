@@ -10,7 +10,11 @@
                 <attr sel="strong" th:text="${quizStat.totalCount}"/>
             </attr>
             <attr sel=".card[1]">
-                <attr sel="strong" th:text="${(quizStat.correctCount / quizStat.totalCount * 100) + '%'}"/>
+                <attr sel="strong"
+                      th:text="${quizStat.totalCount == 0
+                      ? '0%'
+                      : #numbers.formatDecimal(quizStat.correctCount / quizStat.totalCount * 100, 0, 0) + '%'}"
+                />
             </attr>
             <attr sel=".card[2]">
                 <attr sel=".gauge-bar" th:remove="all-but-first">
