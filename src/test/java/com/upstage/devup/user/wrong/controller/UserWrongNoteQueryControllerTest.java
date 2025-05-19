@@ -5,7 +5,6 @@ import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
-import com.upstage.devup.user.wrong.controller.UserWrongNoteQueryController;
 import com.upstage.devup.user.wrong.service.UserWrongAnswerQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,7 @@ class UserWrongNoteQueryControllerTest {
                 .thenReturn(mockPage);
 
         // when & then
-        mockMvc.perform(get("/api/stat/wrong")
+        mockMvc.perform(get("/api/wrong")
                         .param("pageNumber", String.valueOf(pageNumber))
                         .with(getAuthentication(userId)))
                 .andExpect(status().isOk())

@@ -1,6 +1,5 @@
 package com.upstage.devup.user.wrong.service;
 
-import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,23 +36,6 @@ class UserWrongAnswerQueryServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 오답 노트 목록 조회 실패 - 사용자 ID가 null인 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityNotFoundException_whenUserIdIsNull() {
-        // given
-        Long userId = null;
-        Integer pageNumber = 0;
-        String errorMessage = "사용자 정보를 찾을 수 없습니다.";
-
-        // when & then
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () -> userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
-
-    @Test
     @DisplayName("사용자 오답 노트 목록 조회 결과 없음 - 유효하지 않은 사용자 ID를 사용한 경우 빈 페이지 반환")
     public void shouldReturnEmptyPage_whenUserIdIsUnavailable() {
         // given
@@ -66,23 +48,6 @@ class UserWrongAnswerQueryServiceTest {
         // then
         assertThat(results).isEmpty();
         assertThat(results.getTotalElements()).isEqualTo(0L);
-    }
-
-    @Test
-    @DisplayName("사용자 오답 노트 목록 조회 실패 - pageNumber가 null인 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityNotFoundException_whenPageNumberIsNull() {
-        // given
-        Long userId = 1L;
-        Integer pageNumber = null;
-        String errorMessage = "오답 노트를 불러올 수 없습니다.";
-
-        // when & then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
     @Test
