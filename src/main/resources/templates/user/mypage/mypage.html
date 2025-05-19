@@ -77,9 +77,9 @@
         </tbody>
     </table>
     <div class="pagination" id="history-pagination">
-        <a>1</a>
-        <a>2</a>
-        <a>3</a>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
     </div>
 </template>
 <template class="tab-content" id="wrong">
@@ -91,6 +91,7 @@
             <th>카테고리</th>
             <th>난이도</th>
             <th>날짜</th>
+            <th>삭제</th>
         </tr>
         </thead>
         <tbody id="wrong-body">
@@ -100,13 +101,22 @@
             <td>DB</td>
             <td>상</td>
             <td>2025-05-08</td>
+            <td><button class="delete-btn" disabled><span>삭제</span></button></td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>OOP란?</td>
+            <td>JAVA</td>
+            <td>하</td>
+            <td>2025-05-08</td>
+            <td><button class="delete-btn"><span>삭제</span></button></td>
         </tr>
         </tbody>
     </table>
     <div class="pagination" id="wrong-pagination">
-        <a>1</a>
-        <a>2</a>
-        <a>3</a>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
     </div>
 </template>
 <template class="tab-content" id="profile">
@@ -148,7 +158,7 @@
     이메일: devup@devup.com
 </footer>
 
-<script id="main-script" type="module" src="/static/js/user/mypage/mypage.js"></script>
+<script id="main-script" type="module" src="/static/js/user/mypage/mypage-test.js"></script>
 
 </body>
 </html>

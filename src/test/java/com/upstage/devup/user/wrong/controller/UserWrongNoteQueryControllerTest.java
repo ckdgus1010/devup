@@ -1,11 +1,12 @@
-package com.upstage.devup.user.statistics.controller;
+package com.upstage.devup.user.wrong.controller;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
 import com.upstage.devup.user.statistics.service.UserAnswerStatService;
-import com.upstage.devup.user.statistics.service.UserWrongAnswerReadService;
+import com.upstage.devup.user.wrong.controller.UserWrongNoteQueryController;
+import com.upstage.devup.user.wrong.service.UserWrongAnswerQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(UserStatController.class)
+@WebMvcTest(UserWrongNoteQueryController.class)
 @Import(SecurityConfig.class)
-class UserStatControllerTest {
+class UserWrongNoteQueryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +44,7 @@ class UserStatControllerTest {
     private UserAnswerStatService userAnswerStatService;
 
     @MockitoBean
-    private UserWrongAnswerReadService userWrongAnswerReadService;
+    private UserWrongAnswerQueryService userWrongAnswerQueryService;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
@@ -70,7 +71,7 @@ class UserStatControllerTest {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<WrongNoteSummaryDto> mockPage = new PageImpl<>(items, pageable, items.size());
 
-        when(userWrongAnswerReadService.getWrongNoteSummaries(eq(userId), eq(pageNumber)))
+        when(userWrongAnswerQueryService.getWrongNoteSummaries(eq(userId), eq(pageNumber)))
                 .thenReturn(mockPage);
 
         // when & then

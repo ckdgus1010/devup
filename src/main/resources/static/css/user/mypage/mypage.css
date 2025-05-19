@@ -153,6 +153,26 @@ tr:hover {
     border-radius: 4px;
 }
 
+.delete-btn {
+    font-size: 1rem;
+    background: #ff6f61;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid;
+}
+
+.delete-btn:hover {
+    font-size: 1rem;
+    background: #e85c4f;
+    cursor: pointer;
+}
+
+.delete-btn:disabled {
+    background: #ffc6b9;
+    cursor: pointer;
+}
+
 .pagination {
     margin-top: 1rem;
     text-align: center;
@@ -170,6 +190,7 @@ tr:hover {
     background-color: var(--secondary-color);
     color: white;
     border-color: var(--secondary-color);
+    cursor: pointer;
 }
 
 .pagination button:disabled {

@@ -1,4 +1,4 @@
-package com.upstage.devup.user.statistics.service;
+package com.upstage.devup.user.wrong.service;
 
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.user.statistics.dto.WrongNoteSummaryDto;
@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class UserWrongAnswerReadServiceTest {
+class UserWrongAnswerQueryServiceTest {
 
     @Autowired
-    private UserWrongAnswerReadService userWrongAnswerReadService;
+    private UserWrongAnswerQueryService userWrongAnswerQueryService;
 
     @Transactional
     @Test
@@ -27,7 +27,7 @@ class UserWrongAnswerReadServiceTest {
         Integer pageNumber = 0;
 
         // when
-        Page<WrongNoteSummaryDto> results = userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber);
+        Page<WrongNoteSummaryDto> results = userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber);
 
         // then
         assertThat(results).isNotEmpty();
@@ -47,7 +47,7 @@ class UserWrongAnswerReadServiceTest {
         // when & then
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
-                () -> userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber)
+                () -> userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -61,7 +61,7 @@ class UserWrongAnswerReadServiceTest {
         Integer pageNumber = 0;
 
         // when
-        Page<WrongNoteSummaryDto> results = userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber);
+        Page<WrongNoteSummaryDto> results = userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber);
 
         // then
         assertThat(results).isEmpty();
@@ -79,7 +79,7 @@ class UserWrongAnswerReadServiceTest {
         // when & then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber)
+                () -> userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
@@ -93,7 +93,7 @@ class UserWrongAnswerReadServiceTest {
         Integer pageNumber = 100_000_000;
 
         // when
-        Page<WrongNoteSummaryDto> results = userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber);
+        Page<WrongNoteSummaryDto> results = userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber);
 
         // then
         assertThat(results).isEmpty();
@@ -112,7 +112,7 @@ class UserWrongAnswerReadServiceTest {
         // when & then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userWrongAnswerReadService.getWrongNoteSummaries(userId, pageNumber)
+                () -> userWrongAnswerQueryService.getWrongNoteSummaries(userId, pageNumber)
         );
 
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
