@@ -39,12 +39,12 @@ public class UserAnswerSaveService {
      * @throws EntityNotFoundException 사용자 또는 문제를 찾을 수 없을 때 발생
      */
     @Transactional
-    public UserAnswerDetailDto saveUserAnswer(Long userId, UserAnswerSaveRequest request) {
+    public UserAnswerDetailDto saveUserAnswer(long userId, UserAnswerSaveRequest request) {
         if (request == null) {
             throw new EntityNotFoundException("면접 질문을 찾을 수 없습니다.");
         }
 
-        if (userId == null || !answerUserRepository.existsById(userId)) {
+        if (!answerUserRepository.existsById(userId)) {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
 

@@ -1,7 +1,6 @@
 package com.upstage.devup.user.answer.controller;
 
 import com.upstage.devup.auth.config.AuthenticatedUser;
-import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.user.answer.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.dto.UserAnswerSaveRequest;
 import com.upstage.devup.user.answer.service.UserAnswerSaveService;
@@ -27,13 +26,7 @@ public class UserAnswerSaveController {
     public ResponseEntity<?> saveUserAnswer(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestBody @Valid UserAnswerSaveRequest request) {
-
-        if (user == null) {
-            throw new UnauthenticatedException("로그인이 필요합니다.");
-        }
-
         UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(user.getUserId(), request);
-
         return ResponseEntity.ok(result);
     }
 }
