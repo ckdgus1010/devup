@@ -66,12 +66,15 @@ async function send(isCorrect) {
             })
         });
 
-        if (!response.ok) {
-            throw new Error('저장할 수 없습니다.');
+        console.log(response);
+        if (response.status === 401) {
+            alert('로그인을 해주세요.');
+            window.location.href = '/auth/signin';
+        } else if (!response.ok) {
+            alert(`${response.status} :: 풀이를 저장할 수 없습니다.`);
+        } else {
+            alert('풀이를 저장했습니다.');
         }
-
-        const data = await response.json();
-        alert('저장됐습니다.');
     } catch (err) {
         alert(err);
     }
