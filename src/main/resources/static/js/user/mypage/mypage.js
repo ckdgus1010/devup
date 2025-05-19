@@ -1,12 +1,12 @@
 import {showProfile} from '/js/user/mypage/mypage-profile.js';
+import {showWrongNote} from '/js/user/mypage/mypage-wrong-note.js';
 
 const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
 let currentTabButton = null;
 
 const tabActionMap = {
-    stats: () => {
-    },
+    stats: () => {},
     history: () => showUserSolvedQuestions(0),
     wrong: () => showWrongNote(0),
     profile: showProfile
@@ -14,13 +14,13 @@ const tabActionMap = {
 
 document.addEventListener('DOMContentLoaded', () => {
     currentTabButton = document.getElementById("stats-tab-btn");
-    showTab('stats');
+    changeTab('stats');
 });
 
 buttons.forEach(btn => {
     btn.addEventListener("click", () => {
         changeCurrentTabButton(btn);
-        showTab(btn.dataset.tab);
+        changeTab(btn.dataset.tab);
     });
 });
 
@@ -35,57 +35,25 @@ function changeCurrentTabButton(btn) {
 }
 
 // 탭 전환하기
-async function showTab(tabName) {
+async function changeTab(tabName) {
     tabContainer.innerHTML = "";
     tabContainer.innerHTML = "데이터를 불러오는 중입니다.";
 
-    const template = document.getElementById(tabName);
+    const tabTemplate = document.getElementById(tabName);
 
-    if (!template) {
+    if (!tabTemplate) {
         return;
     }
 
     tabContainer.innerHTML = "";
 
-    const content = template.content.cloneNode(true);
-    tabContainer.appendChild(content);
+    const clonedTemplate = tabTemplate.content.cloneNode(true);
+    tabContainer.appendChild(clonedTemplate);
 
     const action = tabActionMap[tabName];
     if (typeof action === 'function') {
         await action();
     }
-}
-
-// 오답 노트 목록 보여주기
-async function showWrongNote(pageNumber) {
-    try {
-        const tbody = document.getElementById('wrong-body');
-        const paginationEl = document.getElementById('wrong-pagination');
-        tbody.innerHTML = '';
-        paginationEl.innerHTML = '';
-
-        const url = '/api/wrong?pageNumber=' + pageNumber;
-        const response = await fetch(url, {method: "GET"});
-        const data = await response.json();
-
-        // 오답 노트 목록 보여주기
-        renderTable(data.content, tbody, renderWrongNoteRow);
-
-        // 페이징 처리
-        renderPagination(data.number, data.totalPages, paginationEl, showWrongNote);
-    } catch (err) {
-        alert(err);
-    }
-}
-
-function renderWrongNoteRow(item) {
-    return `
-        <td>${item.questionId}</td>
-        <td>${item.title}</td>
-        <td>${item.category}</td>
-        <td>${item.level}</td>
-        <td>${formatDate(item.createdAt)}</td>
-        `;
 }
 
 // 풀이 이력 목록 보여주기
