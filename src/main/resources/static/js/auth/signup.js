@@ -28,6 +28,8 @@ function validatePassword() {
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password_confirm').value;
 
+    console.log(password);
+
     if (!password) {
         alert("비밀번호를 입력해주세요.");
         return false;
@@ -80,6 +82,6 @@ function isStrongPassword(pw) {
         /[A-Z]/.test(pw) &&
         /[a-z]/.test(pw) &&
         /\d/.test(pw) &&
-        /[!@#$%^&*(),.?":{}|<>]/.test(pw)
+        /[!@#$^&*()_+=-?]/.test(pw)
     );
 }
