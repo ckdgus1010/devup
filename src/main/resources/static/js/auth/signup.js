@@ -1,3 +1,51 @@
+const form = document.getElementById("signup-form");
+form.addEventListener('submit', handleSignUpSubmit);
+
+const submitBtn = document.getElementById("submit-btn");
+
+async function handleSignUpSubmit(event) {
+    event.preventDefault();
+
+    submitBtn.disabled = true;
+
+    try {
+        if (!validateSignup()) {
+            return;
+        }
+
+        const response = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "loginId": form.loginId.value,
+                "password": form.password.value,
+                "nickname": form.nickname.value,
+                "email": form.email.value
+            })
+        });
+
+        if (response.status !== 200) {
+            const data = await response.json();
+            alert(data.message);
+            return;
+        }
+
+        if (!response.ok) {
+            alert("회원가입에 실패했습니다.");
+        }
+
+        alert('회원가입 되었습니다.')
+        window.location.href = '/auth/signin';
+    } catch (err) {
+        alert(err)
+    } finally {
+        submitBtn.disabled = false;
+    }
+
+}
+
 function validateSignup() {
     if (!validateLoginId()) return false;
     if (!validatePassword()) return false;
@@ -80,6 +128,6 @@ function isStrongPassword(pw) {
         /[A-Z]/.test(pw) &&
         /[a-z]/.test(pw) &&
         /\d/.test(pw) &&
-        /[!@#$%^&*(),.?":{}|<>]/.test(pw)
+        /[!@#$^&*()_+=-?]/.test(pw)
     );
 }
