@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class SignUpRequestDto {
 
     @NotBlank(message = "아이디는 필수 항목입니다.")
@@ -20,6 +21,7 @@ public class SignUpRequestDto {
     @NotBlank(message = "닉네임은 필수 항목입니다.")
     private String nickname;
 
+    @NotBlank(message = "이메일 형식이 아닙니다.")
     @Email(message = "이메일 형식이 아닙니다.")
     private String email;
 

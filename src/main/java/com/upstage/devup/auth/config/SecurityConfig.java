@@ -30,7 +30,8 @@ public class SecurityConfig {
     public static final String[] PUBLIC_APIS = {
             "/api/questions/search",
             "/api/answers/**",
-            "/api/auth/signin"
+            "/api/auth/signup",
+            "/api/auth/signin",
     };
 
     @Value("${security.csrf-enabled:true}")
