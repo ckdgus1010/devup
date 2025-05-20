@@ -18,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     public static final String[] STATIC_RESOURCES = {
-            "/css/**", "/js/**", "/images/**"
+            "/css/**", "/js/**", "/images/**",
+            "/favicon.ico"
     };
 
     public static final String[] PUBLIC_PAGES = {
