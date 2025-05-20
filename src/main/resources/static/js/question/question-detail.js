@@ -66,7 +66,6 @@ async function send(isCorrect) {
             })
         });
 
-        console.log(response);
         if (response.status === 401) {
             alert('로그인을 해주세요.');
             window.location.href = '/auth/signin';
