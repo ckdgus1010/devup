@@ -8,31 +8,28 @@ async function handleLoginSubmit(event) {
 
     submitBtn.disabled = true;
 
-    const loginId = form.loginId.value;
-    const password = form.password.value;
-
     try {
-        const url = '/api/auth/signin';
-        const requestInit = {
+        const response = await fetch('/api/auth/signin', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                loginId,
-                password
+                'loginId': form.loginId.value,
+                'password': form.password.value
             })
-        };
+        });
 
-        const response = await fetch(url, requestInit);
-        const data = await response.json();
-        console.log(data);
-
-        if (!response.ok) {
+        if (response.status === 401) {
+            const data = await response.json();
             throw new Error(data.message);
         }
 
-        // 토큰 저장, 페이지 이동 등 후속 처리
+        if (!response.ok) {
+            throw new Error("로그인 실패");
+        }
+
+        const data = await response.json();
         window.location.href = data.redirectUrl;
     } catch (err) {
         alert(err);
