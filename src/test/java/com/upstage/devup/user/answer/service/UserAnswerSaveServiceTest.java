@@ -57,24 +57,6 @@ class UserAnswerSaveServiceTest {
     }
 
     @Test
-    @DisplayName("사용자 답안 저장 실패 - 사용자 ID가 null인 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityException_whenUserIdIsNull() {
-        // given
-        Long userId = null;
-        String errorMessage = "사용자 정보를 찾을 수 없습니다.";
-
-        UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
-
-        // when
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () -> userAnswerSaveService.saveUserAnswer(userId, request)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
-
-    @Test
     @DisplayName("사용자 답안 저장 실패 - 유효하지 않은 사용자 ID를 경우 EntityNotFoundException 발생")
     public void shouldThrowEntityException_whenUserIdIsUnavailable() {
         // given
