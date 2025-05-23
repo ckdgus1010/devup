@@ -87,7 +87,7 @@ public class UserAnswerSaveService {
                 .user(context.getUser())
                 .question(context.getQuestion())
                 .answerText(request.getAnswerText())
-                .isCorrect(request.getIsCorrect())
+                .isCorrect(request.getIsCorrect() ? 1 : 0)
                 .createdAt(context.getNow())
                 .build();
 
