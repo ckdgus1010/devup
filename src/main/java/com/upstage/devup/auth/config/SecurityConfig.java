@@ -36,7 +36,9 @@ public class SecurityConfig {
     };
 
     public static final String[] SWAGGER_API = {
+            "/swagger-ui.html",
             "/swagger-ui/**",
+            "/v3/api-docs.yaml",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**"
@@ -60,7 +62,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         if (!csrfEnabled) {
-//            http.csrf(csrf -> csrf.disable());
             http.csrf(AbstractHttpConfigurer::disable);
         }
 
