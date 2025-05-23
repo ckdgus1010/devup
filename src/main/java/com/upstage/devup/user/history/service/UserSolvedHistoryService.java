@@ -34,7 +34,7 @@ public class UserSolvedHistoryService {
             pageNumber = 0;
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt", "id");
         Pageable pageable = PageRequest.of(pageNumber, USER_SOLVED_QUESTIONS_PER_PAGE, sort);
 
         return userSolvedHistoryRepository
