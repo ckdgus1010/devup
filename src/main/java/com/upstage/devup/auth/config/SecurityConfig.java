@@ -35,6 +35,14 @@ public class SecurityConfig {
             "/api/auth/signin",
     };
 
+    public static final String[] SWAGGER_API = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
+
     @Value("${security.csrf-enabled:true}")
     private boolean csrfEnabled;
 
@@ -61,6 +69,7 @@ public class SecurityConfig {
                         .requestMatchers(STATIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_PAGES).permitAll()
                         .requestMatchers(PUBLIC_APIS).permitAll()
+                        .requestMatchers(SWAGGER_API).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
