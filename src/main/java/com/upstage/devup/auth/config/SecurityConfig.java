@@ -35,6 +35,16 @@ public class SecurityConfig {
             "/api/auth/signin",
     };
 
+    public static final String[] SWAGGER_API = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs.yaml",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
+
     @Value("${security.csrf-enabled:true}")
     private boolean csrfEnabled;
 
@@ -52,7 +62,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         if (!csrfEnabled) {
-//            http.csrf(csrf -> csrf.disable());
             http.csrf(AbstractHttpConfigurer::disable);
         }
 
@@ -61,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(STATIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_PAGES).permitAll()
                         .requestMatchers(PUBLIC_APIS).permitAll()
+                        .requestMatchers(SWAGGER_API).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

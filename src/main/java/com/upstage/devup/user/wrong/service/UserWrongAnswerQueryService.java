@@ -38,7 +38,7 @@ public class UserWrongAnswerQueryService {
         Pageable pageable = PageRequest.of(
                 pageNumber,
                 WRONG_NOTES_PER_PAGE,
-                Sort.by(Sort.Direction.DESC, "createdAt")
+                Sort.by(Sort.Direction.DESC, "createdAt", "id")
         );
 
         return userWrongAnswerRepository

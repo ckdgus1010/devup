@@ -37,7 +37,7 @@ class QuestionServiceTest {
     @DisplayName("제목 검색 - 성공")
     public void successToSearchQuestionByTitle() {
         // given
-        String title = "란?";
+        String title = "Spring";
         int page = 0;
 
         // when

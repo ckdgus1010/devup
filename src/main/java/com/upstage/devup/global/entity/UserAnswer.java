@@ -32,9 +32,13 @@ public class UserAnswer {
     private String answerText;
 
     @Column(nullable = false)
-    private Boolean isCorrect;
+    private Integer isCorrect;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public boolean getIsCorrect() {
+        return isCorrect == 1;
+    }
 
 }
