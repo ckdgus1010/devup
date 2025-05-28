@@ -2,7 +2,7 @@ spring:
   application:
     name: devup
   profiles:
-    active: prod
+    active: dev
     group:
       dev:
         - common
