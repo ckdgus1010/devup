@@ -2,7 +2,29 @@ spring:
   application:
     name: devup
   profiles:
-    active: dev
+    active: prod
+    group:
+      dev:
+        - common
+      prod:
+        - common
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+  thymeleaf3:
+    decoupled-logic: true
+
+jwt:
+  secret_key: ${JWT_SECRET_KEY}
+  issuer: ${JWT_ISSUER}
+  expiration: ${JWT_EXPIRATION}
+
+cookie:
+  secure: false
+  access-token-max-age: 3600
 
 ---
 
@@ -30,23 +52,13 @@ spring:
   sql:
     init:
       mode: always
-  thymeleaf3:
-    decoupled-logic: true
+
 
 server:
   port: 8080
 
-jwt:
-  secret_key: ${JWT_SECRET_KEY}
-  issuer: ${JWT_ISSUER}
-  expiration: ${JWT_EXPIRATION}
-
 security:
   csrf-enabled: false
-
-cookie:
-  secure: false
-  access-token-max-age: 3600
 
 ---
 
@@ -54,10 +66,15 @@ spring:
   config:
     activate:
       on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
 
 security:
-  csrf-enabled: true
-
-cookie:
-  secure: false
-  access-token-max-age: 3600
+  csrf-enabled: false
