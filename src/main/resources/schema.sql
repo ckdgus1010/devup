@@ -76,10 +76,13 @@ CREATE TABLE user_answers
     user_id     BIGINT        NOT NULL,
     question_id BIGINT        NOT NULL,
     answer_text VARCHAR(2000) NOT NULL,
-    is_correct  INT           NOT NULL CHECK ( is_correct BETWEEN 0 AND 1)COMMENT '정답 여부(0: 오답, 1: 정답)',
+    is_correct  INT           NOT NULL COMMENT '정답 여부(0: 오답, 1: 정답)',
     created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '제출 시간',
     PRIMARY KEY (id)
 ); -- '유저가 작성한 정답'
+
+ALTER TABLE user_answers
+    ADD CONSTRAINT CHECK_is_correct CHECK ( is_correct BETWEEN 0 AND 1);
 
 CREATE TABLE users
 (
