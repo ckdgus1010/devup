@@ -10,6 +10,9 @@ jobs:
 
     env:
       SPRING_PROFILES_ACTIVE: ci
+      JWT_SECRET_KEY: ${ { secrets.JWT_SECRET_KEY } }
+      JWT_ISSUER: ${ { secrets.JWT_ISSUER } }
+      JWT_EXPIRATION: ${ { secrets.JWT_EXPIRATION } }
 
     steps:
       # CI
