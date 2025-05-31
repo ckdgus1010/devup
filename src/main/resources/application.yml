@@ -71,10 +71,18 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 101
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
+
+server:
+  tomcat:
+    threads:
+      max: 100
+  port: 8080
 
 security:
   csrf-enabled: false
