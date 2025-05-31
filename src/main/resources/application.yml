@@ -8,6 +8,8 @@ spring:
         - common
       prod:
         - common
+      ci:
+        - common
 ---
 
 spring:
