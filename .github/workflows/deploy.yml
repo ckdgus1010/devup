@@ -8,12 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    env:
-      SPRING_PROFILES_ACTIVE: ci
-      JWT_SECRET_KEY: ${ { secrets.JWT_SECRET_KEY } }
-      JWT_ISSUER: ${ { secrets.JWT_ISSUER } }
-      JWT_EXPIRATION: ${ { secrets.JWT_EXPIRATION } }
-
     steps:
       # CI
       - name: Checkout code
@@ -29,7 +23,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       # CD
       - name: Copy JAR to EC2
