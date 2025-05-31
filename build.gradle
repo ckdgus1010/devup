@@ -23,6 +23,10 @@ bootJar {
 	archiveFileName = 'devup.jar'
 }
 
+jar {
+	enabled = false
+}
+
 repositories {
 	mavenCentral()
 }
