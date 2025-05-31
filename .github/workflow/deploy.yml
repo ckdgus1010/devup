@@ -9,9 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DB_URL: ${ { secrets.DB_URL } }
-      DB_USERNAME: ${ { secrets.DB_USERNAME } }
-      DB_PASSWORD: ${ { secrets.DB_PASSWORD } }
+      SPRING_PROFILES_ACTIVE: ci
 
     steps:
       # CI
@@ -28,7 +26,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        uses: ./gradlew clean build
+        run: ./gradlew clean build
 
       # CD
       - name: Copy JAR to EC2
