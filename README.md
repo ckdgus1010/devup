@@ -1,5 +1,10 @@
 # README
 
+## 🌐 배포 주소
+
+> 🟢 <strong>실 서비스 바로가기 → <a href="https://devup.p-e.kr" target="_blank">https://devup.p-e.kr &#8599;</a></strong>
+
+
 ## 📌 프로젝트 개요
 
 > 기술 면접 질문 탐색과 오답 복습 기능을 제공하는 웹 서비스
@@ -113,6 +118,12 @@ cd devup
 | 📊 마이페이지 통계 화면                                                            | 🪪 로그인 화면                                                              |
 |---------------------------------------------------------------------------|------------------------------------------------------------------------|
 | <img src="./docs/readme/img/mypage-stat.png" alt="통계 화면" width="478.5px"> | <img src="./docs/readme/img/sign-in.png" alt="로그인 화면" width="478.5px"> |
+
+---
+
+## 🏗️ 시스템 아키텍처
+
+<img src="./docs/readme/img/system-architecture.png" alt="시스템 아키텍처" width="957px">
 
 ---
 
