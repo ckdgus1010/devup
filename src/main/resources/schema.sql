@@ -10,10 +10,9 @@ CREATE TABLE answers
 
 CREATE TABLE bookmarks
 (
-    id          BIGINT NOT NULL AUTO_INCREMENT,
     user_id     BIGINT NOT NULL,
     question_id BIGINT NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (user_id, question_id)
 ); -- '북마크'
 
 CREATE TABLE categories
