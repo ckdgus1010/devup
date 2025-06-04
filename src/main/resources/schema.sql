@@ -10,8 +10,9 @@ CREATE TABLE answers
 
 CREATE TABLE bookmarks
 (
-    user_id     BIGINT NOT NULL,
-    question_id BIGINT NOT NULL,
+    user_id     BIGINT      NOT NULL,
+    question_id BIGINT      NOT NULL,
+    created_at  TIMESTAMP   NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, question_id)
 ); -- '북마크'
 
