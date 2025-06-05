@@ -6,10 +6,7 @@ import com.upstage.devup.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/bookmarks")
@@ -24,6 +21,15 @@ public class BookmarkController {
             @PathVariable Long questionId
     ) {
         BookmarkResponseDto result = bookmarkService.registerBookmark(user.getUserId(), questionId);
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<BookmarkResponseDto> deleteBookmark(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable Long questionId
+    ) {
+        BookmarkResponseDto result = bookmarkService.deleteBookmark(user.getUserId(), questionId);
         return ResponseEntity.ok(result);
     }
 }
