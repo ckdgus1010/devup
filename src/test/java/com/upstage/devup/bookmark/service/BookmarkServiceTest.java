@@ -69,8 +69,6 @@ class BookmarkServiceTest {
     public class BookmarksQuery {
 
         private final int totalElements = 12;
-        private final int pageSize = 10;
-
         @BeforeEach
         public void beforeEach() {
             User user = userAccountRepository.findById(userId)
