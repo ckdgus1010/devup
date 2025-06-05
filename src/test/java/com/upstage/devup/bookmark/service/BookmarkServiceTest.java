@@ -1,6 +1,7 @@
 package com.upstage.devup.bookmark.service;
 
 import com.upstage.devup.bookmark.dto.BookmarkResponseDto;
+import com.upstage.devup.bookmark.dto.BookmarksQueryDto;
 import com.upstage.devup.bookmark.repository.BookmarkRepository;
 import com.upstage.devup.global.domain.id.BookmarkId;
 import com.upstage.devup.global.entity.*;
@@ -21,7 +22,6 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 @SpringBootTest
 @Transactional
@@ -62,6 +62,128 @@ class BookmarkServiceTest {
 
         this.userId = user.getId();
         this.questionId = question.getId();
+    }
+
+    @Nested
+    @DisplayName("북마크 조회 기능 테스트")
+    public class BookmarksQuery {
+
+        private final int totalElements = 12;
+        private final int pageSize = 10;
+
+        @BeforeEach
+        public void beforeEach() {
+            User user = userAccountRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없음"));
+
+            Category category = Category.builder().id(1L).build();
+            Level level = Level.builder().id(3L).build();
+
+            for (int i = 0; i < totalElements; i++) {
+                int order = i + 1;
+                Question question = questionRepository.save(Question.builder()
+                        .id((long) order)
+                        .title("제목 " + order)
+                        .questionText("내용 " + order)
+                        .category(category)
+                        .level(level)
+                        .createdAt(LocalDateTime.now())
+                        .build());
+
+                bookmarkRepository.save(new Bookmark(user, question, LocalDateTime.now()));
+            }
+        }
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("pageNumber가 0인 경우 북마크 목록 첫 페이지 반환")
+            public void shouldReturnBookmarksQueryDto_whenPageNumberIsZero() {
+                // given
+                int pageNumber = 0;
+
+                // when
+                BookmarksQueryDto result = bookmarkService.getBookmarks(userId, pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContents().size()).isEqualTo(10);
+                assertThat(result.getCurrentPageNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isEqualTo(10);
+                assertThat(result.getTotalPages()).isEqualTo(2);
+                assertThat(result.getTotalElements()).isEqualTo(totalElements);
+                assertThat(result.isHasPrevious()).isFalse();
+                assertThat(result.isHasNext()).isTrue();
+            }
+
+            @Test
+            @DisplayName("마지막 pageNumber를 사용한 경우")
+            public void shouldReturnBookmarksQueryDto() {
+                // given
+                int pageNumber = 1;
+
+                // when
+                BookmarksQueryDto result = bookmarkService.getBookmarks(userId, pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContents().size()).isEqualTo(2);
+                assertThat(result.getCurrentPageNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isEqualTo(10);
+                assertThat(result.getTotalPages()).isEqualTo(2);
+                assertThat(result.getTotalElements()).isEqualTo(totalElements);
+                assertThat(result.isHasPrevious()).isTrue();
+                assertThat(result.isHasNext()).isFalse();
+            }
+
+            @Test
+            @DisplayName("pageNumber가 음수인 경우 첫 페이지를 반환")
+            public void shouldReturnFirstPage_whenPageNumberIsNegative() {
+                // given
+                int pageNumber = -1;
+
+                // when
+                BookmarksQueryDto result = bookmarkService.getBookmarks(userId, pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContents().size()).isEqualTo(10);
+                assertThat(result.getCurrentPageNumber()).isEqualTo(0);
+                assertThat(result.getSize()).isEqualTo(10);
+                assertThat(result.getTotalPages()).isEqualTo(2);
+                assertThat(result.getTotalElements()).isEqualTo(totalElements);
+                assertThat(result.isHasPrevious()).isFalse();
+                assertThat(result.isHasNext()).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("존재하지 않은 사용자 ID를 사용하는 경우 빈 값을 반환")
+            public void shouldReturnEmptyDto_whenUserIdIsUnavailable() {
+                // given
+                long userId = -1;
+                int pageNumber = 0;
+
+                // when
+                BookmarksQueryDto result = bookmarkService.getBookmarks(userId, pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContents()).isEmpty();
+                assertThat(result.getCurrentPageNumber()).isEqualTo(0);
+                assertThat(result.getSize()).isEqualTo(10);
+                assertThat(result.getTotalPages()).isEqualTo(0);
+                assertThat(result.getTotalElements()).isEqualTo(0);
+                assertThat(result.isHasPrevious()).isFalse();
+                assertThat(result.isHasNext()).isFalse();
+            }
+        }
     }
 
     @Nested
