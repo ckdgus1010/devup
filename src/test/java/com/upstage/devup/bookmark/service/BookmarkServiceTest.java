@@ -7,7 +7,12 @@ import com.upstage.devup.global.entity.*;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.repository.QuestionRepository;
 import com.upstage.devup.user.account.repository.UserAccountRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -35,7 +40,7 @@ class BookmarkServiceTest {
     private QuestionRepository questionRepository;
 
     private Long userId;
-    private Long questinId;
+    private Long questionId;
 
     @BeforeEach
     public void beforeEach() {
@@ -56,7 +61,7 @@ class BookmarkServiceTest {
                 .build());
 
         this.userId = user.getId();
-        this.questinId = question.getId();
+        this.questionId = question.getId();
     }
 
     @Nested
@@ -73,12 +78,12 @@ class BookmarkServiceTest {
                 // given
 
                 // when
-                BookmarkResponseDto result = bookmarkService.registerBookmark(userId, questinId);
+                BookmarkResponseDto result = bookmarkService.registerBookmark(userId, questionId);
 
                 // then
                 assertThat(result).isNotNull();
                 assertThat(result.getUserId()).isEqualTo(userId);
-                assertThat(result.getQuestionId()).isEqualTo(questinId);
+                assertThat(result.getQuestionId()).isEqualTo(questionId);
                 assertThat(result.getCreatedAt()).isNotNull();
                 assertThat(result.getCreatedAt()).isBefore(LocalDateTime.now());
             }
@@ -89,20 +94,20 @@ class BookmarkServiceTest {
                 // given
                 Bookmark entity = bookmarkRepository.save(
                         Bookmark.builder()
-                                .id(new BookmarkId(userId, questinId))
+                                .id(new BookmarkId(userId, questionId))
                                 .user(User.builder().id(userId).build())
-                                .question(Question.builder().id(questinId).build())
+                                .question(Question.builder().id(questionId).build())
                                 .createdAt(LocalDateTime.now())
                                 .build()
                 );
 
                 // when
-                BookmarkResponseDto result = bookmarkService.registerBookmark(userId, questinId);
+                BookmarkResponseDto result = bookmarkService.registerBookmark(userId, questionId);
 
                 // then
                 assertThat(result).isNotNull();
                 assertThat(result.getUserId()).isEqualTo(userId);
-                assertThat(result.getQuestionId()).isEqualTo(questinId);
+                assertThat(result.getQuestionId()).isEqualTo(questionId);
                 assertThat(result.getCreatedAt()).isEqualTo(entity.getCreatedAt());
             }
         }
@@ -120,7 +125,7 @@ class BookmarkServiceTest {
                 // when
                 EntityNotFoundException exception = assertThrows(
                         EntityNotFoundException.class,
-                        () -> bookmarkService.registerBookmark(wrongUserId, questinId)
+                        () -> bookmarkService.registerBookmark(wrongUserId, questionId)
                 );
 
                 assertThat(exception.getMessage()).isEqualTo("존재하지 않는 회원입니다.");
@@ -135,7 +140,7 @@ class BookmarkServiceTest {
                 // when
                 EntityNotFoundException exception = assertThrows(
                         EntityNotFoundException.class,
-                        () -> bookmarkService.registerBookmark(wrongUserId, questinId)
+                        () -> bookmarkService.registerBookmark(wrongUserId, questionId)
                 );
 
                 assertThat(exception.getMessage()).isEqualTo("존재하지 않는 회원입니다.");
@@ -185,6 +190,63 @@ class BookmarkServiceTest {
                 );
 
                 assertThat(exception.getMessage()).isEqualTo("존재하지 않는 회원입니다.");
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("북마크 삭제 기능 테스트")
+    public class BookmarkDeletion {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 userId, questionId를 사용한 경우")
+            public void shouldDeleteBookmark_whenBookmarkExistsInDB() {
+                // given
+                BookmarkResponseDto saved = bookmarkService.registerBookmark(userId, questionId);
+
+                // when
+                BookmarkResponseDto deleted = bookmarkService.deleteBookmark(userId, questionId);
+
+                // then
+                assertThat(deleted).isNotNull();
+                assertThat(deleted.getUserId()).isEqualTo(saved.getUserId());
+                assertThat(deleted.getQuestionId()).isEqualTo(saved.getQuestionId());
+                assertThat(deleted.getCreatedAt()).isEqualTo(saved.getCreatedAt());
+
+                // Repository 상태 확인
+                assertThat(bookmarkRepository.existsByUserIdAndQuestionId(userId, questionId)).isFalse();
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @ParameterizedTest
+            @DisplayName("DB에 없는 북마크를 삭제할 경우 - EntityNotFoundException 발생")
+            @CsvSource(
+                    value = {
+                            "1, 2",
+                            "0, 2",
+                            "-1, 2",
+                            "1, 0",
+                            "1, -1"
+                    }
+            )
+            public void shouldThrowEntityNotFoundException_whenBookmarkDoesNotExistsInDB(long userId, long questionId) {
+                // given
+
+                // when
+                EntityNotFoundException exception = assertThrows(
+                        EntityNotFoundException.class,
+                        () -> bookmarkService.deleteBookmark(userId, questionId)
+                );
+
+                assertThat(exception.getMessage()).isEqualTo("존재하지 않는 북마크입니다.");
             }
         }
     }

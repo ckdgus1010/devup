@@ -24,8 +24,6 @@ public class BookmarkService {
     private final UserAccountRepository userAccountRepository;
     private final QuestionRepository questionRepository;
 
-    // TODO: 북마크 등록
-
     /**
      * 신규 북마크 등록
      * (이미 등록된 북마크가 있는 경우 정상 등록 처리)
@@ -56,6 +54,23 @@ public class BookmarkService {
                 });
 
         return convertToDto(bookmark);
+    }
+
+    /**
+     * 북마크 삭제
+     *
+     * @param userId 사용자 ID
+     * @param questionId 면접 질문 ID
+     * @return 삭제된 북마크 정보
+     */
+    public BookmarkResponseDto deleteBookmark(long userId, long questionId) {
+        Bookmark entity = bookmarkRepository
+                .findByUserIdAndQuestionId(userId, questionId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 북마크입니다."));
+
+        bookmarkRepository.delete(entity);
+
+        return convertToDto(entity);
     }
 
     private BookmarkResponseDto convertToDto(Bookmark bookmark) {
