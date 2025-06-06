@@ -1,8 +1,9 @@
 package com.upstage.devup.question.service;
 
+import com.upstage.devup.bookmark.service.BookmarkService;
+import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.question.dto.QuestionDetailDto;
-import com.upstage.devup.global.entity.Question;
 import com.upstage.devup.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final BookmarkService bookmarkService;
     private final QuestionRepository questionRepository;
 
     private static final int QUESTIONS_PER_PAGE = 10;
@@ -33,7 +35,7 @@ public class QuestionService {
 
         return questionRepository
                 .findAll(pageable)
-                .map(this::convertQuestionToDetailDto);
+                .map(entity -> convertQuestionToDetailDto(entity, false));
     }
 
     /**
@@ -59,39 +61,34 @@ public class QuestionService {
 
         return questionRepository
                 .findByTitleContainsIgnoreCase(str, pageable)
-                .map(this::convertQuestionToDetailDto);
+                .map(entity -> convertQuestionToDetailDto(entity, false));
     }
 
     /**
-     * 면접 질문 상세 조회
+     * 면접 질문 상세 정보 조회
      *
-     * @param id 면접 질문 ID
-     * @return 면접 질문 상세 정보
+     * @param userId     사용자 ID
+     * @param questionId 면접 질문 ID
+     * @return 조회된 면접 질문 상세 정보
      */
-    public QuestionDetailDto getQuestion(Long id) {
-        return questionRepository
-                .findById(id)
-                .map(this::convertQuestionToDetailDto)
+    public QuestionDetailDto getQuestion(long userId, long questionId) {
+
+        boolean isBookmarked = bookmarkService.checkBookmarkIsRegistered(userId, questionId);
+
+        Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("면접 질문을 찾을 수 없습니다."));
+
+        return convertQuestionToDetailDto(question, isBookmarked);
     }
 
-    /**
-     * 면접 질문 ID가 사용 중인지 확인
-     *
-     * @param questionId 확인할 면접 질문 ID
-     * @return 사용 중인 ID, false: 사용하지 않는 ID
-     */
-    public boolean isQuestionIdInUse(Long questionId) {
-        return questionRepository.existsById(questionId);
-    }
-
-    private QuestionDetailDto convertQuestionToDetailDto(Question question) {
+    private QuestionDetailDto convertQuestionToDetailDto(Question question, boolean isBookmarked) {
         return QuestionDetailDto.builder()
                 .id(question.getId())
                 .title(question.getTitle())
                 .questionText(question.getQuestionText())
                 .category(question.getCategory().getCategory())
                 .level(question.getLevel().getLevel())
+                .isBookmarked(isBookmarked)
                 .createdAt(question.getCreatedAt())
                 .modifiedAt(question.getModifiedAt())
                 .build();

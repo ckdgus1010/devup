@@ -48,7 +48,7 @@ public class UserAnswerSaveService {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
 
-        QuestionDetailDto questionDetailDto = questionService.getQuestion(request.getQuestionId());
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(userId, request.getQuestionId());
 
         UserAnswerContext context = new UserAnswerContext(userId, request.getQuestionId());
 

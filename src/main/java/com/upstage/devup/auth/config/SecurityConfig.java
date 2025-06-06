@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,6 +49,9 @@ public class SecurityConfig {
     @Value("${security.csrf-enabled:true}")
     private boolean csrfEnabled;
 
+    @Value("${spring.profiles.active:dev}")
+    private String isDevProfile;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
@@ -65,6 +69,15 @@ public class SecurityConfig {
             http.csrf(AbstractHttpConfigurer::disable);
         }
 
+        if (isDevProfile.equals("dev")) {
+            http
+                    .headers(h ->
+                            h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))  // X-Frame-Options 헤더 제거
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/h2-console/**")
+                            .permitAll());
+        }
+
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(STATIC_RESOURCES).permitAll()
@@ -79,11 +92,14 @@ public class SecurityConfig {
                 ).logout(AbstractHttpConfigurer::disable);
 
         http
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(
                                 (req, res, ex1) ->
-                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
+                                        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
                         )
                 );
 
