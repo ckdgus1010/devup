@@ -43,7 +43,7 @@ class UserAnswerSaveServiceTest {
         UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(userId, request);
 
         // then
-        QuestionDetailDto questionDetailDto = questionService.getQuestion(questionId);
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(userId, questionId);
 
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getQuestionId()).isEqualTo(questionId);

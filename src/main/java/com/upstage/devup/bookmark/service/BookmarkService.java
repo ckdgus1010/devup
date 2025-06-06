@@ -91,6 +91,7 @@ public class BookmarkService {
      * @return 삭제된 북마크 정보
      */
     public BookmarkResponseDto deleteBookmark(long userId, long questionId) {
+
         Bookmark entity = bookmarkRepository
                 .findByUserIdAndQuestionId(userId, questionId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 북마크입니다."));
@@ -106,5 +107,9 @@ public class BookmarkService {
                 .questionId(bookmark.getQuestion().getId())
                 .createdAt(bookmark.getCreatedAt())
                 .build();
+    }
+
+    public boolean checkBookmarkIsRegistered(long userId, long questionId) {
+        return bookmarkRepository.existsByUserIdAndQuestionId(userId, questionId);
     }
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "bookmarks")
 @Builder
 @Getter
 public class Bookmark {

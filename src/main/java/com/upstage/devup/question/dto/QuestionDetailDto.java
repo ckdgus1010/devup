@@ -17,6 +17,7 @@ public class QuestionDetailDto {
     private String category;
     private String level;
 
+    private boolean isBookmarked;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;

@@ -1,9 +1,11 @@
 package com.upstage.devup.web;
 
+import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,14 +47,27 @@ public class QuestionController {
             startPage = Math.max(0, endPage - pageBlockSize);
         }
 
-        List<Integer> pageNumbers = IntStream.range(startPage, endPage).boxed().toList();
-        return pageNumbers;
+        return IntStream.range(startPage, endPage).boxed().toList();
     }
 
+    /**
+     * 면접 질문 상세 페이지 불러오기
+     *
+     * @param user       사용자 정보
+     * @param questionId 면접 질문 ID
+     * @param model      페이지로 전달할 정보
+     * @return 면접 질문 상세 페이지
+     */
     @GetMapping("/{questionId}")
-    public String getQuestionDetailView(@PathVariable Long questionId, Model model) {
-        QuestionDetailDto question = questionService.getQuestion(questionId);
-        model.addAttribute("question", question);
+    public String getQuestionDetailView(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable Long questionId,
+            Model model
+    ) {
+        long userId = user == null ? 0L : user.getUserId();
+        QuestionDetailDto result = questionService.getQuestion(userId, questionId);
+
+        model.addAttribute("question", result);
 
         return "question/question-detail";
     }
