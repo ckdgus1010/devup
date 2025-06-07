@@ -30,15 +30,17 @@ public class JwtTokenProvider {
     /**
      * JWT 토큰 생성
      *
-     * @param userId 유저 고유 번호
-     * @return
+     * @param userId 사용자 ID
+     * @param role   사용자 권한
+     * @return 생성된 JWT 토큰
      */
-    public String generateToken(Long userId) {
+    public String generateToken(Long userId, String role) {
         Date now = new Date();
         Date expiredDate = new Date(System.currentTimeMillis() + jwtProperties.getExpiration());
 
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
+                .claim("role", role)
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
@@ -87,8 +89,11 @@ public class JwtTokenProvider {
     public AuthenticatedUser getAuthenticatedUserFromJwtToken(String token) {
         try {
             Claims claims = parseToken(token);
+
             Long userId = Long.parseLong(claims.getSubject());
-            return new AuthenticatedUser(userId);
+            String role = claims.get("role", String.class);
+
+            return new AuthenticatedUser(userId, role);
         } catch (JwtException | IllegalArgumentException e) {
             log.warn("토큰에서 사용자 정보를 찾을 수 없음: {}", e.getMessage());
             return null;

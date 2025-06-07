@@ -2,6 +2,7 @@ package com.upstage.devup.auth.mapper;
 
 import com.upstage.devup.auth.dto.SignUpRequestDto;
 import com.upstage.devup.auth.dto.SignUpResponseDto;
+import com.upstage.devup.global.entity.Role;
 import com.upstage.devup.global.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +16,10 @@ public class UserMapper {
 
     private final PasswordEncoder passwordEncoder;
 
-    public User toEntity(SignUpRequestDto request) {
+    public User toEntity(SignUpRequestDto request, Role role) {
 
         return User.builder()
+                .role(role)
                 .loginId(request.getLoginId())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .nickname(request.getNickname())
@@ -32,6 +34,7 @@ public class UserMapper {
                 .loginId(entity.getLoginId())
                 .nickname(entity.getNickname())
                 .email(entity.getEmail())
+                .role(entity.getRole().getRoleName())
                 .build();
     }
 }
