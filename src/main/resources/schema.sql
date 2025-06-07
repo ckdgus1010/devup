@@ -58,6 +58,16 @@ CREATE TABLE questions
     PRIMARY KEY (id)
 ); -- '기술 면접 질문'
 
+CREATE TABLE roles
+(
+    id          BIGINT       NOT NULL AUTO_INCREMENT,
+    role_name   VARCHAR(30)  NOT NULL COMMENT '권한 이름',
+    description VARCHAR(100) NULL     COMMENT '권한 설명',
+    created_at  TIMESTAMP    NOT NULL COMMENT '등록일',
+    modified_at TIMESTAMP    NULL     COMMENT '수정일',
+    PRIMARY KEY (id)
+); -- '사용자 권한'
+
 CREATE TABLE user_answer_stats
 (
     id              BIGINT    NOT NULL AUTO_INCREMENT,
@@ -87,6 +97,7 @@ ALTER TABLE user_answers
 CREATE TABLE users
 (
     id          BIGINT       NOT NULL AUTO_INCREMENT,
+    role_id     BIGINT       NOT NULL,
     login_id    VARCHAR(100) NOT NULL,
     password    VARCHAR(255) NOT NULL,
     nickname    VARCHAR(100) NOT NULL,
@@ -173,3 +184,8 @@ ALTER TABLE user_answer_stats
     ADD CONSTRAINT FK_questions_TO_user_answer_stats
         FOREIGN KEY (question_id)
             REFERENCES questions (id);
+
+ALTER TABLE users
+    ADD CONSTRAINT FK_roles_TO_users
+        FOREIGN KEY (role_id)
+            REFERENCES roles (id);
