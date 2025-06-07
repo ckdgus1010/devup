@@ -49,7 +49,8 @@ VALUES
     (2, 1, 'user2', '$2a$12$A5XbxYRC6WAEACzXW1QcpeKbr8NuFhcphfhACaXtRBjpWb2yACMvW', '사용자2', 'user2@devup.com', CURRENT_TIMESTAMP),
     (3, 1, 'user3', '$2a$12$7jpHtMMoVmHqQgw.mSgBPe8qnVXboRO3k920KCTbzChtHksJkfvo2', '사용자3', 'user3@devup.com', CURRENT_TIMESTAMP),
     (4, 1, 'user4', '$2a$12$0ZyGb/eUgu0JPRj8SAmTPuDQnJnV35cKT8ujJmBO0p73Nj/N/Sgw6', '사용자4', 'user4@devup.com', CURRENT_TIMESTAMP),
-    (5, 1, 'user5', '$2a$12$xvsNuP8HD4S5pb.k908Bru1.jNzBfRnkaaVBFX.RisuHOglvYCUJy', '사용자5', 'user5@devup.com', CURRENT_TIMESTAMP);
+    (5, 1, 'user5', '$2a$12$xvsNuP8HD4S5pb.k908Bru1.jNzBfRnkaaVBFX.RisuHOglvYCUJy', '사용자5', 'user5@devup.com', CURRENT_TIMESTAMP),
+    (6, 2, 'admin', '$2a$12$iLfO7X/iMCKIsNXGZMdlQu.QBwaHEHTj4QQkxA4VHGkP2.ij9L6NS', '관리자', 'admin@devup.com', CURRENT_TIMESTAMP);
 
 -- 질문 (questions)
 INSERT INTO questions
