@@ -18,7 +18,7 @@ public class UserAccountController {
 
     @GetMapping
     public ResponseEntity<?> getUserAccount(@AuthenticationPrincipal AuthenticatedUser user) {
-        UserAccountDto result = userAccountService.getUserAccount(user.getUserId());
+        UserAccountDto result = userAccountService.getUserAccount(user.userId());
         return ResponseEntity.ok(result);
     }
 
@@ -28,7 +28,7 @@ public class UserAccountController {
             @RequestBody UserAccountUpdateDto userAccountUpdateDto) {
 
         System.out.println("UserAccountController.updateUserAccount");
-        UserAccountDto result = userAccountService.updateUserAccount(user.getUserId(), userAccountUpdateDto);
+        UserAccountDto result = userAccountService.updateUserAccount(user.userId(), userAccountUpdateDto);
         return ResponseEntity.ok(result);
     }
 }

@@ -25,9 +25,10 @@ public class LogoutController {
 
     @PostMapping
     public ResponseEntity<?> logout(@AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
-        log.info("로그아웃 요청 userId = {}", user.getUserId());
+        long userId = user.userId();
+        log.info("로그아웃 요청 userId = {}", userId);
 
-        if (user.getUserId() == null || user.getUserId() <= 0L) {
+        if (userId <= 0L) {
             throw new UnauthenticatedException("로그인이 필요합니다.");
         }
 

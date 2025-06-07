@@ -1,7 +1,6 @@
 package com.upstage.devup.user.answer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.global.exception.EntityNotFoundException;
@@ -15,20 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import static com.upstage.devup.Util.getAuthentication;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -50,13 +46,8 @@ class UserAnswerSaveControllerTest {
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
+    private static final String ROLE_USER = "ROLE_USER";
     private static final String URI_TEMPLATE = "/api/user/answer";
-
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-        return authentication(auth);
-    }
 
     @Nested
     @DisplayName("성공 케이스")
@@ -99,7 +90,7 @@ class UserAnswerSaveControllerTest {
                     .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -158,7 +149,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andDo(print())
@@ -176,7 +167,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(""))
                     .andExpect(status().isBadRequest());
@@ -194,7 +185,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest());
@@ -216,7 +207,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isNotFound())
@@ -237,7 +228,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andDo(print())
@@ -257,7 +248,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andDo(print())
@@ -277,7 +268,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andDo(print())
@@ -296,7 +287,7 @@ class UserAnswerSaveControllerTest {
 
             // when & then
             mockMvc.perform(post(URI_TEMPLATE)
-                            .with(getAuthentication(userId))
+                            .with(getAuthentication(userId, ROLE_USER))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andDo(print())

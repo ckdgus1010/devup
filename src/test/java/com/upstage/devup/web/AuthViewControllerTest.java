@@ -1,6 +1,5 @@
 package com.upstage.devup.web;
 
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -8,13 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static com.upstage.devup.Util.getAuthentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -28,6 +24,8 @@ class AuthViewControllerTest {
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
+
+    private static final String ROLE_USER = "ROLE_USER";
 
     private static final String URI_TEMPLATE = "/auth/signin";
 
@@ -50,14 +48,8 @@ class AuthViewControllerTest {
 
         // when & then
         mockMvc.perform(get(URI_TEMPLATE)
-                        .with(getAuthentication(userId)))
+                        .with(getAuthentication(userId, ROLE_USER)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/mypage"));
-    }
-
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-        return authentication(auth);
     }
 }
