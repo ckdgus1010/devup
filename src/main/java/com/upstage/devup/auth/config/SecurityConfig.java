@@ -36,6 +36,11 @@ public class SecurityConfig {
             "/api/auth/signin",
     };
 
+    public static final String[] ADMIN_APIS = {
+            "/admin/**",
+            "/api/admin/**"
+    };
+
     public static final String[] SWAGGER_API = {
             "/swagger-ui.html",
             "/swagger-ui/**",
@@ -52,10 +57,10 @@ public class SecurityConfig {
     @Value("${spring.profiles.active:dev}")
     private String isDevProfile;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
     @Bean
@@ -80,6 +85,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(ADMIN_APIS).hasRole("ADMIN")  // 관리자 전용 API
                         .requestMatchers(STATIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_PAGES).permitAll()
                         .requestMatchers(PUBLIC_APIS).permitAll()
@@ -93,7 +99,7 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider),
+                        jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .exceptionHandling(ex -> ex

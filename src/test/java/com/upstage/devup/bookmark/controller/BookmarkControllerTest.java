@@ -1,6 +1,5 @@
 package com.upstage.devup.bookmark.controller;
 
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.bookmark.dto.BookmarkDetails;
@@ -17,19 +16,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.upstage.devup.Util.getAuthentication;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,11 +42,7 @@ class BookmarkControllerTest {
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-        return authentication(auth);
-    }
+    private static final String ROLE_USER = "ROLE_USER";
 
     @Nested
     @DisplayName("북마크 조회")
@@ -86,7 +78,7 @@ class BookmarkControllerTest {
 
                 // when & then
                 mockMvc.perform(get(URL_TEMPLATE)
-                                .with(getAuthentication(userId))
+                                .with(getAuthentication(userId, ROLE_USER))
                                 .param("pageNumber", String.valueOf(pageNumber)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -115,7 +107,7 @@ class BookmarkControllerTest {
 
                 // when & then
                 mockMvc.perform(get(URL_TEMPLATE)
-                                .with(getAuthentication(userId))
+                                .with(getAuthentication(userId, ROLE_USER))
                                 .param("pageNumber", String.valueOf(pageNumber)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -146,7 +138,7 @@ class BookmarkControllerTest {
 
                 // when & then
                 mockMvc.perform(get(URL_TEMPLATE)
-                                .with(getAuthentication(userId))
+                                .with(getAuthentication(userId, ROLE_USER))
                                 .param("pageNumber", String.valueOf(pageNumber)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -195,7 +187,7 @@ class BookmarkControllerTest {
 
                 mockMvc.perform(
                                 post(URL_TEMPLATE + questionId)
-                                        .with(getAuthentication(userId)))
+                                        .with(getAuthentication(userId, ROLE_USER)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType("application/json"))
                         .andExpect(jsonPath("$.userId").value(userId))
@@ -232,7 +224,7 @@ class BookmarkControllerTest {
 
                 // when & then
                 mockMvc.perform(post(URL_TEMPLATE + questionId)
-                                .with(getAuthentication(userId)))
+                                .with(getAuthentication(userId, ROLE_USER)))
                         .andExpect(status().isNotFound());
             }
         }
@@ -272,7 +264,7 @@ class BookmarkControllerTest {
                         .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
                 mockMvc.perform(delete(URL_TEMPLATE + questionId)
-                                .with(getAuthentication(userId)))
+                                .with(getAuthentication(userId, ROLE_USER)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$.userId").value(userId))
@@ -309,7 +301,7 @@ class BookmarkControllerTest {
 
                 // when & then
                 mockMvc.perform(delete(URL_TEMPLATE + questionId)
-                                .with(getAuthentication(userId)))
+                                .with(getAuthentication(userId, ROLE_USER)))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$.code").value("NOT_FOUND"))

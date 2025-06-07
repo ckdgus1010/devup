@@ -122,6 +122,7 @@ class QuestionServiceTest {
         @BeforeEach
         public void beforeEach() {
             user = userAccountRepository.save(User.builder()
+                    .role(Role.builder().id(1L).build())
                     .loginId("test")
                     .password("1234")
                     .nickname("test_user")

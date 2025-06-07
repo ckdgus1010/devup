@@ -64,7 +64,7 @@ public class QuestionController {
             @PathVariable Long questionId,
             Model model
     ) {
-        long userId = user == null ? 0L : user.getUserId();
+        long userId = user == null ? 0L : user.userId();
         QuestionDetailDto result = questionService.getQuestion(userId, questionId);
 
         model.addAttribute("question", result);

@@ -26,7 +26,7 @@ public class UserAnswerSaveController {
     public ResponseEntity<?> saveUserAnswer(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestBody @Valid UserAnswerSaveRequest request) {
-        UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(user.getUserId(), request);
+        UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(user.userId(), request);
         return ResponseEntity.ok(result);
     }
 }

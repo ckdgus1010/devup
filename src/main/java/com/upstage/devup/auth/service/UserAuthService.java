@@ -5,6 +5,8 @@ import com.upstage.devup.auth.dto.SignInRequestDto;
 import com.upstage.devup.auth.dto.SignInResult;
 import com.upstage.devup.auth.dto.SignUpRequestDto;
 import com.upstage.devup.auth.dto.SignUpResponseDto;
+import com.upstage.devup.auth.respository.RoleRepository;
+import com.upstage.devup.global.entity.Role;
 import com.upstage.devup.global.entity.User;
 import com.upstage.devup.auth.mapper.UserMapper;
 import com.upstage.devup.global.exception.InvalidLoginException;
@@ -22,9 +24,13 @@ import org.springframework.stereotype.Service;
 public class UserAuthService {
 
     private final UserAuthRepository userAuthRepository;
+    private final RoleRepository roleRepository;
+
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private static final String ROLE_USER = "ROLE_USER";
 
     /**
      * 로그인
@@ -50,8 +56,8 @@ public class UserAuthService {
             throw new InvalidLoginException("아이디 또는 비밀번호를 확인해주세요.");
         }
 
-        // JWT 발급
-        String token = jwtTokenProvider.generateToken(user.getId());
+        // JWT 토큰 발급
+        String token = jwtTokenProvider.generateToken(user.getId(), user.getRole().getRoleName());
 
         return SignInResult.builder()
                 .token(token)
@@ -84,7 +90,11 @@ public class UserAuthService {
             throw new ValueAlreadyInUseException("이미 사용 중인 이메일입니다.");
         }
 
-        User savedEntity = userAuthRepository.save(userMapper.toEntity(request));
+        // 사용자 권한 조회
+        Role role = roleRepository.findByRoleName(ROLE_USER)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 권한을 찾을 수 없습니다."));
+
+        User savedEntity = userAuthRepository.save(userMapper.toEntity(request, role));
 
         return userMapper.toSignUpResponseDto(savedEntity);
     }

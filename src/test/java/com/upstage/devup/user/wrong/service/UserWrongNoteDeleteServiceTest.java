@@ -45,6 +45,7 @@ class UserWrongNoteDeleteServiceTest {
     @BeforeEach
     public void beforeEach() {
         User user = userAccountRepository.save(User.builder()
+                .role(Role.builder().id(1L).build())
                 .loginId("user1234")
                 .password("pass1234")
                 .nickname("nickname1234")

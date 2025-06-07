@@ -1,6 +1,5 @@
 package com.upstage.devup.auth.controller;
 
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.global.properties.CookieProperties;
@@ -14,15 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import static com.upstage.devup.Util.getAuthentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,6 +33,7 @@ class LogoutControllerTest {
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
+    private static final String ROLE_USER = "ROLE_USER";
     private static final String URI_TEMPLATE = "/api/auth/logout";
 
     @Test
@@ -47,7 +44,7 @@ class LogoutControllerTest {
 
         // when & then
         mockMvc.perform(post(URI_TEMPLATE)
-                        .with(getAuthentication(userId)))
+                        .with(getAuthentication(userId, ROLE_USER)))
                 .andExpect(status().isOk())
                 .andExpect(compareStringInHeader("accessToken="))
                 .andExpect(compareStringInHeader("Max-Age=0"))
@@ -75,7 +72,7 @@ class LogoutControllerTest {
 
         // when & then
         mockMvc.perform(post(URI_TEMPLATE)
-                        .with(getAuthentication(userId)))
+                        .with(getAuthentication(userId, ROLE_USER)))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -84,13 +81,6 @@ class LogoutControllerTest {
                 .string(
                         HttpHeaders.SET_COOKIE, Matchers.containsString(subString)
                 );
-    }
-
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-
-        return authentication(auth);
     }
 
 }

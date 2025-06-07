@@ -28,7 +28,7 @@ public class BookmarkController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam Integer pageNumber
     ) {
-        BookmarksQueryDto result = bookmarkService.getBookmarks(user.getUserId(), pageNumber);
+        BookmarksQueryDto result = bookmarkService.getBookmarks(user.userId(), pageNumber);
         return ResponseEntity.ok(result);
     }
 
@@ -44,7 +44,7 @@ public class BookmarkController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable Long questionId
     ) {
-        BookmarkResponseDto result = bookmarkService.registerBookmark(user.getUserId(), questionId);
+        BookmarkResponseDto result = bookmarkService.registerBookmark(user.userId(), questionId);
         return ResponseEntity.ok(result);
     }
 
@@ -60,7 +60,7 @@ public class BookmarkController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable Long questionId
     ) {
-        BookmarkResponseDto result = bookmarkService.deleteBookmark(user.getUserId(), questionId);
+        BookmarkResponseDto result = bookmarkService.deleteBookmark(user.userId(), questionId);
         return ResponseEntity.ok(result);
     }
 }

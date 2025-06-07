@@ -34,15 +34,23 @@ VALUES
     (2, 'MEDIUM'),
     (3, 'HARD');
 
+-- 권한 (roles)
+INSERT INTO roles
+    (id, role_name, description, created_at)
+VALUES
+    (1, 'ROLE_USER', '일반 사용자', CURRENT_TIMESTAMP),
+    (2, 'ROLE_ADMIN', '관리자', CURRENT_TIMESTAMP);
+
 -- 사용자 (users)
 INSERT INTO users
-    (id, login_id, password, nickname, email, created_at)
+    (id, role_id, login_id, password, nickname, email, created_at)
 VALUES
-    (1, 'user1', '$2a$12$L3hwEcWBtlbjNqbBO1Ukv.H2qYEprz6P9uylfT2RujWW9FiAEf9ve', '사용자1', 'user1@devup.com', CURRENT_TIMESTAMP),
-    (2, 'user2', '$2a$12$A5XbxYRC6WAEACzXW1QcpeKbr8NuFhcphfhACaXtRBjpWb2yACMvW', '사용자2', 'user2@devup.com', CURRENT_TIMESTAMP),
-    (3, 'user3', '$2a$12$7jpHtMMoVmHqQgw.mSgBPe8qnVXboRO3k920KCTbzChtHksJkfvo2', '사용자3', 'user3@devup.com', CURRENT_TIMESTAMP),
-    (4, 'user4', '$2a$12$0ZyGb/eUgu0JPRj8SAmTPuDQnJnV35cKT8ujJmBO0p73Nj/N/Sgw6', '사용자4', 'user4@devup.com', CURRENT_TIMESTAMP),
-    (5, 'user5', '$2a$12$xvsNuP8HD4S5pb.k908Bru1.jNzBfRnkaaVBFX.RisuHOglvYCUJy', '사용자5', 'user5@devup.com', CURRENT_TIMESTAMP);
+    (1, 1, 'user1', '$2a$12$L3hwEcWBtlbjNqbBO1Ukv.H2qYEprz6P9uylfT2RujWW9FiAEf9ve', '사용자1', 'user1@devup.com', CURRENT_TIMESTAMP),
+    (2, 1, 'user2', '$2a$12$A5XbxYRC6WAEACzXW1QcpeKbr8NuFhcphfhACaXtRBjpWb2yACMvW', '사용자2', 'user2@devup.com', CURRENT_TIMESTAMP),
+    (3, 1, 'user3', '$2a$12$7jpHtMMoVmHqQgw.mSgBPe8qnVXboRO3k920KCTbzChtHksJkfvo2', '사용자3', 'user3@devup.com', CURRENT_TIMESTAMP),
+    (4, 1, 'user4', '$2a$12$0ZyGb/eUgu0JPRj8SAmTPuDQnJnV35cKT8ujJmBO0p73Nj/N/Sgw6', '사용자4', 'user4@devup.com', CURRENT_TIMESTAMP),
+    (5, 1, 'user5', '$2a$12$xvsNuP8HD4S5pb.k908Bru1.jNzBfRnkaaVBFX.RisuHOglvYCUJy', '사용자5', 'user5@devup.com', CURRENT_TIMESTAMP),
+    (6, 2, 'admin', '$2a$12$iLfO7X/iMCKIsNXGZMdlQu.QBwaHEHTj4QQkxA4VHGkP2.ij9L6NS', '관리자', 'admin@devup.com', CURRENT_TIMESTAMP);
 
 -- 질문 (questions)
 INSERT INTO questions

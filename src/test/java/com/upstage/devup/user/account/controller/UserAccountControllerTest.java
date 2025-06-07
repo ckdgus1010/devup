@@ -1,6 +1,5 @@
 package com.upstage.devup.user.account.controller;
 
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.global.exception.EntityNotFoundException;
@@ -12,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import static com.upstage.devup.Util.getAuthentication;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,6 +33,7 @@ class UserAccountControllerTest {
     @MockitoBean
     private UserAccountService userAccountService;
 
+    private static final String ROLE_USER = "ROLE_USER";
     private static final String urlTemplate = "/api/user/account";
 
     @Test
@@ -57,7 +54,7 @@ class UserAccountControllerTest {
 
         // when & then
         mockMvc.perform(get(urlTemplate)
-                        .with(getAuthentication(userId)))
+                        .with(getAuthentication(userId, ROLE_USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userId").value(userId.toString()))
@@ -85,17 +82,10 @@ class UserAccountControllerTest {
 
         // when & then
         mockMvc.perform(get(urlTemplate)
-                        .with(getAuthentication(userId)))
+                        .with(getAuthentication(userId, ROLE_USER)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").value(errorMessage));
-    }
-
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-
-        return authentication(auth);
     }
 
 }

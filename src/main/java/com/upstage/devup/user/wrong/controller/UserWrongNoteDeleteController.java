@@ -30,7 +30,7 @@ public class UserWrongNoteDeleteController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable Long questionId
     ) {
-        userWrongNoteDeleteService.deleteWrongNote(user.getUserId(), questionId);
+        userWrongNoteDeleteService.deleteWrongNote(user.userId(), questionId);
         return ResponseEntity.ok().build();
     }
 
