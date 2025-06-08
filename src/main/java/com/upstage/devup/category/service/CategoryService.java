@@ -62,7 +62,7 @@ public class CategoryService {
         Category entity = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리입니다."));
 
-        entity.setCategory(request.category());
+        entity.setCategoryName(request.category());
         entity.setColor(request.color());
 
         try {
@@ -83,6 +83,6 @@ public class CategoryService {
      * @return true: 중복 값 있음, false: 중복 값 없음
      */
     private boolean checkCategoryNameIsInUse(String categoryName) {
-        return categoryRepository.existsByCategory(categoryName);
+        return categoryRepository.existsByCategoryName(categoryName);
     }
 }

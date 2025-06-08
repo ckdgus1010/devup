@@ -19,7 +19,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, BookmarkId> 
 
     @Query("""
         SELECT new com.upstage.devup.bookmark.dto.BookmarkDetails(
-                q.id, q.title, c.category, l.level, b.createdAt
+                q.id, q.title, c.categoryName, l.level, b.createdAt
                 )
                 FROM Bookmark b
                 JOIN b.question q

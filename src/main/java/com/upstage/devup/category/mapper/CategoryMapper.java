@@ -13,7 +13,7 @@ public class CategoryMapper {
 
     public Category toEntity(CategoryAddRequest request) {
         return Category.builder()
-                .category(request.category())
+                .categoryName(request.category())
                 .color(request.color())
                 .build();
     }
@@ -21,7 +21,7 @@ public class CategoryMapper {
     public CategoryDto toCategoryDto(Category entity) {
         return new CategoryDto(
                 entity.getId(),
-                entity.getCategory(),
+                entity.getCategoryName(),
                 entity.getColor()
         );
     }

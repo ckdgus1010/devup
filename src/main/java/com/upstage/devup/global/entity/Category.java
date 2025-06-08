@@ -17,7 +17,7 @@ public class Category {
 
     @Setter
     @Column(unique = true, nullable = false, length = 100)
-    private String category;
+    private String categoryName;
 
     @Setter
     @Column(nullable = false, length = 10)
