@@ -1,10 +1,7 @@
 package com.upstage.devup.global.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "categories")
@@ -18,9 +15,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(unique = true, nullable = false, length = 100)
     private String category;
 
+    @Setter
     @Column(nullable = false, length = 10)
     private String color;
 
