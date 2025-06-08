@@ -1,11 +1,9 @@
 package com.upstage.devup.global.handler;
 
-import com.upstage.devup.global.exception.InvalidLoginException;
-import com.upstage.devup.global.exception.UnauthenticatedException;
+import com.upstage.devup.global.exception.*;
 import com.upstage.devup.global.domain.dto.ErrorResponse;
-import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.global.exception.ValueAlreadyInUseException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -62,5 +60,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("VALIDATION_FAILED", message));
+    }
+
+    @ExceptionHandler(DuplicatedResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DuplicatedResourceException e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(HttpStatus.CONFLICT.name(), e.getMessage()));
     }
 }
