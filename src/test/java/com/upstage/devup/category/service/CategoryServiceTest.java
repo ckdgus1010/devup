@@ -3,8 +3,12 @@ package com.upstage.devup.category.service;
 import com.upstage.devup.category.dto.CategoryAddRequest;
 import com.upstage.devup.category.dto.CategoryDto;
 import com.upstage.devup.category.dto.CategoryUpdateRequest;
+import com.upstage.devup.category.repository.CategoryRepository;
+import com.upstage.devup.global.entity.Category;
 import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,8 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 class CategoryServiceTest {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     long savedCategoryId;
     String savedCategoryName;
@@ -194,6 +204,57 @@ class CategoryServiceTest {
                 );
 
                 // then
+                assertThat(exception.getMessage()).isEqualTo("존재하지 않는 카테고리입니다.");
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 삭제 테스트")
+    public class CategoryDeleteTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("외래키로 연결되지 않은 경우")
+            public void shouldDeleteCategory() {
+                // given
+                Category category = categoryRepository.findById(savedCategoryId)
+                        .orElseThrow(() -> new EntityNotFoundException("존재하지 않은 카테고리입니다."));
+
+                // when
+                CategoryDto result = categoryService.deleteCategory(category.getId());
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.id()).isEqualTo(category.getId());
+                assertThat(result.categoryName()).isEqualTo(category.getCategoryName());
+                assertThat(result.color()).isEqualTo(category.getColor());
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("등록되지 않은 카테고리를 삭제하려는 경우")
+            public void shouldThrowEntityNotFoundException_whenCategoryDoesNotExists(long categoryId) {
+                // given
+
+                // when & then
+                EntityNotFoundException exception = assertThrows(
+                        EntityNotFoundException.class,
+                        () -> categoryService.deleteCategory(categoryId)
+                );
+
                 assertThat(exception.getMessage()).isEqualTo("존재하지 않는 카테고리입니다.");
             }
         }

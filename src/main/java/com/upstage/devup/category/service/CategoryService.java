@@ -74,7 +74,33 @@ public class CategoryService {
         }
     }
 
-    // TODO: 카테고리 삭제
+
+    /**
+     * 카테고리 삭제
+     *
+     * @param categoryId 삭제할 카테고리 ID
+     * @return 삭제된 카테고리 정보
+     * @throws EntityNotFoundException 존재하지 않는 카테고리를 삭제하려는 경우 발생
+     * @throws DataIntegrityViolationException 외래키로 사용 중인 카테고리를 삭제하려는 경우 발생
+     */
+    @Transactional
+    public CategoryDto deleteCategory(long categoryId) {
+
+        Category entity = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리입니다."));
+
+        try {
+            CategoryDto categoryDto = categoryMapper.toCategoryDto(entity);
+
+            categoryRepository.delete(entity);
+            categoryRepository.flush();
+
+            return categoryDto;
+        } catch (DataIntegrityViolationException e) {
+            log.error("삭제 실패: 해당 Category는 하나 이상의 Question에서 참조 중입니다.");
+            throw new DataIntegrityViolationException("삭제할 수 없습니다. 다른 데이터에서 이 항목을 사용 중입니다.");
+        }
+    }
 
     /**
      * 카테고리 명 중복 확인
