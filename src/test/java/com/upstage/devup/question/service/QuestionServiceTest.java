@@ -157,7 +157,7 @@ class QuestionServiceTest {
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
                 assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
-                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
+                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevelName());
                 assertThat(result.isBookmarked()).isFalse();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());
                 assertThat(result.getModifiedAt()).isNull();
@@ -177,7 +177,7 @@ class QuestionServiceTest {
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
                 assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
-                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
+                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevelName());
                 assertThat(result.isBookmarked()).isFalse();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());
                 assertThat(result.getModifiedAt()).isNull();
@@ -203,7 +203,7 @@ class QuestionServiceTest {
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
                 assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
-                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
+                assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevelName());
                 assertThat(result.isBookmarked()).isTrue();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());
                 assertThat(result.getModifiedAt()).isNull();

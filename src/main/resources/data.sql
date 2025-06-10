@@ -28,11 +28,11 @@ VALUES
 
 -- 난이도 (levels)
 INSERT INTO levels
-    (id, level)
+    (id, level_name, created_at)
 VALUES
-    (1, 'EASY'),
-    (2, 'MEDIUM'),
-    (3, 'HARD');
+    (1, 'EASY', CURRENT_TIMESTAMP),
+    (2, 'MEDIUM', CURRENT_TIMESTAMP),
+    (3, 'HARD', CURRENT_TIMESTAMP);
 
 -- 권한 (roles)
 INSERT INTO roles

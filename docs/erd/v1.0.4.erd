@@ -10,7 +10,7 @@
     "show": 511,
     "database": 1,
     "databaseName": "db_devup",
-    "canvasType": "@dineug/erd-editor/builtin-schema-sql",
+    "canvasType": "ERD",
     "language": 1,
     "tableNameCase": 4,
     "columnNameCase": 2,
@@ -729,20 +729,20 @@
       "PZNJcHrv12XoDKy1E94EA": {
         "id": "PZNJcHrv12XoDKy1E94EA",
         "tableId": "_CIKzC1_ech2NHfwtp4ZP",
-        "name": "level",
+        "name": "level_name",
         "comment": "",
         "dataType": "VARCHAR(50)",
         "default": "",
         "options": 12,
         "ui": {
           "keys": 0,
-          "widthName": 60,
+          "widthName": 66,
           "widthComment": 60,
           "widthDataType": 83,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1745508112116,
+          "updateAt": 1749540824082,
           "createAt": 1745497853138
         }
       },

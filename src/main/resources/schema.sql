@@ -29,15 +29,15 @@ ALTER TABLE categories
 
 CREATE TABLE levels
 (
-    id    BIGINT            NOT NULL AUTO_INCREMENT,
-    level VARCHAR(50)       NOT NULL,
+    id          BIGINT      NOT NULL AUTO_INCREMENT,
+    level_name  VARCHAR(50) NOT NULL,
     created_at  TIMESTAMP   NOT NULL COMMENT '등록일',
     modified_at TIMESTAMP   NULL     COMMENT '수정일',
     PRIMARY KEY (id)
 ); -- '난이도'
 
 ALTER TABLE levels
-    ADD CONSTRAINT UQ_level UNIQUE (level);
+    ADD CONSTRAINT UQ_level UNIQUE (level_name);
 
 CREATE TABLE question_stats
 (

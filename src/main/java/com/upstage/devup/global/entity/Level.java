@@ -25,7 +25,7 @@ public class Level {
             nullable = false,
             length = 50
     )
-    private String level;
+    private String levelName;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
