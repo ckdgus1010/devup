@@ -1,10 +1,7 @@
 package com.upstage.devup.global.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -31,4 +28,9 @@ public class Level {
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }
