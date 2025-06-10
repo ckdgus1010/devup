@@ -13,7 +13,7 @@ public class CategoryMapper {
 
     public Category toEntity(CategoryAddRequest request) {
         return Category.builder()
-                .categoryName(request.category())
+                .categoryName(request.categoryName())
                 .color(request.color())
                 .build();
     }

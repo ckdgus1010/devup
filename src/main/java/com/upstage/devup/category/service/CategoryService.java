@@ -30,7 +30,7 @@ public class CategoryService {
      */
     @Transactional
     public CategoryDto addCategory(CategoryAddRequest request) {
-        if (checkCategoryNameIsInUse(request.category())) {
+        if (checkCategoryNameIsInUse(request.categoryName())) {
             throw new DuplicatedResourceException("이미 존재하는 카테고리입니다.");
         }
 

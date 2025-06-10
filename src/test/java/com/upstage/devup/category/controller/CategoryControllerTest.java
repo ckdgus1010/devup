@@ -1,10 +1,13 @@
 package com.upstage.devup.category.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.upstage.devup.Util;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
+import com.upstage.devup.category.dto.CategoryAddRequest;
 import com.upstage.devup.category.dto.CategoryDto;
 import com.upstage.devup.category.service.CategoryService;
+import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import com.upstage.devup.global.handler.GlobalExceptionHandler;
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +21,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {CategoryController.class, GlobalExceptionHandler.class})
@@ -30,15 +36,132 @@ class CategoryControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
     @MockitoBean
     private CategoryService categoryService;
 
-    private static final String URL_TEMPLATE = "/api/admin/category/";
+    private static final String URL_TEMPLATE = "/api/admin/category";
     private static final long userId = 1L;
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+    @Nested
+    @DisplayName("카테고리 등록 테스트")
+    public class RegistrationTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청이 온 경우")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                long categoryId = 10L;
+                String categoryName = "등록할 카테고리";
+                String color = "#123456";
+                CategoryAddRequest request = new CategoryAddRequest(categoryName, color);
+                CategoryDto mockResult = new CategoryDto(categoryId, categoryName, color);
+
+                when(categoryService.addCategory(eq(request)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id").value(mockResult.id()))
+                        .andExpect(jsonPath("$.categoryName").value(mockResult.categoryName()))
+                        .andExpect(jsonPath("$.color").value(mockResult.color()));
+
+                verify(categoryService).addCategory(eq(request));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("카테고리 이름 누락 - 400 Bad Request 응답")
+            public void shouldReturn400_whenCategoryNameIsBlank() throws Exception {
+                // given
+                String categoryName = "";
+                String color = "#123456";
+                CategoryAddRequest request = new CategoryAddRequest(categoryName, color);
+
+                String code = "VALIDATION_FAILED";
+                String errorMessage = "카테고리를 입력해 주세요.";
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+            }
+
+            @Test
+            @DisplayName("색상 누락 - 400 Bad Request 응답")
+            public void shouldReturn404_whenColorIsBlank() throws Exception {
+                // given
+                String categoryName = "등록할 카테고리";
+                String color = "";
+                CategoryAddRequest request = new CategoryAddRequest(categoryName, color);
+
+                String code = "VALIDATION_FAILED";
+                String errorMessage = "색상을 입력해 주세요.";
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+            }
+
+            @Test
+            @DisplayName("이미 존재하는 카테고리 이름을 사용하는 경우 - 409 Conflict 응답")
+            public void shouldReturn409_whenCategoryNameIsInUse() throws Exception {
+                // given
+                String categoryName = "중복된 카테고리";
+                String color = "#123456";
+                CategoryAddRequest request = new CategoryAddRequest(categoryName, color);
+
+                String code = "CONFLICT";
+                String errorMessage = "이미 존재하는 카테고리입니다.";
+
+                when(categoryService.addCategory(eq(request)))
+                        .thenThrow(new DuplicatedResourceException(errorMessage));
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isConflict())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+
+                verify(categoryService).addCategory(eq(request));
+            }
+        }
+    }
 
     @Nested
     @DisplayName("카테고리 삭제 테스트")
@@ -60,7 +183,7 @@ class CategoryControllerTest {
                         .thenReturn(new CategoryDto(categoryId, categoryName, color));
 
                 // when & then
-                mockMvc.perform(delete(URL_TEMPLATE + categoryId)
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + categoryId)
                                 .with(Util.getAuthentication(userId, ROLE_ADMIN)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +212,7 @@ class CategoryControllerTest {
                         );
 
                 // when & then
-                mockMvc.perform(delete(URL_TEMPLATE + categoryId)
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + categoryId)
                                 .with(Util.getAuthentication(userId, ROLE_ADMIN)))
                         .andExpect(status().isConflict())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -112,7 +235,7 @@ class CategoryControllerTest {
                         );
 
                 // when & then
-                mockMvc.perform(delete(URL_TEMPLATE + categoryId)
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + categoryId)
                                 .with(Util.getAuthentication(userId, ROLE_ADMIN)))
                         .andExpect(status().isNotFound())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
