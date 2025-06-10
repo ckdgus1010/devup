@@ -7,8 +7,6 @@ import com.upstage.devup.admin.level.repository.LevelRepository;
 import com.upstage.devup.global.entity.Level;
 import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,9 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @Transactional
 class LevelServiceTest {
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     private LevelService levelService;
@@ -157,7 +152,7 @@ class LevelServiceTest {
                     "0",
                     "9223372036854775807"
             })
-            @DisplayName("이미 사용중인 난이도 이름으로 수정하려는 경우 - DuplicatedResourceException 예외 발생")
+            @DisplayName("이미 사용중인 난이도 이름으로 수정하려는 경우 - EntityNotFoundException 예외 발생")
             public void shouldThrowEntityNotFoundException_whenLevelDoesNotExist(long levelId) {
                 // given
                 String newLevelName = "수정할 난이도";
@@ -168,6 +163,60 @@ class LevelServiceTest {
                 EntityNotFoundException exception = assertThrows(
                         EntityNotFoundException.class,
                         () -> levelService.updateLevel(request)
+                );
+
+                assertThat(exception.getMessage()).isEqualTo("존재하지 않는 난이도입니다.");
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("난이도 삭제 테스트")
+    public class DeletionTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청인 경우")
+            public void shouldReturnLevelDto_whenRequestIsValid() {
+                // given
+                long levelId = savedLevel.getId();
+                String levelName = savedLevel.getLevelName();
+                LocalDateTime createdAt = savedLevel.getCreatedAt();
+                LocalDateTime modifiedAt = savedLevel.getModifiedAt();
+
+                // when
+                LevelDto result = levelService.deleteLevel(levelId);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.levelId()).isEqualTo(levelId);
+                assertThat(result.levelName()).isEqualTo(levelName);
+                assertThat(result.createdAt()).isEqualTo(createdAt);
+                assertThat(result.modifiedAt()).isEqualTo(modifiedAt);
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("존재하지 않는 난이도 ID를 사용하는 경우 - EntityNotFoundException 발생")
+            public void shouldThrowEntityNotFoundException_whenLevelIdDoesNotExist(long levelId) {
+                // given
+
+                // when & then
+                EntityNotFoundException exception = assertThrows(
+                        EntityNotFoundException.class,
+                        () -> levelService.deleteLevel(levelId)
                 );
 
                 assertThat(exception.getMessage()).isEqualTo("존재하지 않는 난이도입니다.");

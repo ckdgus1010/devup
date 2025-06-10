@@ -5,11 +5,13 @@ import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.mapper.LevelMapper;
 import com.upstage.devup.admin.level.repository.LevelRepository;
+import com.upstage.devup.category.dto.CategoryDto;
 import com.upstage.devup.global.entity.Level;
 import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +61,7 @@ public class LevelService {
      * @param request 수정할 난이도 정보
      * @return 수정된 난이도 정보
      * @throws DuplicatedResourceException 이미 사용중인 난이도 이름을 사용한 경우 발생
-     * @throws EntityNotFoundException 존재하지 않는 난이도 ID를 사용한 경우 발생
+     * @throws EntityNotFoundException     존재하지 않는 난이도 ID를 사용한 경우 발생
      */
     @Transactional
     public LevelDto updateLevel(LevelUpdateRequest request) {
@@ -76,7 +78,32 @@ public class LevelService {
         return levelMapper.toLevelDto(entity);
     }
 
-    // TODO: 난이도 삭제
+    /**
+     * 난이도 삭제
+     *
+     * @param levelId 삭제할 난이도 ID
+     * @return 삭제된 난이도 정보
+     * @throws EntityNotFoundException 존재하지 않는 난이도 ID를 사용한 경우 발생
+     * @throws DataIntegrityViolationException 삭제하려는 난이도가 외래키로 사용중인 경우 발생
+     */
+    @Transactional
+    public LevelDto deleteLevel(long levelId) {
+
+        Level entity = levelRepository.findById(levelId)
+                .orElseThrow(() -> new EntityNotFoundException(ERR_MSG_ENTITY_NOT_FOUND));
+
+        try {
+            LevelDto result = levelMapper.toLevelDto(entity);
+            levelRepository.delete(entity);
+
+            log.info("난이도 삭제 ::: levelId = {}", levelId);
+
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            log.warn("삭제 실패 ::: levelId = {}, 해당 Level은 하나 이상의 Question에서 참조 중입니다.", levelId);
+            throw new DataIntegrityViolationException("삭제할 수 없습니다. 다른 데이터에서 이 항목을 사용 중입니다.");
+        }
+    }
 
     /**
      * 난이도 이름 중복 검사
