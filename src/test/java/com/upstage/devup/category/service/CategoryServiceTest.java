@@ -2,6 +2,7 @@ package com.upstage.devup.category.service;
 
 import com.upstage.devup.category.dto.CategoryAddRequest;
 import com.upstage.devup.category.dto.CategoryDto;
+import com.upstage.devup.category.dto.CategoryPageDto;
 import com.upstage.devup.category.dto.CategoryUpdateRequest;
 import com.upstage.devup.category.repository.CategoryRepository;
 import com.upstage.devup.global.entity.Category;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -48,6 +50,126 @@ class CategoryServiceTest {
         this.savedCategoryId = categoryDto.id();
         this.savedCategoryName = categoryDto.categoryName();
         this.savedColor = categoryDto.color();
+    }
+
+    @Nested
+    @DisplayName("카테고리 단건 조회 테스트")
+    public class SingleQueryTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 카테고리 ID를 사용한 경우")
+            public void shouldReturnCategoryDto_whenCategoryIdIsValid() {
+                // given
+
+                // when
+                CategoryDto result = categoryService.findCategory(savedCategoryId);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.id()).isEqualTo(savedCategoryId);
+                assertThat(result.categoryName()).isEqualTo(savedCategoryName);
+                assertThat(result.color()).isEqualTo(savedColor);
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("존재하지 않는 카테고리 ID를 사용한 경우")
+            public void shouldReturnCategoryDto_whenCategoryIdDoesNotExist(long categoryId) {
+                // given
+
+                // when & then
+                assertThatThrownBy(() ->
+                        categoryService.findCategory(categoryId)
+                ).isInstanceOf(EntityNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 목록 조회 테스트")
+    public class MultiQueryTest {
+
+        private static final int CATEGORIES_PER_PAGE = 10;
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 pageNumber를 사용한 경우")
+            public void shouldReturnCategoryDto_whenPageNumberIsValid() {
+                // given
+                int pageNumber = 0;
+
+                // when
+                CategoryPageDto result = categoryService.findCategories(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isNotEmpty();
+                assertThat(result.getContent().size()).isLessThanOrEqualTo(CATEGORIES_PER_PAGE);
+                assertThat(result.getNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.getTotalPages()).isGreaterThan(0);
+                assertThat(result.isHasPrevious()).isFalse();
+                assertThat(result.isHasNext()).isTrue();
+            }
+
+            @Test
+            @DisplayName("pageNumber가 음수인 경우 - 첫번째 페이지를 반환")
+            public void shouldReturnCategoryDto_whenPageNumberIsNegative() {
+                // given
+                int pageNumber = -1;
+
+                // when
+                CategoryPageDto result = categoryService.findCategories(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isNotEmpty();
+                assertThat(result.getContent().size()).isLessThanOrEqualTo(CATEGORIES_PER_PAGE);
+                assertThat(result.getNumber()).isEqualTo(0);
+                assertThat(result.getSize()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.getTotalPages()).isGreaterThan(0);
+                assertThat(result.isHasPrevious()).isFalse();
+                assertThat(result.isHasNext()).isTrue();
+            }
+
+            @Test
+            @DisplayName("pageNumber가 음수인 경우 - 첫번째 페이지를 반환")
+            public void shouldReturnCategoryDto_whenPageNumberIsLargerThanTotalPages() {
+                // given
+                int pageNumber = 21474836;
+
+                // when
+                CategoryPageDto result = categoryService.findCategories(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isEmpty();
+                assertThat(result.getNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.getTotalPages()).isLessThan(pageNumber);
+                assertThat(result.isHasPrevious()).isTrue();
+                assertThat(result.isHasNext()).isFalse();
+            }
+        }
     }
 
     @Nested
