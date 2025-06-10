@@ -6,6 +6,7 @@ import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.category.dto.CategoryAddRequest;
 import com.upstage.devup.category.dto.CategoryDto;
+import com.upstage.devup.category.dto.CategoryUpdateRequest;
 import com.upstage.devup.category.service.CategoryService;
 import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
@@ -21,12 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {CategoryController.class, GlobalExceptionHandler.class})
@@ -75,7 +73,6 @@ class CategoryControllerTest {
                                 .with(Util.getAuthentication(userId, ROLE_ADMIN))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
-                        .andDo(MockMvcResultHandlers.print())
                         .andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$.id").value(mockResult.id()))
@@ -159,6 +156,175 @@ class CategoryControllerTest {
                         .andExpect(jsonPath("$.message").value(errorMessage));
 
                 verify(categoryService).addCategory(eq(request));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("카테고리 수정 테스트")
+    public class UpdateTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청이 온 경우")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                long categoryId = 1L;
+                String categoryName = "수정할 카테고리";
+                String color = "#123456";
+
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+                CategoryDto mockResult = new CategoryDto(categoryId, categoryName, color);
+
+                when(categoryService.updateCategory(eq(request)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id").value(mockResult.id()))
+                        .andExpect(jsonPath("$.categoryName").value(mockResult.categoryName()))
+                        .andExpect(jsonPath("$.color").value(mockResult.color()));
+
+                verify(categoryService).updateCategory(eq(request));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("카테고리 ID 누락 - 400 Bad Request 응답")
+            public void shouldReturn400_whenCategoryIdIsBlank() throws Exception {
+                // given
+                Long categoryId = null;
+                String categoryName = "수정할 카테고리";
+                String color = "#123456";
+
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+
+                String code = "VALIDATION_FAILED";
+                String errorMessage = "변경할 카테고리를 선택해 주세요.";
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+            }
+
+            @Test
+            @DisplayName("카테고리 이름 누락 - 400 Bad Request 응답")
+            public void shouldReturn400_whenCategoryNameIsBlank() throws Exception {
+                // given
+                Long categoryId = 1L;
+                String categoryName = "";
+                String color = "#123456";
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+
+                String code = "VALIDATION_FAILED";
+                String errorMessage = "카테고리를 입력해 주세요.";
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+            }
+
+            @Test
+            @DisplayName("색상 누락 - 400 Bad Request 응답")
+            public void shouldReturn404_whenColorIsBlank() throws Exception {
+                // given
+                Long categoryId = 1L;
+                String categoryName = "수정할 카테고리";
+                String color = "";
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+
+                String code = "VALIDATION_FAILED";
+                String errorMessage = "색상을 입력해 주세요.";
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+            }
+
+            @Test
+            @DisplayName("이미 존재하는 카테고리 이름으로 수정하려는 경우 - 409 Conflict 응답")
+            public void shouldReturn409_whenCategoryNameIsInUse() throws Exception {
+                // given
+                Long categoryId = 1L;
+                String categoryName = "중복된 카테고리";
+                String color = "#123456";
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+
+                String code = "CONFLICT";
+                String errorMessage = "이미 존재하는 카테고리입니다.";
+
+                when(categoryService.updateCategory(eq(request)))
+                        .thenThrow(new DuplicatedResourceException(errorMessage));
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isConflict())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+
+                verify(categoryService).updateCategory(eq(request));
+            }
+
+            @Test
+            @DisplayName("존재하지 않은 카테고리를 수정하려는 경우 - 404 Not Found 응답")
+            public void shouldReturn404_whenCategoryDoesNotExist() throws Exception {
+                // given
+                Long categoryId = Long.MAX_VALUE;
+                String categoryName = "수정할 카테고리";
+                String color = "#123456";
+                CategoryUpdateRequest request = new CategoryUpdateRequest(categoryId, categoryName, color);
+
+                String code = "NOT_FOUND";
+                String errorMessage = "존재하지 않는 카테고리입니다.";
+
+                when(categoryService.updateCategory(eq(request)))
+                        .thenThrow(new EntityNotFoundException(errorMessage));
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(code))
+                        .andExpect(jsonPath("$.message").value(errorMessage));
+
+                verify(categoryService).updateCategory(eq(request));
             }
         }
     }

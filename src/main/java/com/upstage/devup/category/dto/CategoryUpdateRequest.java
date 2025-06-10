@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record CategoryUpdateRequest(
 
-        @NotNull
+        @NotNull(message = "변경할 카테고리를 선택해 주세요.")
         Long categoryId,
 
         @NotBlank(message = "카테고리를 입력해 주세요.")

@@ -2,6 +2,7 @@ package com.upstage.devup.category.controller;
 
 import com.upstage.devup.category.dto.CategoryAddRequest;
 import com.upstage.devup.category.dto.CategoryDto;
+import com.upstage.devup.category.dto.CategoryUpdateRequest;
 import com.upstage.devup.category.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,14 @@ public class CategoryController {
 
         return ResponseEntity.ok(
                 categoryService.addCategory(request)
+        );
+    }
+
+    @PatchMapping
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                categoryService.updateCategory(request)
         );
     }
 
