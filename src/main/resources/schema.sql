@@ -18,14 +18,14 @@ CREATE TABLE bookmarks
 
 CREATE TABLE categories
 (
-    id       BIGINT       NOT NULL AUTO_INCREMENT,
-    category VARCHAR(100) NOT NULL,
-    color    VARCHAR(10)  NOT NULL COMMENT '카테고리 바에 표시할 색상',
+    id              BIGINT       NOT NULL AUTO_INCREMENT,
+    category_name   VARCHAR(100) NOT NULL,
+    color           VARCHAR(10)  NOT NULL COMMENT '카테고리 바에 표시할 색상',
     PRIMARY KEY (id)
 ); -- '기술 면접 주제'
 
 ALTER TABLE categories
-    ADD CONSTRAINT UQ_category UNIQUE (category);
+    ADD CONSTRAINT UQ_category UNIQUE (category_name);
 
 CREATE TABLE levels
 (

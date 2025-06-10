@@ -22,7 +22,7 @@ public interface UserAnswerStatRepository extends JpaRepository<UserAnswerStat, 
     @Query(value = """
         SELECT
             c.id,
-            c.category,
+            c.category_name,
             c.color,
             COUNT(*)
         FROM user_answer_stats uas
@@ -31,7 +31,7 @@ public interface UserAnswerStatRepository extends JpaRepository<UserAnswerStat, 
         JOIN categories c
             ON q.category_id = c.id
         WHERE uas.user_id = :userId
-        GROUP BY c.id, c.category, c.color
+        GROUP BY c.id, c.category_name, c.color
     """, nativeQuery = true)
     List<CategoryCountDto> findCategoriesByUserId(Long userId);
 

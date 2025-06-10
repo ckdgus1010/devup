@@ -156,7 +156,7 @@ class QuestionServiceTest {
                 assertThat(result.getId()).isEqualTo(question.getId());
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
-                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategory());
+                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
                 assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
                 assertThat(result.isBookmarked()).isFalse();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());
@@ -176,7 +176,7 @@ class QuestionServiceTest {
                 assertThat(result.getId()).isEqualTo(question.getId());
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
-                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategory());
+                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
                 assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
                 assertThat(result.isBookmarked()).isFalse();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());
@@ -202,7 +202,7 @@ class QuestionServiceTest {
                 assertThat(result.getId()).isEqualTo(question.getId());
                 assertThat(result.getTitle()).isEqualTo(question.getTitle());
                 assertThat(result.getQuestionText()).isEqualTo(question.getQuestionText());
-                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategory());
+                assertThat(result.getCategory()).isEqualTo(question.getCategory().getCategoryName());
                 assertThat(result.getLevel()).isEqualTo(question.getLevel().getLevel());
                 assertThat(result.isBookmarked()).isTrue();
                 assertThat(result.getCreatedAt()).isEqualTo(question.getCreatedAt());

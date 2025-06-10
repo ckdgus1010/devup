@@ -1,6 +1,6 @@
 -- 카테고리 (categories)
 INSERT INTO categories
-    (id, category, color)
+    (id, category_name, color)
 VALUES
     (1, 'CI/CD', '#40C9A2'),
     (2, 'Database', '#FFD93D'),

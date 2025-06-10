@@ -31,7 +31,7 @@ public class UserSolvedQuestionDto {
                 .id(entity.getId())
                 .questionId(entity.getQuestion().getId())
                 .questionTitle(entity.getQuestion().getTitle())
-                .category(entity.getQuestion().getCategory().getCategory())
+                .category(entity.getQuestion().getCategory().getCategoryName())
                 .level(entity.getQuestion().getLevel().getLevel())
                 .solvedAt(entity.getCreatedAt())
                 .isCorrect(entity.getIsCorrect())

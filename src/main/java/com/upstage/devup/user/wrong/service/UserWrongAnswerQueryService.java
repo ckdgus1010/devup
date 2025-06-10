@@ -53,7 +53,7 @@ public class UserWrongAnswerQueryService {
                 .userId(entity.getUser().getId())
                 .questionId(question.getId())
                 .title(question.getTitle())
-                .category(question.getCategory().getCategory())
+                .category(question.getCategory().getCategoryName())
                 .level(question.getLevel().getLevel())
                 .createdAt(entity.getCreatedAt())
                 .build();
