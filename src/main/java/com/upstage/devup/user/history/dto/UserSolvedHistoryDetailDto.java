@@ -39,7 +39,7 @@ public class UserSolvedHistoryDetailDto {
                 .questionTitle(question.getTitle())
                 .questionText(question.getQuestionText())
                 .category(question.getCategory().getCategoryName())
-                .level(question.getLevel().getLevel())
+                .level(question.getLevel().getLevelName())
                 .userAnswerText(entity.getAnswerText())
                 .solvedAt(entity.getCreatedAt())
                 .isCorrect(entity.getIsCorrect())

@@ -1,10 +1,9 @@
 package com.upstage.devup.global.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "levels")
@@ -18,6 +17,20 @@ public class Level {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String level;
+    @Column(
+            unique = true,
+            nullable = false,
+            length = 50
+    )
+    private String levelName;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

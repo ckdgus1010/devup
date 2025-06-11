@@ -87,7 +87,7 @@ public class QuestionService {
                 .title(question.getTitle())
                 .questionText(question.getQuestionText())
                 .category(question.getCategory().getCategoryName())
-                .level(question.getLevel().getLevel())
+                .level(question.getLevel().getLevelName())
                 .isBookmarked(isBookmarked)
                 .createdAt(question.getCreatedAt())
                 .modifiedAt(question.getModifiedAt())
