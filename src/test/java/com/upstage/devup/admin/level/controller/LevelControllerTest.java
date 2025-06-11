@@ -2,6 +2,7 @@ package com.upstage.devup.admin.level.controller;
 
 import com.upstage.devup.Util;
 import com.upstage.devup.admin.level.dto.LevelDto;
+import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.service.LevelService;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
@@ -14,11 +15,15 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,8 +42,12 @@ class LevelControllerTest {
     @MockitoBean
     LevelService levelService;
 
+    private static final int LEVELS_PER_PAGE = 10;
     private static final long ADMIN_USER_ID = 1L;
+
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ROLE_USER = "ROLE_USER";
+
     private static final String URL_TEMPLATE = "/api/admin/levels";
 
     @Nested
@@ -50,7 +59,7 @@ class LevelControllerTest {
         public class SuccessCases {
 
             @Test
-            @DisplayName("유효한 leverId를 사용하는 경우 - 200 반환")
+            @DisplayName("유효한 levelId를 사용하는 경우 - 200 반환")
             public void shouldReturn200_whenLevelIdIsValid() throws Exception {
                 // given
                 long levelId = 1L;
@@ -99,7 +108,7 @@ class LevelControllerTest {
 
                 // when & then
                 mockMvc.perform(get(URL_TEMPLATE + "/" + levelId)
-                                .with(Util.getAuthentication(userId, "ROLE_USER")))
+                                .with(Util.getAuthentication(userId, ROLE_USER)))
                         .andExpect(status().isForbidden());
             }
 
@@ -127,6 +136,145 @@ class LevelControllerTest {
                         .andExpect(jsonPath("$.message").value(ERR_MSG));
 
                 verify(levelService).getLevel(eq(levelId));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("페이지 조회 API 테스트")
+    public class PageQueryApiTest {
+
+        private List<LevelDto> createDummyLevelDtoList(int size) {
+            List<LevelDto> list = new ArrayList<>();
+
+            for (int i = 0; i < size; i++) {
+                list.add(new LevelDto(i, "난이도 " + i, LocalDateTime.now(), null));
+            }
+
+            return list;
+        }
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청이 온 경우 - 200 OK 반환")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                int pageNumber = 0;
+
+                LevelPageDto mockResult = new LevelPageDto(
+                        new PageImpl<>(createDummyLevelDtoList(LEVELS_PER_PAGE)));
+
+                when(levelService.getLevels(eq(pageNumber)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(get(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .queryParam("pageNumber", String.valueOf(pageNumber)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.content").isNotEmpty())
+                        .andExpect(jsonPath("$.number").value(pageNumber))
+                        .andExpect(jsonPath("$.size").value(mockResult.getSize()))
+                        .andExpect(jsonPath("$.totalPages").value(mockResult.getTotalPages()))
+                        .andExpect(jsonPath("$.totalElements").value(mockResult.getTotalElements()))
+                        .andExpect(jsonPath("$.hasPrevious").value(mockResult.isHasPrevious()))
+                        .andExpect(jsonPath("$.hasNext").value(mockResult.isHasNext()));
+
+                verify(levelService).getLevels(eq(pageNumber));
+            }
+
+            @Test
+            @DisplayName("pageNumber가 음수인 경우 - 200 OK, 첫번째 페이지 반환")
+            public void shouldReturn200_whenPageNumberIsNegative() throws Exception {
+                // given
+                int pageNumber = -1;
+
+                LevelPageDto mockResult = new LevelPageDto(
+                        new PageImpl<>(createDummyLevelDtoList(LEVELS_PER_PAGE)));
+
+                when(levelService.getLevels(eq(pageNumber)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(get(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .queryParam("pageNumber", String.valueOf(pageNumber)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.content").isNotEmpty())
+                        .andExpect(jsonPath("$.number").value(0))
+                        .andExpect(jsonPath("$.size").value(mockResult.getSize()))
+                        .andExpect(jsonPath("$.totalPages").value(mockResult.getTotalPages()))
+                        .andExpect(jsonPath("$.totalElements").value(mockResult.getTotalElements()))
+                        .andExpect(jsonPath("$.hasPrevious").value(mockResult.isHasPrevious()))
+                        .andExpect(jsonPath("$.hasNext").value(mockResult.isHasNext()));
+
+                verify(levelService).getLevels(eq(pageNumber));
+            }
+
+            @Test
+            @DisplayName("pageNumber가 전체 페이지보다 큰 경우 - 200 OK, 빈 페이지 반환")
+            public void shouldReturn200AndEmptyLevelPageDto_whenPageNumberIsGreaterThanTotalPages() throws Exception {
+                // given
+                int pageNumber = 123456789;
+
+                LevelPageDto mockResult = new LevelPageDto(
+                        new PageImpl<>(List.of(), PageRequest.of(pageNumber, LEVELS_PER_PAGE), 0)
+                );
+
+                when(levelService.getLevels(eq(pageNumber)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(get(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .queryParam("pageNumber", String.valueOf(pageNumber)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.content").isEmpty())
+                        .andExpect(jsonPath("$.number").value(pageNumber))
+                        .andExpect(jsonPath("$.size").value(mockResult.getSize()))
+                        .andExpect(jsonPath("$.totalPages").value(mockResult.getTotalPages()))
+                        .andExpect(jsonPath("$.totalElements").value(mockResult.getTotalElements()))
+                        .andExpect(jsonPath("$.hasPrevious").value(mockResult.isHasPrevious()))
+                        .andExpect(jsonPath("$.hasNext").value(mockResult.isHasNext()));
+
+                verify(levelService).getLevels(eq(pageNumber));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("로그인하지 않은 경우 - 401 Unauthorized 반환")
+            public void shouldReturn401_whenUserDoesNotSignIn() throws Exception {
+                // given
+                int pageNumber = 0;
+
+                // when & then
+                mockMvc.perform(get(URL_TEMPLATE)
+                                .queryParam("pageNumber", String.valueOf(pageNumber)))
+                        .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @DisplayName("로그인하지 않은 경우 - 403 Forbidden 반환")
+            public void shouldReturn403_whenUserIsNotAdmin() throws Exception {
+                // given
+                int pageNumber = 0;
+                long userId = 1L;
+
+                // when & then
+                mockMvc.perform(get(URL_TEMPLATE)
+                                .with(Util.getAuthentication(userId, ROLE_USER))
+                                .queryParam("pageNumber", String.valueOf(pageNumber)))
+                        .andExpect(status().isForbidden());
             }
         }
     }

@@ -1,14 +1,12 @@
 package com.upstage.devup.admin.level.controller;
 
 import com.upstage.devup.admin.level.dto.LevelDto;
+import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.service.LevelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/levels")
@@ -31,7 +29,21 @@ public class LevelController {
         );
     }
 
-    // TODO: 페이지 조회
+
+    /**
+     * 난이도 페이지 조회
+     *
+     * @param pageNumber 조회할 페이지 번호
+     * @return 조회된 난이도 페이지 정보
+     */
+    @GetMapping
+    public ResponseEntity<LevelPageDto> getLevels(@RequestParam @Valid Integer pageNumber) {
+
+        return ResponseEntity.ok(
+                levelService.getLevels(pageNumber)
+        );
+    }
+
     // TODO: 등록
     // TODO: 수정
     // TODO: 삭제
