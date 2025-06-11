@@ -5,6 +5,7 @@ import com.upstage.devup.Util;
 import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelPageDto;
+import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.service.LevelService;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
@@ -30,8 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,6 +59,8 @@ class LevelControllerTest {
 
     private static final String URL_TEMPLATE = "/api/admin/levels";
     private static final String ERR_MSG_DUPLICATED_RESOURCE = "이미 사용중인 난이도입니다.";
+    private static final String ERR_MSG_ENTITY_NOT_FOUND = "존재하지 않는 난이도입니다.";
+
 
 
     @Nested
@@ -395,6 +397,181 @@ class LevelControllerTest {
 
                 // when & then
                 mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(2L, ROLE_USER))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isForbidden());
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("수정 API 테스트")
+    public class UpdateApiTest {
+
+        @Nested
+        @DisplayName("성공 테스트")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청인 경우 - 200 OK 반환")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "수정할 난이도";
+                LocalDateTime createdAt = LocalDateTime.now();
+                LocalDateTime modifiedAt = LocalDateTime.now().plusSeconds(1L);
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                when(levelService.updateLevel(eq(request)))
+                        .thenReturn(new LevelDto(levelId, levelName, createdAt, modifiedAt));
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.levelId").value(levelId))
+                        .andExpect(jsonPath("$.levelName").value(levelName))
+                        .andExpect(jsonPath("$.createdAt").value(Util.formatToIsoLocalDateTime(createdAt)))
+                        .andExpect(jsonPath("$.modifiedAt").value(Util.formatToIsoLocalDateTime(modifiedAt)));
+
+                verify(levelService).updateLevel(eq(request));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 테스트")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("난이도 ID가 null인 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelIdIsNull() throws Exception {
+                // given
+                Long levelId = null;
+                String levelName = "수정할 난이도";
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                        .andExpect(jsonPath("$.message").value("난이도를 선택해 주세요."));
+            }
+
+            @Test
+            @DisplayName("난이도 이름이 빈 값인 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelNameIsBlank() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "";
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                        .andExpect(jsonPath("$.message").value("난이도를 입력해 주세요."));
+            }
+
+            @Test
+            @DisplayName("중복된 난이도 이름을 등록하려는 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelNameIsDuplicated() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "중복된 난이도";
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                when(levelService.updateLevel(eq(request)))
+                        .thenThrow(new DuplicatedResourceException(ERR_MSG_DUPLICATED_RESOURCE));
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isConflict())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.name()))
+                        .andExpect(jsonPath("$.message").value(ERR_MSG_DUPLICATED_RESOURCE));
+
+                verify(levelService).updateLevel(eq(request));
+            }
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("존재하지 않는 난이도 ID를 사용하려는 경우 - 404 NOT_FOUND 반환")
+            public void shouldReturn404_whenLevelIdDoesNotExist(long levelId) throws Exception {
+                // given
+                String levelName = "중복된 난이도";
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                when(levelService.updateLevel(eq(request)))
+                        .thenThrow(new EntityNotFoundException(ERR_MSG_ENTITY_NOT_FOUND));
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("$.message").value(ERR_MSG_ENTITY_NOT_FOUND));
+
+                verify(levelService).updateLevel(eq(request));
+            }
+
+            @Test
+            @DisplayName("로그인하지 않은 경우 - 401 Unauthorized 반환")
+            public void shouldReturn401_whenUserDoesNotSignIn() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "중복된 난이도";
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @DisplayName("관리자로 로그인하지 않은 경우 - 403 Forbidden 반환")
+            public void shouldReturn403_whenUserIsNotAdmin() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "중복된 난이도";
+
+                LevelUpdateRequest request = new LevelUpdateRequest(levelId, levelName);
+
+                // when & then
+                mockMvc.perform(patch(URL_TEMPLATE)
                                 .with(Util.getAuthentication(2L, ROLE_USER))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))

@@ -3,6 +3,7 @@ package com.upstage.devup.admin.level.controller;
 import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelPageDto;
+import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.service.LevelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,19 @@ public class LevelController {
         );
     }
 
-    // TODO: 수정
+    /**
+     * 난이도 정보 수정
+     *
+     * @param request 수정할 난이도 정보
+     * @return 수정된 난이도 정보
+     */
+    @PatchMapping
+    public ResponseEntity<LevelDto> updateLevel(@RequestBody @Valid LevelUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                levelService.updateLevel(request)
+        );
+    }
+
     // TODO: 삭제
 }
