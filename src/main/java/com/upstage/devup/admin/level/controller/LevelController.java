@@ -74,5 +74,17 @@ public class LevelController {
         );
     }
 
-    // TODO: 삭제
+    /**
+     * 난이도 삭제
+     *
+     * @param levelId 삭제할 난이도 ID
+     * @return 삭제된 난이도 정보
+     */
+    @DeleteMapping("/{levelId}")
+    public ResponseEntity<LevelDto> deleteLevel(@PathVariable @Valid Long levelId) {
+
+        return ResponseEntity.ok(
+                levelService.deleteLevel(levelId)
+        );
+    }
 }

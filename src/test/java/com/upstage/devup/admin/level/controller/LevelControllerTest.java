@@ -62,7 +62,6 @@ class LevelControllerTest {
     private static final String ERR_MSG_ENTITY_NOT_FOUND = "존재하지 않는 난이도입니다.";
 
 
-
     @Nested
     @DisplayName("단건 조회 API 테스트")
     public class SingleQueryApiTest {
@@ -575,6 +574,114 @@ class LevelControllerTest {
                                 .with(Util.getAuthentication(2L, ROLE_USER))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isForbidden());
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("삭제 API 테스트")
+    public class DeleteApiTest {
+
+        @Nested
+        @DisplayName("성공 테스트")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청인 경우 - 200 OK 반환")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "삭제된 난이도";
+                LocalDateTime createdAt = LocalDateTime.now();
+                LocalDateTime modifiedAt = null;
+
+                when(levelService.deleteLevel(eq(levelId)))
+                        .thenReturn(new LevelDto(levelId, levelName, createdAt, modifiedAt));
+
+                // when & then
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + levelId)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .param("levelId", String.valueOf(levelId)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.levelId").value(levelId))
+                        .andExpect(jsonPath("$.levelName").value(levelName))
+                        .andExpect(jsonPath("$.createdAt").value(Util.formatToIsoLocalDateTime(createdAt)))
+                        .andExpect(jsonPath("$.modifiedAt").value(modifiedAt));
+
+                verify(levelService).deleteLevel(eq(levelId));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 테스트")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("난이도 ID가 null인 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelIdIsNull() throws Exception {
+                // given
+                Long levelId = null;
+
+                // when & then
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + levelId)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .param("levelId", String.valueOf(levelId)))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.name()))
+                        .andExpect(jsonPath("$.message").value("For input string: \"null\""));
+            }
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("존재하지 않는 난이도 ID를 사용하려는 경우 - 404 NOT_FOUND 반환")
+            public void shouldReturn404_whenLevelIdDoesNotExist(long levelId) throws Exception {
+                // given
+                when(levelService.deleteLevel(eq(levelId)))
+                        .thenThrow(new EntityNotFoundException(ERR_MSG_ENTITY_NOT_FOUND));
+
+                // when & then
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + levelId)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .param("levelId", String.valueOf(levelId)))
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.name()))
+                        .andExpect(jsonPath("$.message").value(ERR_MSG_ENTITY_NOT_FOUND));
+
+                verify(levelService).deleteLevel(eq(levelId));
+            }
+
+            @Test
+            @DisplayName("로그인하지 않은 경우 - 401 Unauthorized 반환")
+            public void shouldReturn401_whenUserDoesNotSignIn() throws Exception {
+                // given
+                long levelId = 1L;
+
+                // when & then
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + levelId)
+                                .param("levelId", String.valueOf(levelId)))
+                        .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @DisplayName("관리자로 로그인하지 않은 경우 - 403 Forbidden 반환")
+            public void shouldReturn403_whenUserIsNotAdmin() throws Exception {
+                // given
+                long levelId = 1L;
+
+                // when & then
+                mockMvc.perform(delete(URL_TEMPLATE + "/" + levelId)
+                                .with(Util.getAuthentication(2L, ROLE_USER))
+                                .param("levelId", String.valueOf(levelId)))
                         .andExpect(status().isForbidden());
             }
         }
