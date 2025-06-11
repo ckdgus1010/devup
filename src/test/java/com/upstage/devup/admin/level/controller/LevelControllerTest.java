@@ -1,11 +1,14 @@
 package com.upstage.devup.admin.level.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.upstage.devup.Util;
+import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.service.LevelService;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
+import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +31,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LevelController.class)
@@ -34,13 +40,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LevelControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockitoBean
-    JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @MockitoBean
-    LevelService levelService;
+    private LevelService levelService;
 
     private static final int LEVELS_PER_PAGE = 10;
     private static final long ADMIN_USER_ID = 1L;
@@ -49,6 +58,8 @@ class LevelControllerTest {
     private static final String ROLE_USER = "ROLE_USER";
 
     private static final String URL_TEMPLATE = "/api/admin/levels";
+    private static final String ERR_MSG_DUPLICATED_RESOURCE = "이미 사용중인 난이도입니다.";
+
 
     @Nested
     @DisplayName("단건 조회 API 테스트")
@@ -264,7 +275,7 @@ class LevelControllerTest {
             }
 
             @Test
-            @DisplayName("로그인하지 않은 경우 - 403 Forbidden 반환")
+            @DisplayName("관리자로 로그인하지 않은 경우 - 403 Forbidden 반환")
             public void shouldReturn403_whenUserIsNotAdmin() throws Exception {
                 // given
                 int pageNumber = 0;
@@ -277,5 +288,119 @@ class LevelControllerTest {
                         .andExpect(status().isForbidden());
             }
         }
+    }
+
+    @Nested
+    @DisplayName("등록 API 테스트")
+    public class RegistrationApiTest {
+
+        @Nested
+        @DisplayName("성공 테스트")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 요청인 경우 - 200 OK 반환")
+            public void shouldReturn200_whenRequestIsValid() throws Exception {
+                // given
+                long levelId = 1L;
+                String levelName = "등록할 난이도";
+                LocalDateTime createdAt = LocalDateTime.now();
+                LocalDateTime modifiedAt = null;
+
+                LevelAddRequest request = new LevelAddRequest(levelName);
+                LevelDto mockResult = new LevelDto(levelId, levelName, createdAt, modifiedAt);
+
+                when(levelService.addLevel(eq(request)))
+                        .thenReturn(mockResult);
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.levelId").value(levelId))
+                        .andExpect(jsonPath("$.levelName").value(levelName))
+                        .andExpect(jsonPath("$.createdAt").value(Util.formatToIsoLocalDateTime(createdAt)))
+                        .andExpect(jsonPath("$.modifiedAt").value(modifiedAt));
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 테스트")
+        public class FailureCases {
+
+            @Test
+            @DisplayName("난이도 이름이 빈 값인 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelNameIsBlank() throws Exception {
+                // given
+                String levelName = "";
+                LevelAddRequest request = new LevelAddRequest(levelName);
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                        .andExpect(jsonPath("$.message").value("난이도를 입력해 주세요."));
+            }
+
+            @Test
+            @DisplayName("중복된 난이도 이름을 등록하려는 경우 - 400 BAD_REQUEST 반환")
+            public void shouldReturn400_whenLevelNameIsDuplicated() throws Exception {
+                // given
+                String levelName = "중복된 난이도";
+                LevelAddRequest request = new LevelAddRequest(levelName);
+
+                when(levelService.addLevel(request))
+                        .thenThrow(new DuplicatedResourceException(ERR_MSG_DUPLICATED_RESOURCE));
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(ADMIN_USER_ID, ROLE_ADMIN))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andDo(print())
+                        .andExpect(status().isConflict())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.name()))
+                        .andExpect(jsonPath("$.message").value(ERR_MSG_DUPLICATED_RESOURCE));
+            }
+
+            @Test
+            @DisplayName("로그인하지 않은 경우 - 401 Unauthorized 반환")
+            public void shouldReturn401_whenUserDoesNotSignIn() throws Exception {
+                // given
+                String levelName = "등록할 난이도";
+                LevelAddRequest request = new LevelAddRequest(levelName);
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @DisplayName("관리자로 로그인하지 않은 경우 - 403 Forbidden 반환")
+            public void shouldReturn403_whenUserIsNotAdmin() throws Exception {
+                // given
+                String levelName = "등록할 난이도";
+                LevelAddRequest request = new LevelAddRequest(levelName);
+
+                // when & then
+                mockMvc.perform(post(URL_TEMPLATE)
+                                .with(Util.getAuthentication(2L, ROLE_USER))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isForbidden());
+            }
+        }
+
     }
 }

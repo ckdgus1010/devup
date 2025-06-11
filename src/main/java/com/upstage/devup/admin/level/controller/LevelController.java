@@ -1,5 +1,6 @@
 package com.upstage.devup.admin.level.controller;
 
+import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.service.LevelService;
@@ -44,7 +45,20 @@ public class LevelController {
         );
     }
 
-    // TODO: 등록
+    /**
+     * 신규 난이도 등록
+     *
+     * @param request 등록할 난이도 정보
+     * @return 등록된 난이도 정보
+     */
+    @PostMapping
+    public ResponseEntity<LevelDto> addLevel(@RequestBody @Valid LevelAddRequest request) {
+
+        return ResponseEntity.ok(
+                levelService.addLevel(request)
+        );
+    }
+
     // TODO: 수정
     // TODO: 삭제
 }
