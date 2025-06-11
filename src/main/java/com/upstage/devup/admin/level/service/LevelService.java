@@ -5,7 +5,6 @@ import com.upstage.devup.admin.level.dto.LevelDto;
 import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.mapper.LevelMapper;
 import com.upstage.devup.admin.level.repository.LevelRepository;
-import com.upstage.devup.category.dto.CategoryDto;
 import com.upstage.devup.global.entity.Level;
 import com.upstage.devup.global.exception.DuplicatedResourceException;
 import com.upstage.devup.global.exception.EntityNotFoundException;
@@ -29,7 +28,21 @@ public class LevelService {
     private static final String ERR_MSG_DUPLICATED_RESOURCE = "이미 사용중인 난이도입니다.";
     private static final String ERR_MSG_ENTITY_NOT_FOUND = "존재하지 않는 난이도입니다.";
 
-    // TODO: 난이도 단건 조회
+    /**
+     * 난이도 단건 조회
+     *
+     * @param levelId 조회할 난이도 ID
+     * @return 조회된 난이도 정보
+     * @throws EntityNotFoundException 존재하지 않는 난이도 ID를 사용하는 경우 발생
+     */
+    public LevelDto getLevel(long levelId) {
+
+        return levelMapper.toLevelDto(
+                levelRepository.findById(levelId)
+                        .orElseThrow(() -> new EntityNotFoundException(ERR_MSG_ENTITY_NOT_FOUND))
+        );
+    }
+
     // TODO: 난이도 목록 조회
 
 
@@ -83,7 +96,7 @@ public class LevelService {
      *
      * @param levelId 삭제할 난이도 ID
      * @return 삭제된 난이도 정보
-     * @throws EntityNotFoundException 존재하지 않는 난이도 ID를 사용한 경우 발생
+     * @throws EntityNotFoundException         존재하지 않는 난이도 ID를 사용한 경우 발생
      * @throws DataIntegrityViolationException 삭제하려는 난이도가 외래키로 사용중인 경우 발생
      */
     @Transactional

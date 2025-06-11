@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -41,6 +41,57 @@ class LevelServiceTest {
                 .createdAt(LocalDateTime.now())
                 .build()
         );
+    }
+
+    @Nested
+    @DisplayName("난이도 단건 조회 테스트")
+    public class SingleQueryTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 난이도 ID를 사용하는 경우 - 난이도 정보를 반환")
+            public void shouldReturnLevelDto_whenLevelIdIsValid() {
+                // given
+                long categoryId = savedLevel.getId();
+                String levelName = savedLevel.getLevelName();
+                LocalDateTime createdAt = savedLevel.getCreatedAt();
+                LocalDateTime modifiedAt = savedLevel.getModifiedAt();
+
+                // when
+                LevelDto result = levelService.getLevel(categoryId);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.levelId()).isEqualTo(categoryId);
+                assertThat(result.levelName()).isEqualTo(levelName);
+                assertThat(result.createdAt()).isEqualTo(createdAt);
+                assertThat(result.modifiedAt()).isEqualTo(modifiedAt);
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        public class FailureCases {
+
+            @ParameterizedTest
+            @CsvSource(value = {
+                    "-1",
+                    "0",
+                    "9223372036854775807"
+            })
+            @DisplayName("존재하지 않는 난이도 ID를 사용하는 경우 - EntityNotFoundException 예외 발생")
+            public void shouldThrowEntityNotFoundException_whenLevelIdDoesNotExist(long categoryId) {
+                // given
+
+                // when & then
+                assertThatThrownBy(() ->
+                        levelService.getLevel(categoryId)
+                ).isInstanceOf(EntityNotFoundException.class).hasMessage("존재하지 않는 난이도입니다.");
+            }
+        }
     }
 
     @Nested
