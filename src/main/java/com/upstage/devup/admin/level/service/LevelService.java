@@ -2,6 +2,7 @@ package com.upstage.devup.admin.level.service;
 
 import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
+import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.mapper.LevelMapper;
 import com.upstage.devup.admin.level.repository.LevelRepository;
@@ -11,6 +12,10 @@ import com.upstage.devup.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,7 @@ public class LevelService {
 
     private static final String ERR_MSG_DUPLICATED_RESOURCE = "이미 사용중인 난이도입니다.";
     private static final String ERR_MSG_ENTITY_NOT_FOUND = "존재하지 않는 난이도입니다.";
+    private static final int LEVELS_PER_PAGE = 10;
 
     /**
      * 난이도 단건 조회
@@ -43,7 +49,23 @@ public class LevelService {
         );
     }
 
-    // TODO: 난이도 목록 조회
+
+    /**
+     * 난이도 페이지 조회
+     *
+     * @param pageNumber 페이지 번호
+     * @return 조회된 난이도 목록 정보
+     */
+    public LevelPageDto getLevels(int pageNumber) {
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(Math.max(0, pageNumber), LEVELS_PER_PAGE, sort);
+
+        Page<LevelDto> page = levelRepository.findAll(pageable)
+                .map(levelMapper::toLevelDto);
+
+        return new LevelPageDto(page);
+    }
 
 
     /**

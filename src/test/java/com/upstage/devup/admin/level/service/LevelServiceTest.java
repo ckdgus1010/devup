@@ -2,6 +2,7 @@ package com.upstage.devup.admin.level.service;
 
 import com.upstage.devup.admin.level.dto.LevelAddRequest;
 import com.upstage.devup.admin.level.dto.LevelDto;
+import com.upstage.devup.admin.level.dto.LevelPageDto;
 import com.upstage.devup.admin.level.dto.LevelUpdateRequest;
 import com.upstage.devup.admin.level.repository.LevelRepository;
 import com.upstage.devup.global.entity.Level;
@@ -90,6 +91,77 @@ class LevelServiceTest {
                 assertThatThrownBy(() ->
                         levelService.getLevel(categoryId)
                 ).isInstanceOf(EntityNotFoundException.class).hasMessage("존재하지 않는 난이도입니다.");
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("난이도 페이지 조회 테스트")
+    public class PageQueryTest {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        public class SuccessCases {
+
+            @Test
+            @DisplayName("유효한 pageNumber를 사용하는 경우 - 조회된 페이지 정보를 반환")
+            public void shouldReturnLevelPageDto_whenPageNumberIsValid() {
+                // given
+                int pageNumber = 0;
+                int pageSize = 10;
+
+                // when
+                LevelPageDto result = levelService.getLevels(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isNotEmpty();
+                assertThat(result.getNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isEqualTo(pageSize);
+                assertThat(result.getTotalPages()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.isHasPrevious()).isFalse();
+            }
+
+            @Test
+            @DisplayName("pageNumber가 음수인 경우 - 첫 번째 페이지 정보를 반환")
+            public void shouldReturnFirstPageDto_whenPageNumberIsNegative() {
+                // given
+                int pageNumber = -1;
+                int pageSize = 10;
+
+                // when
+                LevelPageDto result = levelService.getLevels(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isNotEmpty();
+                assertThat(result.getNumber()).isEqualTo(0);
+                assertThat(result.getSize()).isEqualTo(pageSize);
+                assertThat(result.getTotalPages()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.isHasPrevious()).isFalse();
+            }
+
+            @Test
+            @DisplayName("pageNumber가 전체 페이지 수보다 큰 경우 - 빈 페이지 정보를 반환")
+            public void shouldReturnEmptyPageDto_whenPageNumberIsGreaterThanTotalPages() {
+                // given
+                int pageNumber = 10_000_000;
+                int pageSize = 10;
+
+                // when
+                LevelPageDto result = levelService.getLevels(pageNumber);
+
+                // then
+                assertThat(result).isNotNull();
+                assertThat(result.getContent()).isEmpty();
+                assertThat(result.getNumber()).isEqualTo(pageNumber);
+                assertThat(result.getSize()).isEqualTo(pageSize);
+                assertThat(result.getTotalPages()).isGreaterThan(0);
+                assertThat(result.getTotalElements()).isGreaterThan(0);
+                assertThat(result.isHasPrevious()).isTrue();
+                assertThat(result.isHasNext()).isFalse();
             }
         }
     }
