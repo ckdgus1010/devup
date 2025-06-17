@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 상세 - DevUp</title>
-    <link rel="stylesheet" href="/static/css/question/question-detail.css"/>
+    <link rel="stylesheet" id="local-css" href="/static/css/question/question-detail.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css">
 </head>
 <body>
 
@@ -57,16 +59,18 @@
             <button id="toggle-answer-btn">정답 보기</button>
         </div>
 
-        <div class="answer-body" id="answer-box">
-            <p><strong>정답:</strong></p>
-            <p id="answer-text">
-                static 키워드는 클래스 단위로 메모리를 공유하기 위한 키워드입니다.<br>
-                static 변수는 모든 인스턴스가 공유하며, static 메서드는 객체 없이 클래스에서 직접 호출할 수 있습니다.
-            </p>
-            <div id="answer-result">
-                <p><strong>정답 결과는?</strong></p>
-                <button id="correct-btn" class="result-btn correct">✔ 맞았어요</button>
-                <button id="wrong-btn" class="result-btn wrong">❌ 틀렸어요</button>
+        <div class="markdown-body">
+            <div class="answer-body" id="answer-box">
+                <p><strong>정답:</strong></p>
+                <p id="answer-text">
+                    static 키워드는 클래스 단위로 메모리를 공유하기 위한 키워드입니다.<br>
+                    static 변수는 모든 인스턴스가 공유하며, static 메서드는 객체 없이 클래스에서 직접 호출할 수 있습니다.
+                </p>
+                <div id="answer-result">
+                    <p><strong>정답 결과는?</strong></p>
+                    <button id="correct-btn" class="result-btn correct">✔ 맞았어요</button>
+                    <button id="wrong-btn" class="result-btn wrong">❌ 틀렸어요</button>
+                </div>
             </div>
         </div>
 
@@ -79,6 +83,7 @@
     이메일: support@devup.com
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script id="main-script" src="/static/js/question/question-detail.js"></script>
 
 </body>
