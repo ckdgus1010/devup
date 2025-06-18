@@ -77,7 +77,7 @@ async function fetchAndShowAnswer() {
         const res = await fetch('/api/answers/' + questionId);
         const data = await res.json();
 
-        answerText.textContent = data.answerText;
+        answerText.innerHTML = marked.parse(data.answerText);
     } catch (err) {
         alert(err);
     }
