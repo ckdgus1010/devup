@@ -81,6 +81,12 @@ public class QuestionService {
         return convertQuestionToDetailDto(question, isBookmarked);
     }
 
+    public String getQuestionText(long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("면접 질문을 찾을 수 없습니다."))
+                .getQuestionText();
+    }
+
     private QuestionDetailDto convertQuestionToDetailDto(Question question, boolean isBookmarked) {
         return QuestionDetailDto.builder()
                 .id(question.getId())
