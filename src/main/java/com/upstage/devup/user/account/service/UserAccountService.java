@@ -60,6 +60,10 @@ public class UserAccountService {
         return UserAccountDto.of(saved);
     }
 
+    public boolean isUserExists(long userId) {
+        return userAccountRepository.existsById(userId);
+    }
+
     private void updateNickname(User user, String newNickname) {
         if (newNickname == null || newNickname.isBlank()) {
             throw new IllegalArgumentException("유효하지 않은 닉네임입니다.");

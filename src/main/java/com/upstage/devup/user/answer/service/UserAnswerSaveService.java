@@ -2,11 +2,10 @@ package com.upstage.devup.user.answer.service;
 
 import com.upstage.devup.global.entity.*;
 import com.upstage.devup.global.exception.EntityNotFoundException;
-import com.upstage.devup.question.dto.QuestionDetailDto;
 import com.upstage.devup.question.service.QuestionService;
+import com.upstage.devup.user.account.service.UserAccountService;
 import com.upstage.devup.user.answer.dto.UserAnswerDetailDto;
 import com.upstage.devup.user.answer.dto.UserAnswerSaveRequest;
-import com.upstage.devup.user.answer.repository.AnswerUserRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerRepository;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
 import com.upstage.devup.user.answer.repository.UserWrongAnswerRepository;
@@ -24,8 +23,8 @@ import java.time.LocalDateTime;
 public class UserAnswerSaveService {
 
     private final QuestionService questionService;
+    private final UserAccountService userAccountService;
 
-    private final AnswerUserRepository answerUserRepository;
     private final UserAnswerRepository userAnswerRepository;
     private final UserAnswerStatRepository userAnswerStatRepository;
     private final UserWrongAnswerRepository userWrongAnswerRepository;
@@ -40,15 +39,10 @@ public class UserAnswerSaveService {
      */
     @Transactional
     public UserAnswerDetailDto saveUserAnswer(long userId, UserAnswerSaveRequest request) {
-        if (request == null) {
-            throw new EntityNotFoundException("면접 질문을 찾을 수 없습니다.");
-        }
 
-        if (!answerUserRepository.existsById(userId)) {
+        if (!userAccountService.isUserExists(userId)) {
             throw new EntityNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
-
-        QuestionDetailDto questionDetailDto = questionService.getQuestion(userId, request.getQuestionId());
 
         UserAnswerContext context = new UserAnswerContext(userId, request.getQuestionId());
 
@@ -64,10 +58,6 @@ public class UserAnswerSaveService {
         return UserAnswerDetailDto.builder()
                 .userId(userAnswer.getUser().getId())
                 .questionId(request.getQuestionId())
-                .title(questionDetailDto.getTitle())
-                .questionText(questionDetailDto.getQuestionText())
-                .category(questionDetailDto.getCategory())
-                .level(questionDetailDto.getLevel())
                 .userAnswerId(userAnswer.getId())
                 .answerText(userAnswer.getAnswerText())
                 .isCorrect(userAnswer.getIsCorrect())
@@ -99,7 +89,7 @@ public class UserAnswerSaveService {
      * 틀린 문제를 오답 노트에 저장
      *
      * @param request 사용자 답안 요청
-     * @param context 사용자, 문제, 기준  시간 정보
+     * @param context 사용자, 문제, 기준 시간 정보
      */
     private void updateWrongNote(UserAnswerSaveRequest request, UserAnswerContext context) {
         if (request.getIsCorrect()) {
