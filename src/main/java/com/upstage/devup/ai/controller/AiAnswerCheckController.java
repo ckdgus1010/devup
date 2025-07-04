@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ai/answer")
+@RequestMapping("/api/ai/answers")
 public class AiAnswerCheckController {
 
     private final AiAnswerCheckService aiAnswerCheckService;
