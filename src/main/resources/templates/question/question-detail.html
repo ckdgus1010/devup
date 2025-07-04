@@ -43,7 +43,7 @@
         </div>
 
         <div class="question">
-            <p><strong>📝 문제</strong></p>
+            <h2>📝 문제</h2>
             <div class="question-body">
                 정적 키워드(static)는 클래스 수준에서 공유되는 변수를 선언할 때 사용됩니다.
                 객체가 여러 개여도 static 변수는 하나만 존재합니다.
@@ -51,26 +51,35 @@
         </div>
 
         <div class="user-answer">
-            <label for="user-answer"><strong>📝 나의 답변</strong></label>
+            <label for="user-answer"><h2>📝 나의 답변</h2></label>
             <textarea id="user-answer" rows="5" placeholder="여기에 당신의 답변을 작성하세요..."></textarea>
         </div>
 
         <div class="show-answer">
-            <button id="toggle-answer-btn">정답 보기</button>
+            <button id="check-answer-btn">정답 확인</button>
         </div>
 
+        <div class="loading-message" id="loading-message">
+            정답을 확인하고 있습니다. 잠시만 기다려주세요.
+        </div>
         <div class="markdown-body">
             <div class="answer-body" id="answer-box">
-                <p><strong>정답:</strong></p>
-                <p id="answer-text">
+                <div id="answer-result">
+                    <p><strong>정답 결과는?</strong></p>
+                    <div id="result-sign">
+                        <p id="correct-sign" class="result-sign correct">✅ 맞았어요</p>
+                        <p id="wrong-sign" class="result-sign wrong">❌ 틀렸어요</p>
+                    </div>
+                </div>
+                <p><strong>피드백:</strong></p>
+                <p id="feedback-text">
+                    여기에 피드백이 표시됩니다.
+                </p>
+                <p><strong>모범 답안:</strong></p>
+                <p id="model-answer-text">
                     static 키워드는 클래스 단위로 메모리를 공유하기 위한 키워드입니다.<br>
                     static 변수는 모든 인스턴스가 공유하며, static 메서드는 객체 없이 클래스에서 직접 호출할 수 있습니다.
                 </p>
-                <div id="answer-result">
-                    <p><strong>정답 결과는?</strong></p>
-                    <button id="correct-btn" class="result-btn correct">✔ 맞았어요</button>
-                    <button id="wrong-btn" class="result-btn wrong">❌ 틀렸어요</button>
-                </div>
             </div>
         </div>
 

@@ -95,7 +95,7 @@ main {
     cursor: pointer;
 }
 
-.question-body, .answer-body {
+.question-body, .answer-body, .loading-message {
     background-color: white;
     border: 1px solid var(--border-color);
     border-radius: 6px;
@@ -161,6 +161,14 @@ main {
     background-color: #cf670b;
 }
 
+.loading-message {
+    display: none;
+}
+
+.loading-message.show {
+    display: block;
+}
+
 .answer-body {
     display: none;
 }
@@ -173,30 +181,35 @@ main {
     display: flex;
     gap: 1rem;
     align-items: center;
-    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
-.result-btn {
+#answer-result p {
+    margin: 0;
+}
+
+#answer-result div {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.result-sign {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
     font-weight: bold;
     height: 40px;
 }
 
-.result-btn.correct {
+.result-sign.correct {
     background-color: #27ae60;
     color: white;
 }
 
-.result-btn.wrong {
+.result-sign.wrong {
     background-color: #e74c3c;
     color: white;
-}
-
-.result-btn:hover {
-    opacity: 0.9;
 }
 
 footer {
