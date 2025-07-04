@@ -22,8 +22,7 @@ public class AiAnswerCheckService {
 
     private static final String USER_MESSAGE_TEMPLATE = """
             1. 기술 면접 문제: %s
-            2. 모범 답안: %s
-            3. 사용자 답안: %s
+            2. 사용자 답안: %s
             """;
 
     public AiAnswerCheckResponseDto checkUserAnswer(long userId, AiAnswerCheckRequestDto dto) {
@@ -32,7 +31,7 @@ public class AiAnswerCheckService {
         String modelAnswer = answerService.getAnswerText(dto.questionId());
 
         // user message 생성
-        String userMessage = String.format(USER_MESSAGE_TEMPLATE, questionText, modelAnswer, dto.userAnswer());
+        String userMessage = String.format(USER_MESSAGE_TEMPLATE, questionText, dto.userAnswer());
 
         // AI 에게 정답 판단 요청
         OpenAiAnswerCheckResult result = chatClient.prompt()
