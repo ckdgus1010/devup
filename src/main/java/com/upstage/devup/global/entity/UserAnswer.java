@@ -31,6 +31,8 @@ public class UserAnswer {
     @Column(nullable = false)
     private String answerText;
 
+    private String feedback;
+
     @Column(nullable = false)
     private Integer isCorrect;
 
