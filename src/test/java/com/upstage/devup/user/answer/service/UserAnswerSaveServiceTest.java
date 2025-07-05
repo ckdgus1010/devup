@@ -56,7 +56,7 @@ class UserAnswerSaveServiceTest {
     public void shouldThrowEntityException_whenUserIdIsUnavailable() {
         // given
         long userId = 0L;
-        String errorMessage = "사용자 정보를 찾을 수 없습니다.";
+        String errorMessage = "회원 정보를 찾을 수 없습니다.";
 
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
 
