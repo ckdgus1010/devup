@@ -47,7 +47,7 @@ public class AiAnswerCheckService {
         // 사용자가 제출한 답안 저장
         userAnswerSaveService.saveUserAnswer(
                 userId,
-                new UserAnswerSaveRequest(dto.questionId(), modelAnswer, result.isCorrect())
+                new UserAnswerSaveRequest(dto.questionId(), dto.userAnswer(), result.feedback(), result.isCorrect())
         );
 
         return new AiAnswerCheckResponseDto(result.isCorrect(), result.feedback(), modelAnswer);

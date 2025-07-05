@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -24,15 +26,21 @@ public class UserAccountService {
      * @return 조회된 사용자 정보
      * @throws EntityNotFoundException 회원 정보를 찾을 수 없을 때 발생
      */
-    public UserAccountDto getUserAccount(Long userId) {
-        if (userId == null) {
-            throw new EntityNotFoundException("회원 정보를 찾을 수 없습니다.");
-        }
+    public UserAccountDto getUserAccount(long userId) {
 
-        User user = userAccountRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+        return UserAccountDto.of(
+                getUser(userId)
+                        .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."))
+        );
+    }
 
-        return UserAccountDto.of(user);
+    /**
+     * User 엔티티 조회하기
+     * @param userId 사용자 ID
+     * @return 조회된 엔티티
+     */
+    public Optional<User> getUser(long userId) {
+        return userAccountRepository.findById(userId);
     }
 
     public UserAccountDto updateUserAccount(Long userId, UserAccountUpdateDto request) {
@@ -58,10 +66,6 @@ public class UserAccountService {
 
         User saved = userAccountRepository.save(user);
         return UserAccountDto.of(saved);
-    }
-
-    public boolean isUserExists(long userId) {
-        return userAccountRepository.existsById(userId);
     }
 
     private void updateNickname(User user, String newNickname) {

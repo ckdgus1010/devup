@@ -17,6 +17,8 @@ public class UserAnswerSaveRequest {
     @NotBlank(message = "정답을 입력해 주세요.")
     private String answerText;
 
+    private String feedback;
+
     @NotNull(message = "정답 여부를 확인해 주세요.")
     private Boolean isCorrect;
 

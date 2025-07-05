@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -75,10 +77,19 @@ public class QuestionService {
 
         boolean isBookmarked = bookmarkService.checkBookmarkIsRegistered(userId, questionId);
 
-        Question question = questionRepository.findById(questionId)
+        Question question = getQuestion(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("면접 질문을 찾을 수 없습니다."));
 
         return convertQuestionToDetailDto(question, isBookmarked);
+    }
+
+    /**
+     * 엔티티 조회하기
+     * @param questionId 면접 질문 ID
+     * @return 조회된 엔티티 정보
+     */
+    public Optional<Question> getQuestion(long questionId) {
+        return questionRepository.findById(questionId);
     }
 
     public String getQuestionText(long questionId) {
