@@ -112,7 +112,7 @@ main {
     gap: 0.5rem;
 }
 
-.user-answer {
+.result, .user-answer, .ai-feedback {
     margin: 2rem 0 1.5rem;
     display: flex;
     flex-direction: column;
@@ -124,6 +124,15 @@ main {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     resize: vertical;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.result textarea, .ai-feedback textarea {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    resize: none;
     font-size: 1rem;
     line-height: 1.5;
 }

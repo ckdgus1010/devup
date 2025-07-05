@@ -22,6 +22,7 @@ public class UserSolvedHistoryDetailDto {
     private String level;
 
     private String userAnswerText;
+    private String feedback;
 
     private LocalDateTime solvedAt;
     private boolean isCorrect;
@@ -41,6 +42,7 @@ public class UserSolvedHistoryDetailDto {
                 .category(question.getCategory().getCategoryName())
                 .level(question.getLevel().getLevelName())
                 .userAnswerText(entity.getAnswerText())
+                .feedback(entity.getFeedback())
                 .solvedAt(entity.getCreatedAt())
                 .isCorrect(entity.getIsCorrect())
                 .build();

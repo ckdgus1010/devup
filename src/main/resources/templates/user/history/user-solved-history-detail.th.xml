@@ -12,11 +12,12 @@
                 <attr sel="span[1]" th:text="'🎯 ' + ${history.level}"/>
                 <attr sel="span[2]" th:datetime="${history.solvedAt}"
                       th:text="'🕒 ' + ${#temporals.format(history.solvedAt, 'yyyy-MM-dd')}"/>
-                <attr sel="span[3]" th:text="${history.isCorrect ? '✅ 정답' : '❌ 오답'}"/>
             </attr>
         </attr>
         <attr sel="div.question-body" th:text="${history.questionText}"/>
         <attr sel="#user-answer" th:text="${history.userAnswerText}"/>
+        <attr sel="#result" th:text="${history.isCorrect ? '✅ 정답' : '❌ 오답'}"/>
+        <attr sel="#ai-feedback" th:text="${history.feedback}"/>
         <attr sel="#footer" th:replace="~{common/footer :: footer}"/>
     </attr>
 </thlogic>
