@@ -25,17 +25,10 @@ public class UserSolvedHistoryService {
 
 
     // 문제 풀이 이력 조회
-    public Page<UserSolvedQuestionDto> getUserSolvedQuestions(Long userId, Integer pageNumber) {
-        if (userId == null) {
-            throw new UnauthenticatedException("로그인이 필요합니다.");
-        }
-
-        if (pageNumber == null || pageNumber < 0) {
-            pageNumber = 0;
-        }
+    public Page<UserSolvedQuestionDto> getUserSolvedQuestions(long userId, int pageNumber) {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt", "id");
-        Pageable pageable = PageRequest.of(pageNumber, USER_SOLVED_QUESTIONS_PER_PAGE, sort);
+        Pageable pageable = PageRequest.of(Math.max(0, pageNumber), USER_SOLVED_QUESTIONS_PER_PAGE, sort);
 
         return userSolvedHistoryRepository
                 .findByUserId(userId, pageable)
@@ -48,10 +41,7 @@ public class UserSolvedHistoryService {
      * @param userAnswerId 사용자 답안 ID
      * @return 상세 문제 풀이 이력
      */
-    public UserSolvedHistoryDetailDto getUserSolvedHistoryDetail(Long userAnswerId) {
-        if (userAnswerId == null || userAnswerId <= 0L) {
-            throw new IllegalArgumentException("풀이 이력을 찾을 수 없습니다.");
-        }
+    public UserSolvedHistoryDetailDto getUserSolvedHistoryDetail(long userAnswerId) {
 
         UserAnswer userAnswer = userSolvedHistoryRepository.findById(userAnswerId)
                 .orElseThrow(() -> new EntityNotFoundException("풀이 이력을 찾을 수 없습니다."));

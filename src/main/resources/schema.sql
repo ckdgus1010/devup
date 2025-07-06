@@ -88,6 +88,7 @@ CREATE TABLE user_answers
     user_id     BIGINT        NOT NULL,
     question_id BIGINT        NOT NULL,
     answer_text VARCHAR(2000) NOT NULL,
+    feedback    VARCHAR(1000),
     is_correct  INT           NOT NULL COMMENT '정답 여부(0: 오답, 1: 정답)',
     created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '제출 시간',
     PRIMARY KEY (id)

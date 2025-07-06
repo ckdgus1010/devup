@@ -16,6 +16,9 @@ spring:
       on-profile: common
   thymeleaf3:
     decoupled-logic: true
+  ai:
+    openai:
+      api-key: ${SPRING_OPEN_AI_API_KEY}
 
 jwt:
   secret_key: ${JWT_SECRET_KEY}

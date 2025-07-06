@@ -23,8 +23,8 @@ class UserSolvedHistoryServiceTest {
     @DisplayName("문제 풀이 이력 조회 성공")
     public void shouldReturnPage_whenUsingValidRequest() {
         // given
-        Long userId = 1L;
-        Integer pageNumber = 0;
+        long userId = 1L;
+        int pageNumber = 0;
 
         // when
         Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
@@ -37,30 +37,12 @@ class UserSolvedHistoryServiceTest {
 
     @Transactional
     @Test
-    @DisplayName("문제 풀이 이력 조회 성공 - 페이지 번호가 null 이면 가장 첫번째 페이지를 조회")
-    public void shouldReturnFirstPage_whenPageNumberIsNull() {
-        // given
-        Long userId = 1L;
-        Integer pageNumber = null;
-        Integer targetPageNumber = 0;
-
-        // when
-        Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
-
-        // then
-        assertThat(results).isNotNull();
-        assertThat(results.getNumber()).isEqualTo(targetPageNumber);
-        assertThat(results.isFirst()).isTrue();
-    }
-
-    @Transactional
-    @Test
     @DisplayName("문제 풀이 이력 조회 성공 - 페이지 번호가 음수이면 가장 첫번째 페이지를 조회")
     public void shouldReturnFirstPage_whenPageNumberIsNegative() {
         // given
-        Long userId = 1L;
-        Integer pageNumber = -1;
-        Integer targetPageNumber = 0;
+        long userId = 1L;
+        int pageNumber = -1;
+        int targetPageNumber = 0;
 
         // when
         Page<UserSolvedQuestionDto> results = userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber);
@@ -69,24 +51,6 @@ class UserSolvedHistoryServiceTest {
         assertThat(results).isNotNull();
         assertThat(results.getNumber()).isEqualTo(targetPageNumber);
         assertThat(results.isFirst()).isTrue();
-    }
-
-    @Transactional
-    @Test
-    @DisplayName("문제 풀이 이력 조회 성공 - 페이지 번호가 음수이면 가장 첫번째 페이지를 조회")
-    public void shouldThrowUnAuthenticatedException_whenUserIdIsNull() {
-        // given
-        Long userId = null;
-        Integer pageNumber = 0;
-        String errorMessage = "로그인이 필요합니다.";
-
-        // when & then
-        UnauthenticatedException exception = Assertions.assertThrows(
-                UnauthenticatedException.class,
-                () -> userSolvedHistoryService.getUserSolvedQuestions(userId, pageNumber)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
 }
