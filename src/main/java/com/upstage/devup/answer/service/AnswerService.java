@@ -33,6 +33,12 @@ public class AnswerService {
                 .orElseThrow(() -> new EntityNotFoundException("정답을 찾을 수 없습니다."));
     }
 
+    public String getAnswerText(long questionId) {
+        return answerRepository.findByQuestion_Id(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("정답을 찾을 수 없습니다."))
+                .getAnswerText();
+    }
+
     private AnswerDetailDto convertAnswerToAnswerDetailDto(Answer answer) {
         return AnswerDetailDto.builder()
                 .id(answer.getId())

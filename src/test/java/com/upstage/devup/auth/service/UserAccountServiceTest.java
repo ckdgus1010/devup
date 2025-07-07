@@ -33,26 +33,10 @@ public class UserAccountServiceTest {
     }
 
     @Test
-    @DisplayName("유저 정보 조회 실패 - 사용자 ID가 null인 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityNotFoundException_whenUserIdIsNull() {
-        // given
-        Long userId = null;
-        String errorMessage = "회원 정보를 찾을 수 없습니다.";
-
-        // when & then
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () ->userAccountService.getUserAccount(userId)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
-
-    @Test
     @DisplayName("유저 정보 조회 실패 - 유효하지 않은 사용자 ID를 사용한 경우 EntityNotFoundException 발생")
     public void shouldThrowEntityNotFoundException_whenUserIdIsUnavailable() {
         // given
-        Long userId = 0L;
+        long userId = 0L;
         String errorMessage = "회원 정보를 찾을 수 없습니다.";
 
         // when & then

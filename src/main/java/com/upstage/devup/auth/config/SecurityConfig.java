@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,6 +36,11 @@ public class SecurityConfig {
             "/api/auth/signin",
     };
 
+    public static final String[] ADMIN_APIS = {
+            "/admin/**",
+            "/api/admin/**"
+    };
+
     public static final String[] SWAGGER_API = {
             "/swagger-ui.html",
             "/swagger-ui/**",
@@ -48,10 +54,13 @@ public class SecurityConfig {
     @Value("${security.csrf-enabled:true}")
     private boolean csrfEnabled;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    @Value("${spring.profiles.active:dev}")
+    private String isDevProfile;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
     @Bean
@@ -65,8 +74,18 @@ public class SecurityConfig {
             http.csrf(AbstractHttpConfigurer::disable);
         }
 
+        if (isDevProfile.equals("dev")) {
+            http
+                    .headers(h ->
+                            h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))  // X-Frame-Options 헤더 제거
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/h2-console/**")
+                            .permitAll());
+        }
+
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(ADMIN_APIS).hasRole("ADMIN")  // 관리자 전용 API
                         .requestMatchers(STATIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_PAGES).permitAll()
                         .requestMatchers(PUBLIC_APIS).permitAll()
@@ -79,11 +98,14 @@ public class SecurityConfig {
                 ).logout(AbstractHttpConfigurer::disable);
 
         http
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(
                                 (req, res, ex1) ->
-                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
+                                        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
                         )
                 );
 

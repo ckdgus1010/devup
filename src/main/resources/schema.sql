@@ -10,32 +10,34 @@ CREATE TABLE answers
 
 CREATE TABLE bookmarks
 (
-    id          BIGINT NOT NULL AUTO_INCREMENT,
-    user_id     BIGINT NOT NULL,
-    question_id BIGINT NOT NULL,
-    PRIMARY KEY (id)
+    user_id     BIGINT      NOT NULL,
+    question_id BIGINT      NOT NULL,
+    created_at  TIMESTAMP   NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, question_id)
 ); -- '북마크'
 
 CREATE TABLE categories
 (
-    id       BIGINT       NOT NULL AUTO_INCREMENT,
-    category VARCHAR(100) NOT NULL,
-    color    VARCHAR(10)  NOT NULL COMMENT '카테고리 바에 표시할 색상',
+    id              BIGINT       NOT NULL AUTO_INCREMENT,
+    category_name   VARCHAR(100) NOT NULL,
+    color           VARCHAR(10)  NOT NULL COMMENT '카테고리 바에 표시할 색상',
     PRIMARY KEY (id)
 ); -- '기술 면접 주제'
 
 ALTER TABLE categories
-    ADD CONSTRAINT UQ_category UNIQUE (category);
+    ADD CONSTRAINT UQ_category UNIQUE (category_name);
 
 CREATE TABLE levels
 (
-    id    BIGINT      NOT NULL AUTO_INCREMENT,
-    level VARCHAR(50) NOT NULL,
+    id          BIGINT      NOT NULL AUTO_INCREMENT,
+    level_name  VARCHAR(50) NOT NULL,
+    created_at  TIMESTAMP   NOT NULL COMMENT '등록일',
+    modified_at TIMESTAMP   NULL     COMMENT '수정일',
     PRIMARY KEY (id)
 ); -- '난이도'
 
 ALTER TABLE levels
-    ADD CONSTRAINT UQ_level UNIQUE (level);
+    ADD CONSTRAINT UQ_level UNIQUE (level_name);
 
 CREATE TABLE question_stats
 (
@@ -58,6 +60,16 @@ CREATE TABLE questions
     PRIMARY KEY (id)
 ); -- '기술 면접 질문'
 
+CREATE TABLE roles
+(
+    id          BIGINT       NOT NULL AUTO_INCREMENT,
+    role_name   VARCHAR(30)  NOT NULL COMMENT '권한 이름',
+    description VARCHAR(100) NULL     COMMENT '권한 설명',
+    created_at  TIMESTAMP    NOT NULL COMMENT '등록일',
+    modified_at TIMESTAMP    NULL     COMMENT '수정일',
+    PRIMARY KEY (id)
+); -- '사용자 권한'
+
 CREATE TABLE user_answer_stats
 (
     id              BIGINT    NOT NULL AUTO_INCREMENT,
@@ -76,6 +88,7 @@ CREATE TABLE user_answers
     user_id     BIGINT        NOT NULL,
     question_id BIGINT        NOT NULL,
     answer_text VARCHAR(2000) NOT NULL,
+    feedback    VARCHAR(1000),
     is_correct  INT           NOT NULL COMMENT '정답 여부(0: 오답, 1: 정답)',
     created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '제출 시간',
     PRIMARY KEY (id)
@@ -87,6 +100,7 @@ ALTER TABLE user_answers
 CREATE TABLE users
 (
     id          BIGINT       NOT NULL AUTO_INCREMENT,
+    role_id     BIGINT       NOT NULL,
     login_id    VARCHAR(100) NOT NULL,
     password    VARCHAR(255) NOT NULL,
     nickname    VARCHAR(100) NOT NULL,
@@ -173,3 +187,8 @@ ALTER TABLE user_answer_stats
     ADD CONSTRAINT FK_questions_TO_user_answer_stats
         FOREIGN KEY (question_id)
             REFERENCES questions (id);
+
+ALTER TABLE users
+    ADD CONSTRAINT FK_roles_TO_users
+        FOREIGN KEY (role_id)
+            REFERENCES roles (id);

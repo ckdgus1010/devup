@@ -30,7 +30,7 @@ public class UserWrongNoteQueryController {
         }
 
         Page<WrongNoteSummaryDto> result
-                = userWrongAnswerQueryService.getWrongNoteSummaries(user.getUserId(), pageNumber);
+                = userWrongAnswerQueryService.getWrongNoteSummaries(user.userId(), pageNumber);
 
         return ResponseEntity.ok(result);
     }

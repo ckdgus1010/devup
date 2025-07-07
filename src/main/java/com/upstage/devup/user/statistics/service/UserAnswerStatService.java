@@ -1,5 +1,8 @@
 package com.upstage.devup.user.statistics.service;
 
+import com.upstage.devup.global.entity.Question;
+import com.upstage.devup.global.entity.User;
+import com.upstage.devup.global.entity.UserAnswerStat;
 import com.upstage.devup.global.exception.UnauthenticatedException;
 import com.upstage.devup.user.answer.repository.UserAnswerStatRepository;
 import com.upstage.devup.user.statistics.dto.CategoryCountDto;
@@ -9,7 +12,9 @@ import com.upstage.devup.user.statistics.dto.UserCategoryStatDto.CategoryStat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -71,5 +76,40 @@ public class UserAnswerStatService {
                 .totalSolvedCount(totalSolvedCount)
                 .categoryStats(categoryStats)
                 .build();
+    }
+
+    /**
+     * 풀이 이력 조회 및 갱신
+     * @param isCorrect 정답 여부
+     * @param user 사용자 엔티티
+     * @param question 질문 엔티티
+     * @param now 현재 시간
+     */
+    @Transactional
+    public UserAnswerStat updateUserAnswerStat(boolean isCorrect, User user, Question question, LocalDateTime now) {
+        // 엔티티 조회
+        UserAnswerStat userAnswerStat = userAnswerStatRepository
+                .findByUserIdAndQuestionId(user.getId(), question.getId())
+                .orElseGet(
+                        () -> UserAnswerStat.builder()
+                                .user(user)
+                                .question(question)
+                                .correctCount(0)
+                                .wrongCount(0)
+                                .firstSolvedAt(now)
+                                .lastSolvedAt(now)
+                                .build()
+                );
+
+        // 이력 업데이트
+        if (isCorrect) {
+            userAnswerStat.increaseCorrectCount();
+        } else {
+            userAnswerStat.increaseWrongCount();
+        }
+
+        userAnswerStat.setLastSolvedAt(now);
+
+        return userAnswerStatRepository.save(userAnswerStat);
     }
 }

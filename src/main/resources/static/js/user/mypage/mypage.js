@@ -1,5 +1,6 @@
 import {showProfile} from '/js/user/mypage/mypage-profile.js';
 import {showWrongNote} from '/js/user/mypage/mypage-wrong-note.js';
+import {showBookmarks} from '/js/user/mypage/mypage-bookmarks.js';
 
 const tabContainer = document.getElementById('tab-container');
 const buttons = document.querySelectorAll(".tab-button");
@@ -9,6 +10,7 @@ const tabActionMap = {
     stats: () => {},
     history: () => showUserSolvedQuestions(0),
     wrong: () => showWrongNote(0),
+    bookmarks: () => showBookmarks(0),
     profile: showProfile
 };
 

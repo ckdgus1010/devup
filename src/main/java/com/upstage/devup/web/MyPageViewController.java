@@ -25,7 +25,7 @@ public class MyPageViewController {
      */
     @GetMapping
     public String getMyPageView(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
-        Long userId = authenticatedUser.getUserId();
+        long userId = authenticatedUser.userId();
 
         // 통계 정보 조회
         UserAnswerStatDto quizStat = userAnswerStatService.getUserAnswerStat(userId);

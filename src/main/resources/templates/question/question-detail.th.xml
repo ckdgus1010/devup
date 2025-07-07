@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thlogic>
     <attr sel="head">
-        <attr sel="link" th:href="@{/css/question/question-detail.css}"/>
+        <attr sel="#local-css" th:href="@{/css/question/question-detail.css}"/>
     </attr>
     <attr sel="body">
         <attr sel="#header" th:replace="~{common/header :: header}"/>
@@ -13,11 +13,16 @@
         </attr>
         <attr sel="div.question-header">
             <attr sel="h1" th:text="'📋 ' + ${question.title}"/>
-            <attr sel="div.meta">
+            <attr sel="div.meta-left">
                 <attr sel="span[0]" th:text="'📁 ' + ${question.category}"/>
                 <attr sel="span[1]" th:text="'🎯 ' + ${question.level}"/>
                 <attr sel="span[2]" th:datetime="${question.createdAt}"
                       th:text="'🕒 ' + ${#temporals.format(question.createdAt, 'yyyy-MM-dd')}"/>
+            </attr>
+            <attr sel="div.meta-right">
+                <attr sel="#bookmark-btn" th:class="${question.isBookmarked ? 'bookmarked' : ''}">
+                    <attr sel="span" th:text="${question.isBookmarked ? '❌ 북마크 삭제' : '🔖 북마크 추가'}"/>
+                </attr>
             </attr>
         </attr>
         <attr sel="div.question-body" th:text="${question.questionText}"/>

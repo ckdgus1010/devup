@@ -27,6 +27,7 @@
         <button class="tab-button active" data-tab="stats" id="stats-tab-btn">📈 통계</button>
         <button class="tab-button" data-tab="history">🕓 풀이 이력</button>
         <button class="tab-button" data-tab="wrong">❌ 오답 노트</button>
+        <button class="tab-button" data-tab="bookmarks">🔖 북마크</button>
         <button class="tab-button" data-tab="profile">🙋 사용자 정보</button>
     </div>
     <div id="tab-container">
@@ -114,6 +115,43 @@
         </tbody>
     </table>
     <div class="pagination" id="wrong-pagination">
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+    </div>
+</template>
+<template class="tab-content" id="bookmarks">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>카테고리</th>
+            <th>난이도</th>
+            <th>등록일</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody id="bookmark-body">
+        <tr>
+            <td>2</td>
+            <td>SQL JOIN 종류</td>
+            <td>DB</td>
+            <td>상</td>
+            <td>2025-05-08</td>
+            <td><button class="delete-btn" disabled><span>삭제</span></button></td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>OOP란?</td>
+            <td>JAVA</td>
+            <td>하</td>
+            <td>2025-05-08</td>
+            <td><button class="delete-btn"><span>삭제</span></button></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination" id="bookmark-pagination">
         <button class="active">1</button>
         <button>2</button>
         <button>3</button>

@@ -1,6 +1,5 @@
 package com.upstage.devup.user.wrong.controller;
 
-import com.upstage.devup.auth.config.AuthenticatedUser;
 import com.upstage.devup.auth.config.SecurityConfig;
 import com.upstage.devup.auth.config.jwt.JwtTokenProvider;
 import com.upstage.devup.global.exception.EntityNotFoundException;
@@ -8,19 +7,14 @@ import com.upstage.devup.user.wrong.service.UserWrongNoteDeleteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import static com.upstage.devup.Util.getAuthentication;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,13 +32,8 @@ class UserWrongNoteDeleteControllerTest {
     @MockitoBean
     private UserWrongNoteDeleteService userWrongNoteDeleteService;
 
+    private static final String ROLE_USER = "ROLE_USER";
     private static final String URI_TEMPLATE = "/api/wrong/";
-
-    private RequestPostProcessor getAuthentication(Long userId) {
-        AuthenticatedUser user = new AuthenticatedUser(userId);
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
-        return authentication(auth);
-    }
 
     @Nested
     @DisplayName("성공 테스트")
@@ -59,7 +48,7 @@ class UserWrongNoteDeleteControllerTest {
 
             // when & then
             mockMvc.perform(delete(URI_TEMPLATE + questionId)
-                            .with(getAuthentication(userId)))
+                            .with(getAuthentication(userId, ROLE_USER)))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
@@ -93,7 +82,7 @@ class UserWrongNoteDeleteControllerTest {
 
             // when & then
             mockMvc.perform(delete(URI_TEMPLATE + questionId)
-                            .with(getAuthentication(userId)))
+                            .with(getAuthentication(userId, ROLE_USER)))
                     .andExpect(status().isNotFound());
         }
     }

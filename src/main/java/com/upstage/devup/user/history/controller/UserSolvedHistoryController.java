@@ -27,7 +27,7 @@ public class UserSolvedHistoryController {
             @RequestParam Integer pageNumber) {
 
         Page<UserSolvedQuestionDto> results
-                = userSolvedHistoryService.getUserSolvedQuestions(user.getUserId(), pageNumber);
+                = userSolvedHistoryService.getUserSolvedQuestions(user.userId(), pageNumber);
 
         return ResponseEntity.ok(results);
     }

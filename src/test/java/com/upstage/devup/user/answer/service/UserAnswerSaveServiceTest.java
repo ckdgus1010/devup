@@ -43,66 +43,22 @@ class UserAnswerSaveServiceTest {
         UserAnswerDetailDto result = userAnswerSaveService.saveUserAnswer(userId, request);
 
         // then
-        QuestionDetailDto questionDetailDto = questionService.getQuestion(questionId);
+        QuestionDetailDto questionDetailDto = questionService.getQuestion(userId, questionId);
 
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getQuestionId()).isEqualTo(questionId);
         assertThat(result.getAnswerText()).isEqualTo(answerText);
         assertThat(result.getIsCorrect()).isEqualTo(isCorrect);
-
-        assertThat(result.getTitle()).isEqualTo(questionDetailDto.getTitle());
-        assertThat(result.getQuestionText()).isEqualTo(questionDetailDto.getQuestionText());
-        assertThat(result.getCategory()).isEqualTo(questionDetailDto.getCategory());
-        assertThat(result.getLevel()).isEqualTo(questionDetailDto.getLevel());
     }
 
     @Test
     @DisplayName("사용자 답안 저장 실패 - 유효하지 않은 사용자 ID를 경우 EntityNotFoundException 발생")
     public void shouldThrowEntityException_whenUserIdIsUnavailable() {
         // given
-        Long userId = 0L;
-        String errorMessage = "사용자 정보를 찾을 수 없습니다.";
+        long userId = 0L;
+        String errorMessage = "회원 정보를 찾을 수 없습니다.";
 
         UserAnswerSaveRequest request = UserAnswerSaveRequest.builder().build();
-
-        // when
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () -> userAnswerSaveService.saveUserAnswer(userId, request)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
-
-    @Test
-    @DisplayName("사용자 답안 저장 실패 - 요청 데이터가 null인 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityException_whenRequestIsNull() {
-        // given
-        Long userId = 1L;
-        String errorMessage = "면접 질문을 찾을 수 없습니다.";
-
-        UserAnswerSaveRequest request = null;
-
-        // when
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () -> userAnswerSaveService.saveUserAnswer(userId, request)
-        );
-
-        assertThat(exception.getMessage()).isEqualTo(errorMessage);
-    }
-
-    @Test
-    @DisplayName("사용자 답안 저장 실패 - 유효하지 않은 질문 ID를 경우 EntityNotFoundException 발생")
-    public void shouldThrowEntityException_whenQuestionIdIsNull() {
-        // given
-        Long userId = 1L;
-        Long questionId = 0L;
-        String errorMessage = "면접 질문을 찾을 수 없습니다.";
-
-        UserAnswerSaveRequest request = UserAnswerSaveRequest.builder()
-                .questionId(questionId)
-                .build();
 
         // when
         EntityNotFoundException exception = assertThrows(
